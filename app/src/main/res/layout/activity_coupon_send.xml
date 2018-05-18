@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <!--头部菜单-->
+    <include layout="@layout/include_menu_navi"
+        android:id="@+id/layout_menu_navi"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ededed">
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ededed"
+            android:orientation="vertical"
+            android:paddingBottom="15dp"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp"
+            android:paddingTop="15dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="@string/coupon_sent_to"
+                android:textColor="@android:color/black" />
+
+            <Spinner
+                android:id="@+id/sp_friend"
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="6dp"
+                android:background="@drawable/shape_border"
+                android:drawablePadding="5dp"
+                android:gravity="center_vertical"
+                android:popupBackground="@android:color/white"
+                android:popupTheme="@android:style/Theme.Holo.Light"
+                android:prompt="@string/friend_select_hint"
+                android:spinnerMode="dialog"
+                android:textColor="@android:color/black" />
+
+            <include
+                android:id="@+id/layout_coupon"
+                layout="@layout/item_coupon" />
+
+            <EditText
+                android:id="@+id/tv_msg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:height="100dp"
+                android:background="@drawable/shape_login_input"
+                android:ems="10"
+                android:hint="Message"
+                android:inputType="textMultiLine"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/tv_give"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/shape_button_radius_orange"
+                android:gravity="center"
+                android:text="@string/button_give"
+                android:textAlignment="center"
+                android:textColor="@android:color/background_light"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

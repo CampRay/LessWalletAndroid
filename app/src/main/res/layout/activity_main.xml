@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <!--头部菜单-->
+    <include layout="@layout/include_menu"
+        android:id="@+id/home_layout_menu"/>
+
+    <!--主页内容布局-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/home_layout_menu"
+        android:background="#004455"
+        android:orientation="vertical">
+
+        <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#004455">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/bg_top"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:isScrollContainer="false"
+                    android:layoutDirection="locale"
+                    android:layoutMode="opticalBounds">
+
+                    <ImageButton
+                        android:id="@+id/ib_wicoupon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
+                        android:background="@drawable/icon_wicoupon_btn"
+                        android:scaleType="fitCenter" />
+
+                    <ImageButton
+                        android:id="@+id/ib_wicard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:background="@drawable/icon_wicard_btn"
+                        android:scaleType="fitCenter" />
+
+                    <ImageButton
+                        android:id="@+id/ib_witicket"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:background="@drawable/icon_witicket_btn"
+                        android:scaleType="fitCenter" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitCenter"
+                        android:src="@mipmap/layer_shodow" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/bg_layer"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:isScrollContainer="false"
+                    android:layoutDirection="locale"
+                    android:layoutMode="opticalBounds">
+
+                    <ImageView
+                        android:id="@+id/iv_alipay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerInParent="false"
+                        android:adjustViewBounds="true"
+                        android:background="@mipmap/img_alipay"
+                        android:cropToPadding="false"
+                        android:scaleType="fitCenter" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitCenter"
+                        android:src="@mipmap/layer_shodow" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/bg_layer"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:isScrollContainer="false"
+                    android:layoutDirection="locale"
+                    android:layoutMode="opticalBounds">
+
+                    <ImageView
+                        android:id="@+id/iv_wechat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerInParent="false"
+                        android:adjustViewBounds="true"
+                        android:background="@mipmap/img_wechat"
+                        android:cropToPadding="false"
+                        android:scaleType="fitCenter" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:background="@mipmap/layer_shodow"
+                        android:scaleType="fitCenter" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/bg_layer"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:isScrollContainer="false"
+                    android:layoutDirection="locale"
+                    android:layoutMode="opticalBounds">
+
+                    <ImageView
+                        android:id="@+id/iv_union"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerInParent="false"
+                        android:adjustViewBounds="true"
+                        android:background="@mipmap/img_unionpay"
+                        android:cropToPadding="false"
+                        android:scaleType="fitCenter" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:background="@mipmap/layer_shodow"
+                        android:scaleType="fitCenter" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/bg_layer"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:isScrollContainer="false"
+                    android:layoutDirection="locale"
+                    android:layoutMode="opticalBounds">
+
+                    <ImageView
+                        android:id="@+id/iv_paypal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerInParent="false"
+                        android:adjustViewBounds="true"
+                        android:background="@mipmap/img_paypal"
+                        android:cropToPadding="false"
+                        android:scaleType="fitCenter" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:background="@mipmap/layer_shadow_bottom"
+                        android:scaleType="fitCenter" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/bg_bottom"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:isScrollContainer="false"
+                    android:layoutDirection="locale"
+                    android:layoutMode="opticalBounds">
+
+                    <ImageButton
+                        android:id="@+id/ib_addpay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
+                        android:background="@mipmap/btn_addpay"
+                        android:scaleType="fitCenter" />
+
+                    <ImageButton
+                        android:id="@+id/ib_coin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:background="@mipmap/btn_wicoin"
+                        android:scaleType="fitCenter" />
+
+                    <ImageButton
+                        android:id="@+id/ib_web"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:background="@mipmap/btn_web"
+                        android:scaleType="fitCenter" />
+                </RelativeLayout>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</RelativeLayout>

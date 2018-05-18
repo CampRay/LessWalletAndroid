@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--layer-list是图层设计列表，每个item都是一个图层，最先的item显示在最下面，最后一个显示在最上面-->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <!-- 实际显示元素的背景图案设计 -->
+    <item>
+        <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
+            <!--背景颜色 -->
+            <solid android:color="#db2431" />
+        </shape>
+    </item>
+</layer-list>

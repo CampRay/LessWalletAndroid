@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--WiTicket显示的上部分圆形边角-->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <!--最外一层的较淡的阴影-->
+    <item android:top="7dp" android:left="7dp">
+        <shape>
+            <padding android:right="1dp" />
+            <solid android:color="#02000000" />
+            <corners  android:topLeftRadius="10dp" android:topRightRadius="10dp"/>
+        </shape>
+    </item>
+    <!--最外每二层的阴影-->
+    <item android:top="6dp" android:left="6dp">
+        <shape>
+            <padding android:right="1dp" />
+            <solid android:color="#05000000" />
+            <corners  android:topLeftRadius="10dp" android:topRightRadius="10dp"/>
+        </shape>
+    </item>
+    <!--以下以此类推直到最后一个item-->
+    <item android:top="5dp" android:left="5dp">
+        <shape>
+            <padding android:right="1dp"/>
+            <solid android:color="#0f000000" />
+            <corners  android:topLeftRadius="10dp" android:topRightRadius="10dp"/>
+        </shape>
+    </item>
+    <item android:top="4dp" android:left="4dp">
+        <shape>
+            <padding android:right="1dp" />
+            <solid android:color="#12000000" />
+            <corners  android:topLeftRadius="10dp" android:topRightRadius="10dp"/>
+        </shape>
+    </item>
+    <item android:top="3dp" android:left="3dp">
+        <shape>
+            <padding android:right="1dp" />
+            <solid android:color="#19000000" />
+            <corners  android:topLeftRadius="10dp" android:topRightRadius="10dp"/>
+        </shape>
+    </item>
+    <item android:top="2dp" android:left="2dp">
+        <shape>
+            <padding android:right="1dp"/>
+            <solid android:color="#1f000000" />
+            <corners  android:topLeftRadius="10dp" android:topRightRadius="10dp"/>
+        </shape>
+    </item>
+    <item android:top="1dp" android:left="1dp">
+        <shape>
+            <padding android:right="1dp"/>
+            <solid android:color="#22000000" />
+            <corners  android:topLeftRadius="10dp" android:topRightRadius="10dp"/>
+        </shape>
+    </item>
+    <item android:id="@+id/top_item">
+        <shape xmlns:android="http://schemas.android.com/apk/res/android">
+            <!--背景颜色 -->
+            <solid android:color="#223d22" />
+            <!--控制底部圆角大小-->
+            <corners  android:topLeftRadius="10dp" android:topRightRadius="10dp"/>
+        </shape>
+    </item>
+</layer-list>

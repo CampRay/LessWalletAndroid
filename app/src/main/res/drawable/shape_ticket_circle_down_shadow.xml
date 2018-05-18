@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--WiTicket显示的上部分圆形边角-->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item>
+        <shape xmlns:android="http://schemas.android.com/apk/res/android">
+                <!--<solid android:color="#FF00ed" />-->
+            <gradient
+                android:type="radial"
+                android:angle="90"
+                android:centerX="1"
+                android:centerY="0.2"
+                android:startColor="#00FFFFFF"
+                android:centerColor="#00FFFFFF"
+                android:endColor="#77000000"
+                android:gradientRadius="32"/>
+        </shape>
+    </item>
+</layer-list>

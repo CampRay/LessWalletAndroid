@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ededed">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/include_navi"/>
+
+        <ImageView
+            android:id="@+id/iv_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:src="@mipmap/logo"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/shape_login_input"
+            android:orientation="vertical">
+            <EditText
+                android:id="@+id/et_fname"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/tv_height"
+                android:background="#ffffff"
+                android:drawableLeft="@mipmap/reg_icon_name"
+                android:drawablePadding="25dip"
+                android:hint="@string/reg_firstname_hint"
+                android:paddingLeft="15dip"
+                android:shadowDx="0.0"
+                android:shadowDy="1.0"
+                android:shadowRadius="1.0"
+                android:textColor="#000000"
+                android:textColorHint="#ffdddddd" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#969696" />
+            <EditText
+                android:id="@+id/et_lname"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/tv_height"
+                android:background="#ffffff"
+                android:drawableLeft="@mipmap/reg_icon_name"
+                android:drawablePadding="25dip"
+                android:hint="@string/reg_lastname_hint"
+                android:paddingLeft="15dip"
+                android:shadowDx="0.0"
+                android:shadowDy="1.0"
+                android:shadowRadius="1.0"
+                android:textColor="#000000"
+                android:textColorHint="#ffdddddd" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#969696" />
+
+            <EditText
+                android:id="@+id/et_password"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/tv_height"
+                android:background="#ffffff"
+                android:drawableLeft="@mipmap/reg_icon_password"
+                android:drawablePadding="25dip"
+                android:hint="@string/reg_password_hint"
+                android:inputType="textPassword"
+                android:paddingLeft="15dip"
+                android:fontFamily="sans-serif"
+                android:textColor="#000000"
+                android:textColorHint="#ffdddddd" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#969696" />
+
+            <EditText
+                android:id="@+id/et_password_again"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/tv_height"
+                android:background="#ffffff"
+                android:drawableLeft="@mipmap/reg_icon_password"
+                android:drawablePadding="25dip"
+                android:hint="@string/reg_repassword_hint"
+                android:inputType="textPassword"
+                android:paddingLeft="15dip"
+                android:fontFamily="sans-serif"
+                android:textColor="#000000"
+                android:textColorHint="#ffdddddd" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#969696" />
+
+            <EditText
+                android:id="@+id/et_mobile"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/tv_height"
+                android:background="#ffffff"
+                android:drawableLeft="@mipmap/reg_icon_mobile"
+                android:drawablePadding="25dip"
+                android:hint="@string/reg_mobile_hint"
+                android:paddingLeft="15dip"
+                android:shadowDx="0.0"
+                android:shadowDy="1.0"
+                android:shadowRadius="1.0"
+                android:textColor="#000000"
+                android:textColorHint="#ffdddddd" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#969696" />
+
+            <EditText
+                android:id="@+id/et_email"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/tv_height"
+                android:background="#ffffff"
+                android:drawableLeft="@mipmap/reg_icon_email"
+                android:drawablePadding="25dip"
+                android:hint="@string/reg_email_hint"
+                android:paddingLeft="15dip"
+                android:shadowDx="0.0"
+                android:shadowDy="1.0"
+                android:shadowRadius="1.0"
+                android:textColor="#000000"
+                android:textColorHint="#ffdddddd" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#969696" />
+            <EditText
+                android:id="@+id/et_address"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/tv_height"
+                android:background="#ffffff"
+                android:drawableLeft="@mipmap/reg_icon_address"
+                android:drawablePadding="25dip"
+                android:hint="@string/reg_address_hint"
+                android:paddingLeft="15dip"
+                android:shadowDx="0.0"
+                android:shadowDy="1.0"
+                android:shadowRadius="1.0"
+                android:textColor="#000000"
+                android:textColorHint="#ffdddddd" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#969696" />
+
+            <Spinner
+                android:id="@+id/sp_country"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/tv_height"
+                android:drawablePadding="25dip"
+                android:paddingLeft="35dip"
+                android:popupBackground="#000000"
+                android:popupTheme="@android:style/Theme.Holo.Light"
+                android:prompt="@string/reg_country_hint"
+                android:spinnerMode="dialog" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_register"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/tv_height"
+            android:layout_margin="@dimen/activity_vertical_margin"
+            android:background="@drawable/btn_login_selector"
+            android:gravity="center"
+            android:text="@string/register"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/text_size_large" />
+
+    </LinearLayout>
+</ScrollView>

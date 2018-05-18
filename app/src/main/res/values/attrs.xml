@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--InnerCorner的自定义View的属性-->
+    <declare-styleable name="InnerCornerView">
+        <attr name="Angle" format="integer"/>
+        <attr name="Radius" format="dimension"/>
+        <attr name="CornerColor" format="color"/>
+    </declare-styleable>
+
+</resources>

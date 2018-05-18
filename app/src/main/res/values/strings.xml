@@ -1,0 +1,232 @@
+<resources>
+    <string name="app_name">LessWallet</string>
+
+    <!-- Strings related to login -->
+    <string name="login_username_hint">Please input username...</string>
+    <string name="login_password_hint">Please input password...</string>
+    <string name="login_repassword_hint">Please retype Password...</string>
+    <string name="login_remember">Automatic login next time</string>
+    <string name="login">Sign in</string>
+    <string name="logout">Sign Out</string>
+    <string name="register_txt1">If you have not register,</string>
+    <string name="register_txt2">register now &gt;</string>
+    <string name="reg_mobile_hint">Mobile Phone Number</string>
+    <string name="reg_firstname_hint">First Name</string>
+    <string name="reg_lastname_hint">Last Name</string>
+    <string name="reg_password_hint">Password</string>
+    <string name="reg_repassword_hint">Retype Password</string>
+    <string name="reg_email_hint">Email</string>
+    <string name="reg_address_hint">Home Address</string>
+    <string name="reg_country_hint">Please select your country</string>
+    <string name="register">Register</string>
+
+    <string name="account_title">My Profile</string>
+    <string name="account_mobile">Phone Number</string>
+    <string name="account_email">Email</string>
+    <string name="account_country">Country</string>
+
+    <string name="collect_title">Collection by QR code</string>
+    <string name="collect_scan">Scan this QR code to pay me by LessWallet</string>
+    <string name="collect_set">Set Amount</string>
+    <string name="collect_export">Export QRCode</string>
+    <string name="collect_amount">Amount to collect</string>
+    <string name="collect_currency_hint">Please select currency</string>
+    <string name="collect_export_success">Exported the QRCode successfully</string>
+    <string name="collect_export_failed">Failed to export the QRCode</string>
+
+    <string name="error_invalid_email">Invalid Email.</string>
+    <string name="error_invalid_password">Passowrd is invalid, it should be between 6 to 20 digits alphanumerical characters.</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_empty_amount">The collection amount is required</string>
+    <string name="error_format_amount">The collection amount must be float number with two decimals.</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+
+    <string name="dialog_camera_permission">This App need the camera permission to scan QRCode</string>
+    <string name="dialog_camera_permission_setting">This App need the camera permission, do you want to open the system setting page?</string>
+    <string name="dialog_permission_title">Request Permission</string>
+    <string name="button_ok">OK</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="button_give">GIVE</string>
+
+    <string name="scan_title">QRCode Scan</string>
+    <string name="scan_text">Put the QRCode into the scan box.</string>
+    <string name="scan_select_image">Select a QRCode image</string>
+    <string name="scan_process">Scanning...</string>
+
+    <!-- Strings related to login -->
+    <string name="friend_list">Friend List</string>
+    <string name="friends_username_hint">Mobile Phone/Email</string>
+    <string name="friends_search_btn">Search</string>
+    <string name="friends_search_error1">Please input mobile phone or Email</string>
+    <string name="friend_title">Friend Information</string>
+    <string name="friend_title_add">Search Result</string>
+    <string name="friend_add">Add as friend</string>
+    <string name="friend_add_success">Friend has been added successfully.</string>
+    <string name="friend_select_hint">Please select your friend</string>
+    <string name="coupon_sent_to">SENT TO:</string>
+    <string name="coupon_sent_success">Send successfully.</string>
+
+    <!--错误码-->
+    <string name="E_0000">Error Message</string>
+    <string name="E_1000">System error</string>
+    <string name="E_1001">No networks connection</string>
+    <string name="E_1002">Invalid API Token</string>
+    <string name="E_1003">API request exception</string>
+    <string name="E_1004">Response data is invalid</string>
+    <string name="E_1005">The database exception</string>
+    <string name="E_2000">The user name or password is invalid</string>
+    <string name="E_2001">Your account have not been activated</string>
+    <string name="E_2002">Your account have been deleted</string>
+    <string name="E_2003">Your account have been locked out</string>
+    <string name="E_2004">This account has been used</string>
+    <string name="E_2005">The username is required</string>
+    <string name="E_2006">The email is required</string>
+    <string name="E_2007">The password is required</string>
+    <string name="E_2008">Please input password again</string>
+    <string name="E_2009">The two passwords you entered did not match</string>
+    <string name="E_2010">Failed to register the account</string>
+    <string name="E_2011">The search condition is required</string>
+    <string name="E_2012">The first name is required</string>
+    <string name="E_2013">The last name is required</string>
+    <string name="E_2014">The mobile name is required</string>
+    <string name="E_2015"></string>
+    <string name="E_2016"></string>
+    <string name="E_3000">Failed to get the smart coupon</string>
+    <string name="E_3001">Failed to delete the coupon</string>
+
+
+    <string name="qrcode_hint">Place a QRCode inside the viewfinder rectangle to scan it.</string>
+    <string name="msg_camera_framework_bug">Sorry, the Android camera encountered a problem. You may need to restart the device.</string>
+
+    <string name="preferences_scanning_title">QR Code Setting</string>
+    <string name="preferences_play_beep_title">Beep</string>
+    <string name="preferences_vibrate_title">Vibrate</string>
+    <string name="preferences_front_light_summary">Improves scanning in low light on some phones, but may cause glare. Does not work on all phones.</string>
+    <string name="preferences_front_light_title">Use front light</string>
+    <string name="preferences_front_light_auto">Automatic</string>
+    <string name="preferences_front_light_off">Off</string>
+    <string name="preferences_front_light_on">On</string>
+    <string name="preferences_auto_focus_title">Use auto focus</string>
+
+
+    <string name="app_picker_name">Applications</string>
+    <string name="bookmark_picker_name">Bookmarks</string>
+    <string name="button_add_calendar">Add to calendar</string>
+    <string name="button_add_contact">Add contact</string>
+    <string name="button_book_search">Book Search</string>
+
+    <string name="button_custom_product_search">Custom search</string>
+    <string name="button_dial">Dial number</string>
+    <string name="button_email">Send email</string>
+    <string name="button_get_directions">Get directions</string>
+    <string name="button_mms">Send MMS</string>
+    <string name="button_open_browser">Open browser</string>
+    <string name="button_product_search">Product search</string>
+    <string name="button_search_book_contents">Search contents</string>
+    <string name="button_share_app">Application</string>
+    <string name="button_share_bookmark">Bookmark</string>
+    <string name="button_share_by_email">Share via email</string>
+    <string name="button_share_by_sms">Share via SMS</string>
+    <string name="button_share_clipboard">Clipboard</string>
+    <string name="button_share_contact">Contact</string>
+    <string name="button_show_map">Show map</string>
+    <string name="button_sms">Send SMS</string>
+    <string name="button_web_search">Web search</string>
+    <string name="button_wifi">Connect to Network</string>
+    <string name="contents_contact">Contact info</string>
+    <string name="contents_email">Email address</string>
+    <string name="contents_location">Geographic coordinates</string>
+    <string name="contents_phone">Phone number</string>
+    <string name="contents_sms">SMS address</string>
+    <string name="contents_text">Plain text</string>
+    <string name="history_clear_text">Clear history</string>
+    <string name="history_clear_one_history_text">Clear</string>
+    <string name="history_email_title">Barcode Scanner history</string>
+    <string name="history_empty">Empty</string>
+    <string name="history_empty_detail">No barcode scans have been recorded</string>
+    <string name="history_send">Send history</string>
+    <string name="history_title">History</string>
+    <string name="menu_encode_mecard">Use MECARD</string>
+    <string name="menu_encode_vcard">Use vCard</string>
+    <string name="menu_help">Help</string>
+    <string name="menu_history">History</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_share">Share</string>
+    <string name="msg_bulk_mode_scanned">Bulk mode: barcode scanned and saved</string>
+    <string name="msg_default_format">Format</string>
+    <string name="msg_default_meta">Metadata</string>
+    <string name="msg_default_mms_subject">Hi</string>
+    <string name="msg_default_status">Place a barcode inside the viewfinder rectangle to scan it.</string>
+    <string name="msg_default_time">Time</string>
+    <string name="msg_default_type">Type</string>
+    <string name="msg_encode_contents_failed">Could not encode a barcode from the data provided.</string>
+    <string name="msg_error">Error</string>
+    <string name="msg_google_books">Google</string>
+    <string name="msg_google_product">Google</string>
+    <string name="msg_intent_failed">Sorry, the requested application could not be launched. The barcode contents may be invalid.</string>
+    <string name="msg_invalid_value">Invalid value</string>
+    <string name="msg_redirect">Redirect</string>
+    <string name="msg_sbc_book_not_searchable">Sorry, this book is not searchable.</string>
+    <string name="msg_sbc_failed">Sorry, the search encountered a problem.</string>
+    <string name="msg_sbc_no_page_returned">No page returned</string>
+    <string name="msg_sbc_page">Page</string>
+    <string name="msg_sbc_results">Results</string>
+    <string name="msg_sbc_searching_book">Searching book\u2026</string>
+    <string name="msg_sbc_snippet_unavailable">Snippet not available</string>
+    <string name="msg_share_explanation">You can share data by displaying a barcode on your screen and scanning it with another phone.</string>
+    <string name="msg_share_text">Or type some text and press Enter</string>
+    <string name="msg_sure">Are you sure?</string>
+    <string name="msg_unmount_usb">Sorry, the SD card is not accessible.</string>
+    <string name="preferences_actions_title">When a barcode is found\u2026</string>
+    <string name="preferences_auto_open_web_title">Open web pages automatically</string>
+    <string name="preferences_bulk_mode_summary">Scan and save many barcodes continuously</string>
+    <string name="preferences_bulk_mode_title">Bulk scan mode</string>
+    <string name="preferences_copy_to_clipboard_title">Copy to clipboard</string>
+    <string name="preferences_custom_product_search_summary" formatted="false">Substitutions: %s = contents, %f = format, %t = type</string>
+    <string name="preferences_custom_product_search_title">Custom search URL</string>
+    <string name="preferences_decode_1D_industrial_title">1D Industrial</string>
+    <string name="preferences_decode_1D_product_title">1D Product</string>
+    <string name="preferences_decode_Aztec_title">Aztec</string>
+    <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
+    <string name="preferences_decode_PDF417_title">PDF417 (β)</string>
+    <string name="preferences_decode_QR_title">QR Codes</string>
+    <string name="preferences_device_bug_workarounds_title">Device Bug Workarounds</string>
+    <string name="preferences_disable_barcode_scene_mode_title">No barcode scene mode</string>
+    <string name="preferences_disable_continuous_focus_summary">Use only standard focus mode</string>
+    <string name="preferences_disable_continuous_focus_title">No continuous focus</string>
+    <string name="preferences_disable_exposure_title">No exposure</string>
+    <string name="preferences_disable_metering_title">No metering</string>
+    <string name="preferences_general_title">General settings</string>
+    <string name="preferences_history_summary">Store your scans in History</string>
+    <string name="preferences_history_title">Add to History</string>
+    <string name="preferences_invert_scan_title">Invert scan</string>
+    <string name="preferences_invert_scan_summary">Scan for white barcodes on black background. Not available on some devices.</string>
+    <string name="preferences_name">Settings</string>
+    <string name="preferences_orientation_title">No automatic rotation</string>
+
+    <string name="preferences_remember_duplicates_summary">Store multiple scans of the same barcode in History</string>
+    <string name="preferences_remember_duplicates_title">Remember duplicates</string>
+    <string name="preferences_result_title">Result settings</string>
+
+    <string name="preferences_search_country">Search country</string>
+    <string name="preferences_supplemental_summary">Try to retrieve more information about the barcode contents</string>
+    <string name="preferences_supplemental_title">Retrieve more info</string>
+
+    <string name="result_address_book">Found contact info</string>
+    <string name="result_calendar">Found calendar event</string>
+    <string name="result_email_address">Found email address</string>
+    <string name="result_geo">Found geographic coordinates</string>
+    <string name="result_isbn">Found book</string>
+    <string name="result_product">Found product</string>
+    <string name="result_sms">Found SMS address</string>
+    <string name="result_tel">Found phone number</string>
+    <string name="result_text">Found plain text</string>
+    <string name="result_uri">Found URL</string>
+    <string name="result_wifi">Found WLAN Configuration</string>
+    <string name="sbc_name">Google Book Search</string>
+    <string name="wifi_changing_network">Requesting connection to network\u2026</string>
+
+</resources>

@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <!--头部菜单-->
+    <include layout="@layout/include_menu"
+        android:id="@+id/home_layout_menu"/>
+
+
+    <!--Coupon的样式布局-->
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/home_layout_menu"
+        android:orientation="vertical"
+        android:animateLayoutChanges="true"
+        android:background="#e2e2e1"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="14dp"
+        android:paddingTop="20dp">
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:background="#ffffff"
+                android:orientation="vertical"
+                android:paddingBottom="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:padding="15dp"
+                    android:text="Payment Information"
+                    android:textAlignment="center"
+                    android:textColor="#000000" />
+
+                <GridLayout
+                    android:layout_width="@dimen/y150"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:columnCount="2"
+                    android:rowCount="3">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_column="0"
+                        android:layout_columnWeight="1"
+                        android:layout_gravity="left"
+                        android:layout_row="0"
+                        android:text="收款人:"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/black" />
+
+                    <TextView
+                        android:id="@+id/tv_collecter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_column="1"
+                        android:layout_columnWeight="4"
+                        android:layout_gravity="left"
+                        android:layout_row="0"
+                        android:text="Phills"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/holo_orange_dark" />
+
+                    <TextView
+                        android:id="@+id/tv_amount_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_column="0"
+                        android:layout_columnWeight="1"
+                        android:layout_gravity="left"
+                        android:layout_row="1"
+                        android:text="收款金额:"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/black" />
+
+                    <TextView
+                        android:id="@+id/tv_currency"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_column="1"
+                        android:layout_columnWeight="4"
+                        android:layout_gravity="left"
+                        android:layout_row="1"
+                        android:text="HK$100.00"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/holo_orange_dark" />
+                </GridLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/shape_login_input"
+                    android:divider="@drawable/shape_divider"
+                    android:orientation="vertical"
+                    android:showDividers="middle"
+                    android:visibility="gone">
+
+                    <Spinner
+                        android:id="@+id/sp_currency"
+                        android:layout_width="fill_parent"
+                        android:layout_height="@dimen/tv_height"
+                        android:drawablePadding="25dip"
+                        android:paddingLeft="35dip"
+                        android:popupBackground="#000000"
+                        android:popupTheme="@android:style/Theme.Holo.Light"
+                        android:prompt="@string/collect_currency_hint"
+                        android:spinnerMode="dialog" />
+
+                    <EditText
+                        android:id="@+id/et_amount"
+                        android:layout_width="fill_parent"
+                        android:layout_height="@dimen/tv_height"
+                        android:background="#ffffff"
+                        android:drawableLeft="@mipmap/collect_amount"
+                        android:drawablePadding="18dp"
+                        android:hint="@string/collect_amount"
+                        android:paddingLeft="10dp"
+                        android:textColor="#000000"
+                        android:textColorHint="#ffdddddd" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!--确认对话框-->
+        <GridLayout
+            android:id="@+id/gl_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/shape_box_shadow"
+            android:columnCount="2"
+            android:rowCount="2">
+
+            <TextView
+                android:id="@+id/tv_dialog_txt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_columnSpan="2"
+                android:layout_row="0"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="Are you sure to payment?"
+                android:textColor="#000000"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/btn_yes"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_column="0"
+                android:layout_columnWeight="1"
+                android:layout_margin="10dp"
+                android:layout_row="1"
+                android:background="@drawable/shape_button_radius"
+                android:gravity="center"
+                android:text="YES"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/btn_no"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_column="1"
+                android:layout_columnWeight="1"
+                android:layout_margin="10dp"
+                android:layout_row="1"
+                android:background="@drawable/shape_button_radius_blue"
+                android:gravity="center"
+                android:text="NO"
+                android:textAlignment="gravity"
+                android:textSize="18sp" />
+        </GridLayout>
+    </LinearLayout>
+
+</RelativeLayout>

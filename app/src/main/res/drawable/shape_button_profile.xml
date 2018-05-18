@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--layer-list是图层设计列表，每个item都是一个图层，最先的item显示在最下面，最后一个显示在最上面-->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item>
+        <shape xmlns:android="http://schemas.android.com/apk/res/android">
+            <!--背景颜色 -->
+            <solid android:color="#395c93" />
+            <!--控制底部圆角大小-->
+            <corners  android:radius="6dp"/>
+        </shape>
+    </item>
+</layer-list>
