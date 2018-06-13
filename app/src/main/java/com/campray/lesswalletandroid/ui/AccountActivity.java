@@ -53,7 +53,7 @@ public class AccountActivity extends MenuActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
-        tv_navi_title.setText(getResources().getString(ResourcesUtils.getStringId(getApplicationContext(),"friend_title")));
+        tv_navi_title.setText(getResources().getString(ResourcesUtils.getStringId(getApplicationContext(),"account_title")));
         User user= LessWalletApplication.INSTANCE().getAccount();
         tv_email.setText(user.getEmail());
         tv_mobile.setText(user.getMobile());

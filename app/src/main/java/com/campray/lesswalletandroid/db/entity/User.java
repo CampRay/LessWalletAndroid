@@ -56,6 +56,8 @@ public class User {
     //头像在本地存储路径
     private String avatorPath;
 
+    private int points;//剩余积分
+
     @Transient
     private String fullName;
 
@@ -83,11 +85,11 @@ public class User {
     /** Used for active entity operations. */
     @Generated(hash = 1507654846)
     private transient UserDao myDao;
-    @Generated(hash = 1515643813)
+    @Generated(hash = 33206674)
     public User(Long id, String userName, @NotNull String email, @NotNull String password,
             String mobile, String firstName, String lastName, String birthday, long countryId,
             String address, String token, Long languageId, Long currencyId, boolean remember,
-            String avatarUrl, String avatorPath) {
+            String avatarUrl, String avatorPath, int points) {
         this.id = id;
         this.userName = userName;
         this.email = email;
@@ -104,7 +106,9 @@ public class User {
         this.remember = remember;
         this.avatarUrl = avatarUrl;
         this.avatorPath = avatorPath;
+        this.points = points;
     }
+
     @Generated(hash = 586692638)
     public User() {
     }
@@ -333,6 +337,14 @@ public class User {
             currencyId = currenty == null ? null : currenty.getId();
             currenty__resolvedKey = currencyId;
         }
+    }
+
+    public int getPoints() {
+        return this.points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
     }
 
 

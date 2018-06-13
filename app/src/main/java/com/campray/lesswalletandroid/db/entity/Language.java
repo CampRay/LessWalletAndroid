@@ -20,6 +20,9 @@ public class Language {
     private String uniqueSeoCode;
     @NotNull
     private int displayOrder;
+    @NotNull
+    private Long defaultCurrencyId;
+
     @Generated(hash = 804495434)
     public Language(Long id, @NotNull String name, @NotNull String languageCulture,
             @NotNull String uniqueSeoCode, int displayOrder) {

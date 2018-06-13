@@ -1,5 +1,6 @@
 package com.campray.lesswalletandroid.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -16,6 +17,7 @@ import com.campray.lesswalletandroid.model.CountryModel;
 import com.campray.lesswalletandroid.model.CurrencyModel;
 import com.campray.lesswalletandroid.model.LanguageModel;
 import com.campray.lesswalletandroid.model.ProductAttributeModel;
+import com.campray.lesswalletandroid.service.MsgPushService;
 import com.campray.lesswalletandroid.ui.base.BaseActivity;
 import com.campray.lesswalletandroid.util.AppException;
 
@@ -32,7 +34,8 @@ public class SplashActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-
+        //运行后台服务
+        startService();
         Handler handler =new Handler(Looper.getMainLooper());
         handler.postDelayed(new Runnable() {
             @Override
@@ -70,5 +73,13 @@ public class SplashActivity extends BaseActivity {
             }
         },1000);
 
+    }
+
+    /**
+     * 启动消息同步Service
+     */
+    private void startService(){
+        Intent intent = new Intent(this, MsgPushService.class);
+        startService(intent);
     }
 }

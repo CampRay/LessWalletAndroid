@@ -70,14 +70,34 @@
                 android:scaleType="fitCenter"
                 android:src="@drawable/tab_account_btn" />
 
-            <ImageButton
-                android:id="@+id/ib_received"
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="#00000000"
-                android:scaleType="fitCenter"
-                android:src="@drawable/tab_coupon_btn" />
+                android:layout_weight="1">
+
+                <ImageButton
+                    android:id="@+id/ib_received"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:background="#00000000"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/tab_coupon_btn" />
+
+                <TextView
+                    android:id="@+id/tv_point"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_alignParentRight="false"
+                    android:layout_alignRight="@+id/ib_received"
+                    android:background="@drawable/shape_oval"
+                    android:text="1"
+                    android:textAlignment="center"
+                    android:textColor="#ffffff"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+            </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
 

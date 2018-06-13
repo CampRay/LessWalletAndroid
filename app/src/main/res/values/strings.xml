@@ -1,4 +1,4 @@
-<resources>
+﻿<resources>
     <string name="app_name">LessWallet</string>
 
     <!-- Strings related to login -->
@@ -15,6 +15,8 @@
     <string name="reg_lastname_hint">Last Name</string>
     <string name="reg_password_hint">Password</string>
     <string name="reg_repassword_hint">Retype Password</string>
+    <string name="reg_password_short">Password is too short (minimum is 7 characters)</string>
+    <string name="reg_password_leter">Password must include at least one letter and one number</string>
     <string name="reg_email_hint">Email</string>
     <string name="reg_address_hint">Home Address</string>
     <string name="reg_country_hint">Please select your country</string>
@@ -68,6 +70,11 @@
     <string name="friend_select_hint">Please select your friend</string>
     <string name="coupon_sent_to">SENT TO:</string>
     <string name="coupon_sent_success">Send successfully.</string>
+
+    <string name="notification_coupon_received">Received a coupon</string>
+    <string name="notification_coupon_received_text">Your friend sent a coupon to you</string>
+    <string name="notification_coupon_sent">Sent a coupon</string>
+    <string name="notification_coupon_sent_text">Gave a coupon to your friend</string>
 
     <!--错误码-->
     <string name="E_0000">Error Message</string>

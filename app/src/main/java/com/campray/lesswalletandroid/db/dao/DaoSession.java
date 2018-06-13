@@ -12,6 +12,7 @@ import com.campray.lesswalletandroid.db.entity.Country;
 import com.campray.lesswalletandroid.db.entity.Coupon;
 import com.campray.lesswalletandroid.db.entity.Currency;
 import com.campray.lesswalletandroid.db.entity.Friend;
+import com.campray.lesswalletandroid.db.entity.History;
 import com.campray.lesswalletandroid.db.entity.Language;
 import com.campray.lesswalletandroid.db.entity.LocalizedProperty;
 import com.campray.lesswalletandroid.db.entity.Merchant;
@@ -23,6 +24,7 @@ import com.campray.lesswalletandroid.db.dao.CountryDao;
 import com.campray.lesswalletandroid.db.dao.CouponDao;
 import com.campray.lesswalletandroid.db.dao.CurrencyDao;
 import com.campray.lesswalletandroid.db.dao.FriendDao;
+import com.campray.lesswalletandroid.db.dao.HistoryDao;
 import com.campray.lesswalletandroid.db.dao.LanguageDao;
 import com.campray.lesswalletandroid.db.dao.LocalizedPropertyDao;
 import com.campray.lesswalletandroid.db.dao.MerchantDao;
@@ -43,6 +45,7 @@ public class DaoSession extends AbstractDaoSession {
     private final DaoConfig couponDaoConfig;
     private final DaoConfig currencyDaoConfig;
     private final DaoConfig friendDaoConfig;
+    private final DaoConfig historyDaoConfig;
     private final DaoConfig languageDaoConfig;
     private final DaoConfig localizedPropertyDaoConfig;
     private final DaoConfig merchantDaoConfig;
@@ -54,6 +57,7 @@ public class DaoSession extends AbstractDaoSession {
     private final CouponDao couponDao;
     private final CurrencyDao currencyDao;
     private final FriendDao friendDao;
+    private final HistoryDao historyDao;
     private final LanguageDao languageDao;
     private final LocalizedPropertyDao localizedPropertyDao;
     private final MerchantDao merchantDao;
@@ -77,6 +81,9 @@ public class DaoSession extends AbstractDaoSession {
         friendDaoConfig = daoConfigMap.get(FriendDao.class).clone();
         friendDaoConfig.initIdentityScope(type);
 
+        historyDaoConfig = daoConfigMap.get(HistoryDao.class).clone();
+        historyDaoConfig.initIdentityScope(type);
+
         languageDaoConfig = daoConfigMap.get(LanguageDao.class).clone();
         languageDaoConfig.initIdentityScope(type);
 
@@ -99,6 +106,7 @@ public class DaoSession extends AbstractDaoSession {
         couponDao = new CouponDao(couponDaoConfig, this);
         currencyDao = new CurrencyDao(currencyDaoConfig, this);
         friendDao = new FriendDao(friendDaoConfig, this);
+        historyDao = new HistoryDao(historyDaoConfig, this);
         languageDao = new LanguageDao(languageDaoConfig, this);
         localizedPropertyDao = new LocalizedPropertyDao(localizedPropertyDaoConfig, this);
         merchantDao = new MerchantDao(merchantDaoConfig, this);
@@ -110,6 +118,7 @@ public class DaoSession extends AbstractDaoSession {
         registerDao(Coupon.class, couponDao);
         registerDao(Currency.class, currencyDao);
         registerDao(Friend.class, friendDao);
+        registerDao(History.class, historyDao);
         registerDao(Language.class, languageDao);
         registerDao(LocalizedProperty.class, localizedPropertyDao);
         registerDao(Merchant.class, merchantDao);
@@ -123,6 +132,7 @@ public class DaoSession extends AbstractDaoSession {
         couponDaoConfig.clearIdentityScope();
         currencyDaoConfig.clearIdentityScope();
         friendDaoConfig.clearIdentityScope();
+        historyDaoConfig.clearIdentityScope();
         languageDaoConfig.clearIdentityScope();
         localizedPropertyDaoConfig.clearIdentityScope();
         merchantDaoConfig.clearIdentityScope();
@@ -145,6 +155,10 @@ public class DaoSession extends AbstractDaoSession {
 
     public FriendDao getFriendDao() {
         return friendDao;
+    }
+
+    public HistoryDao getHistoryDao() {
+        return historyDao;
     }
 
     public LanguageDao getLanguageDao() {

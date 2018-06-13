@@ -25,6 +25,7 @@ public class DaoMaster extends AbstractDaoMaster {
         CouponDao.createTable(db, ifNotExists);
         CurrencyDao.createTable(db, ifNotExists);
         FriendDao.createTable(db, ifNotExists);
+        HistoryDao.createTable(db, ifNotExists);
         LanguageDao.createTable(db, ifNotExists);
         LocalizedPropertyDao.createTable(db, ifNotExists);
         MerchantDao.createTable(db, ifNotExists);
@@ -39,6 +40,7 @@ public class DaoMaster extends AbstractDaoMaster {
         CouponDao.dropTable(db, ifExists);
         CurrencyDao.dropTable(db, ifExists);
         FriendDao.dropTable(db, ifExists);
+        HistoryDao.dropTable(db, ifExists);
         LanguageDao.dropTable(db, ifExists);
         LocalizedPropertyDao.dropTable(db, ifExists);
         MerchantDao.dropTable(db, ifExists);
@@ -67,6 +69,7 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(CouponDao.class);
         registerDaoClass(CurrencyDao.class);
         registerDaoClass(FriendDao.class);
+        registerDaoClass(HistoryDao.class);
         registerDaoClass(LanguageDao.class);
         registerDaoClass(LocalizedPropertyDao.class);
         registerDaoClass(MerchantDao.class);

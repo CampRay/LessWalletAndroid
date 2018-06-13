@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.campray.lesswalletandroid.R;
 
 /**
- * 自定义的对话框实现类
+ * 自定义的对话框实现类(可设置顶部图片，消息内容以及按钮)
  * Created by Phills on 12/4/2017.
  */
 

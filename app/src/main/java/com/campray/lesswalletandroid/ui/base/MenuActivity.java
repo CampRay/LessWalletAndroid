@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Config;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -23,21 +24,29 @@ import com.campray.lesswalletandroid.R;
 import com.campray.lesswalletandroid.bean.CouponBean;
 import com.campray.lesswalletandroid.bean.ProductBean;
 import com.campray.lesswalletandroid.bean.UserBean;
+import com.campray.lesswalletandroid.db.entity.History;
 import com.campray.lesswalletandroid.db.entity.Product;
 import com.campray.lesswalletandroid.db.entity.User;
+import com.campray.lesswalletandroid.event.MessageEvent;
 import com.campray.lesswalletandroid.listener.OperationListener;
 import com.campray.lesswalletandroid.model.CouponModel;
+import com.campray.lesswalletandroid.model.HistoryModel;
 import com.campray.lesswalletandroid.model.ProductModel;
 import com.campray.lesswalletandroid.ui.CardPaymentActivity;
 import com.campray.lesswalletandroid.ui.CollectActivity;
 import com.campray.lesswalletandroid.ui.CollectPaymentActivity;
 import com.campray.lesswalletandroid.ui.CouponPaymentActivity;
 import com.campray.lesswalletandroid.ui.MainActivity;
+import com.campray.lesswalletandroid.ui.MessageActivity;
 import com.campray.lesswalletandroid.ui.ProfileActivity;
 import com.campray.lesswalletandroid.ui.QRCodeCaptureActivity;
 import com.campray.lesswalletandroid.ui.TicketPaymentActivity;
 import com.campray.lesswalletandroid.util.AppException;
 import com.campray.lesswalletandroid.util.EncryptionUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -62,6 +71,8 @@ public class MenuActivity extends BaseActivity implements EasyPermissions.Permis
 
     @BindView(R.id.tv_username)
     TextView tv_username;
+    @BindView(R.id.tv_point)
+    TextView tv_point;
 
 
     /**
@@ -107,6 +118,24 @@ public class MenuActivity extends BaseActivity implements EasyPermissions.Permis
     }
 
     /**
+     * 点击通知消息按钮的事件方法
+     * @param view
+     */
+    @OnClick(R.id.ib_received)
+    public void onReceivedClick(View view){
+
+        List<History> list=HistoryModel.getInstance().getUnread();
+        if(list!=null&&list.size()>0) {
+            for (History item : list) {
+                item.setReaded(true);
+                HistoryModel.getInstance().updateHistory(item);
+            }
+            EventBus.getDefault().post(new MessageEvent());
+        }
+        startActivity(MessageActivity.class,null,false);
+    }
+
+    /**
      * 打开扫码页面
      */
     private void openQRcodeScanActivity(){
@@ -131,7 +160,7 @@ public class MenuActivity extends BaseActivity implements EasyPermissions.Permis
                     if (bundle == null) {
                         return;
                     }
-                    //解析扫码结果数据(二维码数据结构是：商口ID+":"+商品类型ID)
+                    //解析扫码结果数据(二维码数据结构是：product+":"+商品类型ID+":"+商口ID)
                     String result = bundle.getString("result");
                     try {
                         //String text=EncryptionUtil.desECBDecrypt(result,"lesswalletCampRay@201404");
@@ -200,7 +229,7 @@ public class MenuActivity extends BaseActivity implements EasyPermissions.Permis
     protected void initPermissions(){
         String[] perms = {Manifest.permission.CAMERA,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE,};
+                Manifest.permission.READ_EXTERNAL_STORAGE};
         if (!EasyPermissions.hasPermissions(this, perms)) {
             //没有权限则向用户申请权限
             EasyPermissions.requestPermissions(this, "扫码需要摄像头权限",
@@ -264,4 +293,34 @@ public class MenuActivity extends BaseActivity implements EasyPermissions.Permis
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
+    /**
+     * 注册消息接收事件，接收EventBus通過EventBus.getDefault().post(T)方法发出的事件通知，onMessageEvent(T)方法就会自动接收并处理些事件通知
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MessageEvent event){
+        checkRedPoint();
+    }
+
+    private void checkRedPoint(){
+        int count = HistoryModel.getInstance().getUnreadCount();
+        if(count>0){
+            tv_point.setText(count+"");
+            tv_point.setVisibility(View.VISIBLE);
+        }else{
+            tv_point.setVisibility(View.INVISIBLE);
+        }
+    }
 }

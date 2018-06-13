@@ -1,6 +1,8 @@
 package com.campray.lesswalletandroid.ui;
 
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -8,6 +10,7 @@ import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.campray.lesswalletandroid.R;
@@ -36,28 +39,25 @@ import butterknife.OnClick;
 
 public class CardPaymentActivity extends MenuActivity {
     //Coupon控件
-    @BindView(R.id.gl_coupon_top)
-    GridLayout gl_coupon_top;
-    @BindView(R.id.iv_coupon_shading)
-    ImageView iv_coupon_shading;
-    @BindView(R.id.iv_coupon_img)
-    ImageView iv_coupon_img;
-    @BindView(R.id.iv_coupon_logo)
-    ImageView iv_coupon_logo;
+    @BindView(R.id.rl_card_top)
+    RelativeLayout rl_card_top;
+    @BindView(R.id.iv_card_shading)
+    ImageView iv_card_shading;
+    @BindView(R.id.iv_card_img)
+    ImageView iv_card_img;
+    @BindView(R.id.iv_card_logo)
+    ImageView iv_card_logo;
     @BindView(R.id.tv_price)
     TextView tv_price;
     @BindView(R.id.tv_title)
     TextView tv_title;
-    @BindView(R.id.tv_desc)
-    TextView tv_desc;
+
     @BindView(R.id.tv_merchant)
     TextView tv_merchant;
-    @BindView(R.id.tv_expired)
-    TextView tv_expired;
     @BindView(R.id.tv_number)
     TextView tv_number;
-    @BindView(R.id.rl_coupon_layout)
-    LinearLayout rl_coupon_layout;
+    @BindView(R.id.ll_card_layout)
+    LinearLayout ll_card_layout;
 
     @BindView(R.id.gl_dialog)
     GridLayout gl_dialog;
@@ -75,23 +75,24 @@ public class CardPaymentActivity extends MenuActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_card_payment);
         long pid = this.getBundle().getLong("pid");
         long tid = this.getBundle().getLong("tid");
         //根据扫码获取的ID，从服务器获取对应的电子卡卷信息
-        getCouponFromServer(pid);
+        getCardFromServer(pid);
     }
 
     /**
-     * 从服务器获取下载Coupon
+     * 从服务器获取下载Card
      * @param pid
      */
-    private void getCouponFromServer(long pid){
+    private void getCardFromServer(long pid){
         ProductModel.getInstance().getProductFromServer(pid, new OperationListener<Product>() {
             @Override
             public void done(Product product, AppException exe) {
                 if (exe == null) {
                     curProduct=product;
-                    showCoupon(product);
+                    showCard(product);
                 } else {
                     toast(exe.toString(getApplicationContext()));
                     finish();
@@ -104,84 +105,58 @@ public class CardPaymentActivity extends MenuActivity {
      * 根据获取的卡卷信息，显示卡卷图像
      * @param product
      */
-    private void showCoupon(final Product product){
-        String benefit = "";
-        String bgColor= "#137656";
-        String timeStr = (TextUtils.isEmpty(product.getStartTimeLocal())?"":product.getStartTimeLocal()) + (TextUtils.isEmpty(product.getEndTimeLocal()) ? "" : " - " + product.getEndTimeLocal());
-        List<SpecAttr> specAttrList = product.getSpecAttr();
-        for (SpecAttr specAttrBean:specAttrList) {
-            String selectValue = specAttrBean.getColorSquaresRgb();
-            String customValue = specAttrBean.getValueRaw();
-            String value=(TextUtils.isEmpty(selectValue)&& TextUtils.isEmpty(customValue))? specAttrBean.getSpecificationAttributeName(): (TextUtils.isEmpty(selectValue)?customValue : selectValue);
-            //如果是背景色
-            if(specAttrBean.getSpecificationAttributeId()==7){
-                bgColor=value;
-            }
-            else if(specAttrBean.getSpecificationAttributeId()==8){//如果是底纹
-                shadingUrl=value;
-            }
-            else if(specAttrBean.getSpecificationAttributeId()==9){//如果是自定义图片
-                customPicUrl=value;
-            }
-            else if(specAttrBean.getSpecificationAttributeId()==10){//如果是商用家logo
-                logoUrl=value;
-            }
-            else{
-                benefit=value;
-            }
+    private void showCard(final Product product){
+        try {
+            String benefit = "";
+            String bgColor = "#137656";
+            String timeStr = (TextUtils.isEmpty(product.getStartTimeLocal()) ? "" : product.getStartTimeLocal()) + (TextUtils.isEmpty(product.getEndTimeLocal()) ? "" : " - " + product.getEndTimeLocal());
+            List<SpecAttr> specAttrList = product.getSpecAttr();
+            for (SpecAttr specAttrBean : specAttrList) {
+                String selectValue = specAttrBean.getColorSquaresRgb();
+                String customValue = specAttrBean.getValueRaw();
+                String value = (TextUtils.isEmpty(selectValue) && TextUtils.isEmpty(customValue)) ? specAttrBean.getSpecificationAttributeName() : (TextUtils.isEmpty(selectValue) ? customValue : selectValue);
+                //如果是背景色
+                if (specAttrBean.getSpecificationAttributeId() == 7) {
+                    bgColor = value;
+                } else if (specAttrBean.getSpecificationAttributeId() == 8) {//如果是底纹
+                    shadingUrl = value;
+                } else if (specAttrBean.getSpecificationAttributeId() == 9) {//如果是自定义图片
+                    customPicUrl = value;
+                } else if (specAttrBean.getSpecificationAttributeId() == 10) {//如果是商用家logo
+                    logoUrl = value;
+                } else {
+                    benefit = value;
+                }
 
+            }
+            //获取Card的自定义布局
+            //LayerDrawable layerDrawable=(LayerDrawable)ll_card_layout.getBackground();
+            //设置卡的背景色
+            GradientDrawable gradientDrawable = (GradientDrawable) rl_card_top.getBackground();
+            gradientDrawable.setColor(Color.parseColor(bgColor));
+
+            //加载底纹
+            UniversalImageLoader imageLoader = new UniversalImageLoader();
+            imageLoader.load(iv_card_shading, shadingUrl, 0, null);
+            //加载自定义图片
+            //imageLoader.load(iv_card_img, customPicUrl, 0, null);
+            //加载商家logo
+            imageLoader.load(iv_card_logo, logoUrl, 0, null);
+
+            tv_price.setText(benefit);
+            tv_title.setText(product.getTitle());
+            tv_merchant.setText(product.getMerchant().getName());
+            tv_number.setText(product.getPrice() + "");
+            gl_dialog.setVisibility(View.VISIBLE);
         }
+        catch (Exception e){}
 
-        //设置背景色
-        gl_coupon_top.setBackgroundColor(Color.parseColor(bgColor));
-        //加载底纹
-        UniversalImageLoader imageLoader=new UniversalImageLoader();
-        imageLoader.load(iv_coupon_shading,shadingUrl,0,null);
-        //加载自定义图片
-        imageLoader.load(iv_coupon_img,customPicUrl,0,null);
-        //加载商家logo
-        imageLoader.load(iv_coupon_logo,logoUrl,0,null);
-
-        tv_price.setText(benefit);
-        tv_title.setText(product.getTitle());
-        tv_desc.setText(product.getShortDesc());
-        tv_merchant.setText(product.getMerchant().getName());
-        tv_expired.setText(timeStr);
-        tv_number.setText(product.getPrice()+"");
-        gl_dialog.setVisibility(View.VISIBLE);
-
-//        rl_coupon_layout.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View v) {
-////        WrapView wrapView=new WrapView(tv_desc);
-////        if(descHeight==0){
-////            descHeight=tv_desc.getHeight();
-////        }
-//                if(tv_desc.getVisibility()==View.GONE) {
-//                    tv_desc.setVisibility(View.VISIBLE);
-////            ObjectAnimator moveAnimator = ObjectAnimator.ofInt(tv_desc, "height",descHeight);
-////            moveAnimator.setDuration(200);
-////            ObjectAnimator moveAnimator1 = ObjectAnimator.ofInt(tv_desc, "height",descHeight,descHeight-100,descHeight+20,descHeight-50,descHeight+10,descHeight-20,descHeight);
-////            moveAnimator1.setDuration(200);
-////            AnimatorSet animSet = new AnimatorSet();
-////            animSet.play(moveAnimator1).after(moveAnimator);
-////            animSet.start();
-//
-//                }
-//                else{
-////            ObjectAnimator moveAnimator = ObjectAnimator.ofInt(tv_desc, "height",0);
-////            moveAnimator.setDuration(200);
-////            moveAnimator.start();
-//                    tv_desc.setVisibility(View.GONE);
-//                }
-//            }
-//        });
     }
 
 
 
     /**
-     * 点击Yes按钮确认支付或接收Coupon
+     * 点击Yes按钮确认支付或接收Card
      */
     @OnClick(R.id.btn_yes)
     public void onClickButtonYes(){
@@ -197,33 +172,33 @@ public class CardPaymentActivity extends MenuActivity {
                         if(specAttrBean.getSpecificationAttributeId()==8){//如果是底纹
                             if(TextUtils.isEmpty(specAttrBean.getFileUrl())) {
                                 String[] strArr = shadingUrl.split("\\.");
-                                iv_coupon_shading.setDrawingCacheEnabled(true);
-                                File shadingFile = ImageUtil.saveImage(iv_coupon_shading.getDrawingCache(), strArr[strArr.length - 1]);
+                                iv_card_shading.setDrawingCacheEnabled(true);
+                                File shadingFile = ImageUtil.saveImage(iv_card_shading.getDrawingCache(), strArr[strArr.length - 1]);
                                 specAttrBean.setFileUrl(Uri.fromFile(shadingFile).toString());
-                                iv_coupon_shading.setDrawingCacheEnabled(false);
-                                iv_coupon_shading.destroyDrawingCache();
+                                iv_card_shading.setDrawingCacheEnabled(false);
+                                iv_card_shading.destroyDrawingCache();
                                 needUpdate=true;
                             }
                         }
                         else if(specAttrBean.getSpecificationAttributeId()==9){//如果是自定义图片
                             if(TextUtils.isEmpty(specAttrBean.getFileUrl())) {
                                 String[] strArr = customPicUrl.split("\\.");
-                                iv_coupon_img.setDrawingCacheEnabled(true);
-                                File imageFile = ImageUtil.saveImage(iv_coupon_img.getDrawingCache(), strArr[strArr.length - 1]);
+                                iv_card_img.setDrawingCacheEnabled(true);
+                                File imageFile = ImageUtil.saveImage(iv_card_img.getDrawingCache(), strArr[strArr.length - 1]);
                                 specAttrBean.setFileUrl(Uri.fromFile(imageFile).toString());
-                                iv_coupon_img.setDrawingCacheEnabled(false);
-                                iv_coupon_img.destroyDrawingCache();
+                                iv_card_img.setDrawingCacheEnabled(false);
+                                iv_card_img.destroyDrawingCache();
                                 needUpdate=true;
                             }
                         }
                         else if(specAttrBean.getSpecificationAttributeId()==10){//如果是商用家logo
                             if(TextUtils.isEmpty(specAttrBean.getFileUrl())) {
                                 String[] strArr = logoUrl.split("\\.");
-                                iv_coupon_logo.setDrawingCacheEnabled(true);
-                                File logoFile = ImageUtil.saveImage(iv_coupon_logo.getDrawingCache(), strArr[strArr.length - 1]);
+                                iv_card_logo.setDrawingCacheEnabled(true);
+                                File logoFile = ImageUtil.saveImage(iv_card_logo.getDrawingCache(), strArr[strArr.length - 1]);
                                 specAttrBean.setFileUrl(Uri.fromFile(logoFile).toString());
-                                iv_coupon_logo.setDrawingCacheEnabled(false);
-                                iv_coupon_logo.destroyDrawingCache();
+                                iv_card_logo.setDrawingCacheEnabled(false);
+                                iv_card_logo.destroyDrawingCache();
                                 needUpdate=true;
                             }
                         }

@@ -63,12 +63,16 @@
         <activity android:name=".ui.CouponUseActivity" />
         <activity android:name=".ui.CouponSendActivity" />
         <activity android:name=".ui.CouponPaymentActivity" />
+        <activity android:name=".ui.CardActivity" />
+        <activity android:name=".ui.CardPaymentActivity" />
         <activity android:name=".ui.ProfileActivity" />
         <activity android:name=".ui.AccountActivity" />
         <activity android:name=".ui.FriendsActivity" />
         <activity android:name=".ui.FriendActivity" />
         <activity android:name=".ui.CollectActivity" />
         <activity android:name=".ui.CollectPaymentActivity" />
+        <activity android:name=".ui.WebActivity" />
+        <activity android:name=".ui.MessageActivity" />
         <activity
             android:name=".ui.QRCodeCaptureActivity"
             android:clearTaskOnLaunch="true"
@@ -86,6 +90,15 @@
         </receiver>
         <!-- 消息推送服务 -->
         <service android:name=".service.MsgPushService"/>
+        <!-- APP是否在前台检测服务 -->
+        <service android:name=".service.DetectionService"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService"/>
+            </intent-filter>
+            <meta-data android:name="android.accessibilityservice"
+                android:resource="@xml/detection_service_config"/>
+        </service>
         <!--网络状态改变广播接收者-->
         <receiver android:name=".receiver.NetWorkStateReceiver">
             <intent-filter>

@@ -13,7 +13,7 @@ import android.view.View;
 import com.campray.lesswalletandroid.R;
 
 /**
- * 自定义的可以设置各种颜色背景的文本View控件
+ * 自定义的可以设置各种颜色背景的圆角文本View控件
  * Created by Phills on 11/29/2017.
  */
 

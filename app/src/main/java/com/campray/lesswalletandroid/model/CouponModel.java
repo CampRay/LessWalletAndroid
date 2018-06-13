@@ -166,6 +166,86 @@ public class CouponModel extends BaseModel {
     }
 
     /**
+     * 根据订单ID从服务端获取到卡卷
+     * @param oid 订单ID
+     * @param listener
+     */
+    public void getCouponFromServer(long oid,final OperationListener<Coupon> listener){
+        //封装登录请求参数
+        JsonObject jObj=new JsonObject();
+        jObj.addProperty("orderId",oid);
+        jObj.addProperty("device",this.getDeviceId());
+        this.httpPostAPI(CouponModel.URL_API_GETCOUPON, jObj,new ApiHandleListener<JsonObject>() {
+            @Override
+            public void done(JsonObject obj, AppException exception) {
+                if (exception == null) {
+                    try {
+                        //如果返回结果没有异常
+                        if (obj.get("Errors").isJsonNull()) {
+                            if (obj.get("Data").isJsonArray()) {
+                                JsonArray jArr = obj.get("Data").getAsJsonArray();
+                                Gson gson = new Gson();
+                                for(JsonElement item:jArr){
+                                    Coupon coupon = gson.fromJson(item, Coupon.class);
+                                    try {
+                                        long row = CouponDaoService.getInstance(getContext()).insertOrUpdateCoupon(coupon);
+                                        //如果卡卷商品在手机上没有保存过
+                                        if(!ProductDaoService.getInstance(getContext()).hasProduct(coupon.getProductId())){
+                                            ProductModel.getInstance().getProductFromServer(coupon.getProductId(),new OperationListener<Product>(){
+                                                @Override
+                                                public void done(Product product, AppException exception) {
+                                                    if(exception!=null){
+                                                        //保存优惠卷相关图片到手机
+                                                        boolean needUpdate=false;
+                                                        List<SpecAttr> specAttrBeanList = product.getSpecAttr();
+                                                        for (SpecAttr specAttrBean:specAttrBeanList) {
+                                                            String selectValue = specAttrBean.getColorSquaresRgb();
+                                                            String customValue = specAttrBean.getValueRaw();
+                                                            String imgUrl=(TextUtils.isEmpty(selectValue)&& TextUtils.isEmpty(customValue))? specAttrBean.getSpecificationAttributeName(): (TextUtils.isEmpty(selectValue)?customValue : selectValue);
+                                                            //如果是底纹,样式图片或logo
+                                                            if(specAttrBean.getSpecificationAttributeId()==8||specAttrBean.getSpecificationAttributeId()==9||specAttrBean.getSpecificationAttributeId()==10){
+                                                                if(TextUtils.isEmpty(specAttrBean.getFileUrl())) {
+                                                                    //保存网络图片到手机存储空间,并返回uri
+                                                                    Uri imgUri = ImageUtil.saveImageToUri(imgUrl);
+                                                                    specAttrBean.setFileUrl(imgUri.toString());
+                                                                    needUpdate=true;
+                                                                }
+                                                            }
+                                                        }
+                                                        if(needUpdate) {
+                                                            ProductModel.getInstance().updaeProduct(product);
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                        }
+                                        listener.done(coupon, null);
+                                        break;
+                                    }
+                                    catch (Exception exe){
+                                        listener.done(null, new AppException("E_1005"));
+                                        break;
+                                    }
+                                }
+                            }
+                            else {
+                                listener.done(null, null);
+                            }
+                        } else {
+                            listener.done(null, new AppException(obj.get("Errors").getAsString()));
+                        }
+                    }
+                    catch (Exception e){
+                        listener.done(null, new AppException("E_1004"));
+                    }
+                } else {
+                    listener.done(null, exception);
+                }
+            }
+        });
+    }
+
+    /**
      * 从服务器删除指定的卡卷数据
      * @param ids 要删除的卡卷ID字符串
      * @param listener
@@ -224,6 +304,11 @@ public class CouponModel extends BaseModel {
                         //如果返回结果没有异常
                         if (obj.get("Errors").isJsonNull()) {
                             //在本地数据库删除服务器已经被修改成好友的订单记录
+                            Coupon coupon=getCouponById(couponId);
+                            Product product=coupon.getProduct();
+                            if(product.getCoupons().size()<=1){
+                                ProductModel.getInstance().deleteProduct(product);
+                            }
                             deleteCouponById(couponId);
                             listener.done(null, null);
                         } else {
@@ -334,7 +419,9 @@ public class CouponModel extends BaseModel {
             CouponDaoService.getInstance(getContext()).deleteCoupon(couponId);
             return true;
         }
-        catch (Exception e){ return false;}
+        catch (Exception exe){
+            return false;
+        }
     }
 
 }

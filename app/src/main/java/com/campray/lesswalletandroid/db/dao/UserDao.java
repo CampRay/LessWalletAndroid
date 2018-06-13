@@ -47,6 +47,7 @@ public class UserDao extends AbstractDao<User, Long> {
         public final static Property Remember = new Property(13, boolean.class, "remember", false, "REMEMBER");
         public final static Property AvatarUrl = new Property(14, String.class, "avatarUrl", false, "AVATAR_URL");
         public final static Property AvatorPath = new Property(15, String.class, "avatorPath", false, "AVATOR_PATH");
+        public final static Property Points = new Property(16, int.class, "points", false, "POINTS");
     }
 
     private DaoSession daoSession;
@@ -80,7 +81,8 @@ public class UserDao extends AbstractDao<User, Long> {
                 "\"CURRENCY_ID\" INTEGER," + // 12: currencyId
                 "\"REMEMBER\" INTEGER NOT NULL ," + // 13: remember
                 "\"AVATAR_URL\" TEXT," + // 14: avatarUrl
-                "\"AVATOR_PATH\" TEXT);"); // 15: avatorPath
+                "\"AVATOR_PATH\" TEXT," + // 15: avatorPath
+                "\"POINTS\" INTEGER NOT NULL );"); // 16: points
     }
 
     /** Drops the underlying database table. */
@@ -156,6 +158,7 @@ public class UserDao extends AbstractDao<User, Long> {
         if (avatorPath != null) {
             stmt.bindString(16, avatorPath);
         }
+        stmt.bindLong(17, entity.getPoints());
     }
 
     @Override
@@ -225,6 +228,7 @@ public class UserDao extends AbstractDao<User, Long> {
         if (avatorPath != null) {
             stmt.bindString(16, avatorPath);
         }
+        stmt.bindLong(17, entity.getPoints());
     }
 
     @Override
@@ -256,7 +260,8 @@ public class UserDao extends AbstractDao<User, Long> {
             cursor.isNull(offset + 12) ? null : cursor.getLong(offset + 12), // currencyId
             cursor.getShort(offset + 13) != 0, // remember
             cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14), // avatarUrl
-            cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15) // avatorPath
+            cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15), // avatorPath
+            cursor.getInt(offset + 16) // points
         );
         return entity;
     }
@@ -279,6 +284,7 @@ public class UserDao extends AbstractDao<User, Long> {
         entity.setRemember(cursor.getShort(offset + 13) != 0);
         entity.setAvatarUrl(cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14));
         entity.setAvatorPath(cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15));
+        entity.setPoints(cursor.getInt(offset + 16));
      }
     
     @Override

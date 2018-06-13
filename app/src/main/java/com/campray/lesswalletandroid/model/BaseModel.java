@@ -38,13 +38,17 @@ public abstract class BaseModel {
     public static final String URL_API_GETALLCURRENCIES=HOST+"/Plugins/API/GetAllCurrencyes";
     public static final String URL_API_GETALLUSERATTRS=HOST+"/Plugins/API/GetAllUserAttrs";
     public static final String URL_API_GETMERCHANT=HOST+"/Plugins/API/GetMerchant";
+    public static final String URL_API_GETALLHISTORIES=HOST+"/Plugins/API/GetAllLogs";
 
     public static final String URL_API_GET_USER_BYID=HOST+"/Plugins/API/GeUserById";
     public static final String URL_API_SEARCH_USER=HOST+"/Plugins/API/SearchUsers";
     public static final String URL_API_GET_FRIENDS=HOST+"/Plugins/API/GetAllFriends";
     public static final String URL_API_ADD_FRIEND=HOST+"/Plugins/API/AddFriend";
     public static final String URL_API_DEL_FRIEND=HOST+"/Plugins/API/DelFriend";
-    public static final String URL_API_SENT_COUPON=HOST+"Plugins/API/SentCoupon";
+    public static final String URL_API_SENT_COUPON=HOST+"/Plugins/API/SentCoupon";
+
+    public static final String URL_API_MSGSYNC=HOST+"/Plugins/API/MsgSync";
+    public static final String URL_API_DEL_HISTORIES=HOST+"/Plugins/API/DelLogs";
 
     private Handler apiHandler;
     public Context getContext(){

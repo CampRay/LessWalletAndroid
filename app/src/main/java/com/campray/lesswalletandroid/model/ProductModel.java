@@ -124,7 +124,7 @@ public class ProductModel extends BaseModel {
     }
 
     /**
-     * 根据类型查询所有的卡卷对象
+     * 根据类型查询所有的卡卷对应的商品对象
      * @param typeId
      * @return
      */
@@ -153,7 +153,7 @@ public class ProductModel extends BaseModel {
 
 
     /**
-     * 修改卡卷对象
+     * 修改卡卷对应的商品对象
      * @param product
      * @return
      */
@@ -167,7 +167,7 @@ public class ProductModel extends BaseModel {
 
 
     /**
-     * 删除卡卷对象
+     * 删除卡卷对应的商品对象
      * @param product
      * @return
      */
@@ -180,7 +180,7 @@ public class ProductModel extends BaseModel {
     }
 
     /**
-     * 删除卡卷对象
+     * 删除卡卷对应的商品对象
      * @param productId
      * @return
      */

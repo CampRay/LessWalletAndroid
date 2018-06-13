@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +21,7 @@ import com.campray.lesswalletandroid.bean.CouponBean;
 import com.campray.lesswalletandroid.bean.UserBean;
 import com.campray.lesswalletandroid.listener.OperationListener;
 import com.campray.lesswalletandroid.model.CouponModel;
+import com.campray.lesswalletandroid.service.DetectionService;
 import com.campray.lesswalletandroid.ui.base.BaseActivity;
 import com.campray.lesswalletandroid.ui.base.MenuActivity;
 import com.campray.lesswalletandroid.util.AppException;
@@ -84,7 +86,7 @@ public class MainActivity extends MenuActivity {
     public void onWicardClick(View view){
         Bundle bundle=new Bundle();
         bundle.putInt("type_id", 2);
-        startActivity(CouponActivity.class,bundle,true);
+        startActivity(CardActivity.class,bundle,true);
     }
     /**
      * 点击witicket按钮的事件方法
@@ -136,9 +138,7 @@ public class MainActivity extends MenuActivity {
      */
     @OnClick(R.id.ib_web)
     public void onWebClick(View view){
-        Bundle bundle=new Bundle();
-        bundle.putInt("type_id", 1);
-        startActivity(CouponActivity.class,bundle,true);
+        startActivity(WebActivity.class,null,true);
     }
 
     /**
