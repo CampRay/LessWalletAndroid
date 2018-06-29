@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 android {
-    compileSdkVersion 25
-    buildToolsVersion '26.0.2'
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
     defaultConfig {
         applicationId "com.campray.lesswalletandroid"
-        minSdkVersion 14
-        targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion 16
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -32,17 +32,25 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 //    compile project(':lib-zxing')
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:design:25.3.1'
+    //compile 'com.android.support:support-v4:26.0.0'
+    compile 'com.android.support:appcompat-v7:26.0.0'
+    compile 'com.android.support:design:26.0.0'
     testCompile 'junit:junit:4.12'
     compile 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
-    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+    //compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile 'org.greenrobot:eventbus:3.0.0'
     //annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.0.1'
     compile 'org.greenrobot:greendao:3.2.2'
     compile 'com.koushikdutta.ion:ion:2.2.1'
     compile 'pub.devrel:easypermissions:1.0.1'
     compile 'com.google.zxing:core:3.3.1'
-
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.youth.banner:banner:1.4.10'
+    compile 'com.braintreepayments.api:braintree:2.+'
+    //compile 'com.braintreepayments.api:drop-in:3.+'
+    compile('com.braintreepayments.api:drop-in:3.1.0') {
+        exclude group: 'com.braintreepayments.api', module: 'braintree'
+    }
+    compile 'com.google.android.gms:play-services-wallet:11.4.0'
 }

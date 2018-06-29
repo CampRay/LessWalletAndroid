@@ -13,11 +13,8 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.campray.lesswalletandroid.R;
 import com.campray.lesswalletandroid.qrcode.AmbientLightManager;
@@ -30,17 +27,11 @@ import com.campray.lesswalletandroid.qrcode.camera.CameraManager;
 import com.campray.lesswalletandroid.qrcode.decode.ImageDecoder;
 import com.campray.lesswalletandroid.ui.base.ParentWithNaviActivity;
 import com.campray.lesswalletandroid.util.ImageUtil;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.DecodeHintType;
 import com.google.zxing.Result;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
-import butterknife.BindView;
-import butterknife.OnClick;
 import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -201,7 +192,7 @@ public class QRCodeCaptureActivity extends ParentWithNaviActivity implements Sur
         beepManager = new BeepManager(this);
         ambientLightManager = new AmbientLightManager(this);
 
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        PreferenceManager.setDefaultValues(this, R.xml.settings, false);
     }
 
     @Override
@@ -218,7 +209,7 @@ public class QRCodeCaptureActivity extends ParentWithNaviActivity implements Sur
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
-//    if (prefs.getBoolean(PreferencesActivity.KEY_DISABLE_AUTO_ORIENTATION, true)) {
+//    if (prefs.getBoolean(SettingsActivity.KEY_DISABLE_AUTO_ORIENTATION, true)) {
 //      setRequestedOrientation(getCurrentOrientation());
 //    } else {
 //      setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);

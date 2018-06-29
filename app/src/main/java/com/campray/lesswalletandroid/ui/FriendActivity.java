@@ -17,8 +17,9 @@ import com.campray.lesswalletandroid.model.FriendModel;
 import com.campray.lesswalletandroid.model.UserModel;
 import com.campray.lesswalletandroid.ui.base.MenuActivity;
 import com.campray.lesswalletandroid.util.AppException;
-import com.campray.lesswalletandroid.util.ImageLoaderFactory;
 import com.campray.lesswalletandroid.util.ResourcesUtils;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.Picasso;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -72,7 +73,7 @@ public class FriendActivity extends MenuActivity {
             String lastName=this.getBundle().getString("lastName");
             String avatarUrl=this.getBundle().getString("avatarUrl");
             String country=this.getBundle().getString("country");
-            ImageLoaderFactory.getLoader().load(iv_avatar,avatarUrl,R.mipmap.icon_account,null);
+            Picasso.with(this).load(avatarUrl).placeholder(R.mipmap.icon_account).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_avatar);
             tv_email.setText(email);
             tv_mobile.setText(mobile);
             tv_country.setText(country);

@@ -90,6 +90,10 @@ public class Coupon {
                         couponStyle.setPictureUrl(TextUtils.isEmpty(specAttr.getFileUrl()) ? value : specAttr.getFileUrl());
                     } else if (specAttr.getSpecificationAttributeId() == 10) {//如果是商用家logo
                         couponStyle.setLogoUrl(TextUtils.isEmpty(specAttr.getFileUrl()) ? value : specAttr.getFileUrl());
+                    } else if (specAttr.getSpecificationAttributeId() == 11) {//如果是商用会员卡级别
+                        try {
+                            couponStyle.setCardLevel(Integer.parseInt(value));
+                        }catch (Exception e){}
                     } else {
                         couponStyle.setBenefit(value);
                     }

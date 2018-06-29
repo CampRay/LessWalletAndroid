@@ -18,7 +18,7 @@ package com.campray.lesswalletandroid.qrcode.camera;
 
 import android.content.SharedPreferences;
 
-import com.campray.lesswalletandroid.ui.PreferencesActivity;
+import com.campray.lesswalletandroid.ui.SettingsActivity;
 
 /**
  * Enumerates settings of the preference controlling the front light.
@@ -37,7 +37,7 @@ public enum FrontLightMode {
   }
 
   public static FrontLightMode readPref(SharedPreferences sharedPrefs) {
-    return parse(sharedPrefs.getString(PreferencesActivity.KEY_FRONT_LIGHT_MODE, OFF.toString()));
+    return parse(sharedPrefs.getString(SettingsActivity.KEY_FRONT_LIGHT_MODE, OFF.toString()));
   }
 
 }

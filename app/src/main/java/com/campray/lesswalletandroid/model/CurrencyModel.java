@@ -126,5 +126,12 @@ public class CurrencyModel extends BaseModel {
         return null;
     }
 
+    /**
+     * 查询默认主货币对象
+     * @return
+     */
+    public Currency getDefaultCurrency(){
+        return CurrencyDaoService.getInstance(getContext()).getDefaultCurrency();
+    }
 
 }

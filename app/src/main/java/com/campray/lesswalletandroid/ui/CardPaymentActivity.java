@@ -2,7 +2,6 @@ package com.campray.lesswalletandroid.ui;
 
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -15,16 +14,19 @@ import android.widget.TextView;
 
 import com.campray.lesswalletandroid.R;
 import com.campray.lesswalletandroid.db.entity.Coupon;
+import com.campray.lesswalletandroid.db.entity.Currency;
 import com.campray.lesswalletandroid.db.entity.Product;
 import com.campray.lesswalletandroid.db.entity.SpecAttr;
 import com.campray.lesswalletandroid.listener.OperationListener;
 import com.campray.lesswalletandroid.model.CouponModel;
+import com.campray.lesswalletandroid.model.CurrencyModel;
 import com.campray.lesswalletandroid.model.ProductModel;
 import com.campray.lesswalletandroid.ui.base.MenuActivity;
 import com.campray.lesswalletandroid.util.AppException;
 import com.campray.lesswalletandroid.util.ImageUtil;
 import com.campray.lesswalletandroid.util.ResourcesUtils;
-import com.campray.lesswalletandroid.util.UniversalImageLoader;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.List;
@@ -136,18 +138,22 @@ public class CardPaymentActivity extends MenuActivity {
             gradientDrawable.setColor(Color.parseColor(bgColor));
 
             //加载底纹
-            UniversalImageLoader imageLoader = new UniversalImageLoader();
-            imageLoader.load(iv_card_shading, shadingUrl, 0, null);
-            //加载自定义图片
-            //imageLoader.load(iv_card_img, customPicUrl, 0, null);
+            Picasso.with(this).load(shadingUrl).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_card_shading);
             //加载商家logo
-            imageLoader.load(iv_card_logo, logoUrl, 0, null);
+            Picasso.with(this).load(logoUrl).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_card_logo);
+            //加载自定义图片
+            Picasso.with(this).load(customPicUrl).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_card_img);
 
-            tv_price.setText(benefit);
+            //tv_price.setText(benefit);
             tv_title.setText(product.getTitle());
             tv_merchant.setText(product.getMerchant().getName());
-            tv_number.setText(product.getPrice() + "");
             gl_dialog.setVisibility(View.VISIBLE);
+            Currency currency=CurrencyModel.getInstance().getDefaultCurrency();
+            String fmtStr="%s";
+            if(!TextUtils.isEmpty(currency.getCustomFormatting())){
+                fmtStr=currency.getCustomFormatting().replace("0.00","%.2f");
+            }
+            tv_number.setText(String.format(fmtStr,product.getPrice()) );
         }
         catch (Exception e){}
 

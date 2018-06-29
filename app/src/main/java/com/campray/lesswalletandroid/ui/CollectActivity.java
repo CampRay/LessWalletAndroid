@@ -76,8 +76,7 @@ public class CollectActivity extends MenuActivity {
     private void setCurrencyDisplayData() {
         currencyList= CurrencyModel.getInstance().getAllCurrencies();
         if(currencyList==null) {
-            currencyList.add(new Currency(1L,"US Dollar","USD","1","US$",1));
-
+            currencyList.add(new Currency(1L,"HK Dollar","HKD","1","HK$",1,false));
         }
         for (Currency bean : currencyList) {
             displayDataList.add(bean.getName());
@@ -163,7 +162,11 @@ public class CollectActivity extends MenuActivity {
                 String collectStr="collect:"+ LessWalletApplication.INSTANCE().getAccount().getId()+":"+ currencyCode+":"+amount;
                 qrCodeBitmap= QRCodeEncoder.encodeAsBitmap(collectStr, BarcodeFormat.QR_CODE,200);
                 iv_qrcode.setImageBitmap(qrCodeBitmap);
-                tv_amount.setText(currency.getCustomFormatting()+amount);
+                String fmtStr="%s";
+                if(!TextUtils.isEmpty(currency.getCustomFormatting())){
+                    fmtStr=currency.getCustomFormatting().replace("0.00","%.2f");
+                }
+                tv_amount.setText(String.format(fmtStr,amount));
                 tv_amount.setVisibility(View.VISIBLE);
             } catch (WriterException e) {
                 toast("Failed to create QR Code.");

@@ -6,6 +6,7 @@ import org.greenrobot.greendao.annotation.NotNull;
 import org.greenrobot.greendao.annotation.Generated;
 
 /**
+ * 网站发布的货币
  * Created by Phills on 10/25/2017.
  */
 @Entity
@@ -22,16 +23,20 @@ public class Currency {
     private String customFormatting;
     @NotNull
     private int displayOrder;
-    @Generated(hash = 828462455)
+    @NotNull
+    private boolean isDefault=false;
+
+    @Generated(hash = 776738853)
     public Currency(Long id, @NotNull String name, @NotNull String currencyCode,
             @NotNull String rate, @NotNull String customFormatting,
-            int displayOrder) {
+            int displayOrder, boolean isDefault) {
         this.id = id;
         this.name = name;
         this.currencyCode = currencyCode;
         this.rate = rate;
         this.customFormatting = customFormatting;
         this.displayOrder = displayOrder;
+        this.isDefault = isDefault;
     }
     @Generated(hash = 1387171739)
     public Currency() {
@@ -71,6 +76,12 @@ public class Currency {
     }
     public void setDisplayOrder(int displayOrder) {
         this.displayOrder = displayOrder;
+    }
+    public boolean getIsDefault() {
+        return this.isDefault;
+    }
+    public void setIsDefault(boolean isDefault) {
+        this.isDefault = isDefault;
     }
 
 

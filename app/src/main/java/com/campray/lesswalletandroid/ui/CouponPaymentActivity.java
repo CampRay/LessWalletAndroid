@@ -1,10 +1,14 @@
 package com.campray.lesswalletandroid.ui;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.GridLayout;
@@ -13,6 +17,14 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.braintreepayments.api.dropin.DropInActivity;
+import com.braintreepayments.api.dropin.DropInRequest;
+import com.braintreepayments.api.dropin.DropInResult;
+import com.braintreepayments.api.models.BraintreePaymentResult;
+import com.braintreepayments.api.models.GooglePaymentRequest;
+import com.braintreepayments.api.models.IdealResult;
+import com.braintreepayments.api.models.PaymentMethodNonce;
+import com.campray.lesswalletandroid.LessWalletApplication;
 import com.campray.lesswalletandroid.R;
 import com.campray.lesswalletandroid.db.entity.Coupon;
 import com.campray.lesswalletandroid.db.entity.Product;
@@ -20,18 +32,20 @@ import com.campray.lesswalletandroid.db.entity.SpecAttr;
 import com.campray.lesswalletandroid.listener.OperationListener;
 import com.campray.lesswalletandroid.model.CouponModel;
 import com.campray.lesswalletandroid.model.ProductModel;
+import com.campray.lesswalletandroid.model.UserModel;
 import com.campray.lesswalletandroid.ui.base.MenuActivity;
 import com.campray.lesswalletandroid.util.AppException;
 import com.campray.lesswalletandroid.util.ImageUtil;
 import com.campray.lesswalletandroid.util.ResourcesUtils;
-import com.campray.lesswalletandroid.util.TimeUtil;
-import com.campray.lesswalletandroid.util.UniversalImageLoader;
-import com.campray.lesswalletandroid.view.InnerCornerView;
+import com.google.android.gms.wallet.Cart;
+import com.google.android.gms.wallet.LineItem;
+import com.google.android.gms.wallet.TransactionInfo;
+import com.google.android.gms.wallet.WalletConstants;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.util.Calendar;
 import java.util.List;
-import java.util.TimeZone;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -79,6 +93,9 @@ public class CouponPaymentActivity extends MenuActivity {
     private String customPicUrl = null;
     private String logoUrl = null;
 
+    private String clientToken=null;
+    private static final int DROP_IN_REQUEST = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +104,7 @@ public class CouponPaymentActivity extends MenuActivity {
         long tid = this.getBundle().getLong("tid");
         //根据扫码获取的ID，从服务器获取对应的电子卡卷信息
         getCouponFromServer(pid);
+
     }
 
     /**
@@ -100,9 +118,35 @@ public class CouponPaymentActivity extends MenuActivity {
                 if (exe == null) {
                     curProduct=product;
                     showCoupon(product);
+                    if(curProduct.getPrice()==0){
+                        gl_dialog.setVisibility(View.VISIBLE);
+                    }
+                    else{
+                        gl_dialog.setVisibility(View.GONE);
+                        getClientToken();
+                    }
                 } else {
                     toast(exe.toString(getApplicationContext()));
                     finish();
+                }
+            }
+        });
+    }
+
+    /**
+     * 从服务器获取Braintree的Client Token
+     */
+    private void getClientToken(){
+        //获取Paypal的Braintree支付的CLient Token
+        UserModel.getInstance().getPaypalClientToken(new OperationListener<String>() {
+            @Override
+            public void done(String token, AppException exception) {
+                if(exception==null) {
+                    clientToken=token;
+                    gl_dialog.setVisibility(View.VISIBLE);
+                }
+                else{
+                    toast("Get payment token failed,please try again.");
                 }
             }
         });
@@ -143,12 +187,12 @@ public class CouponPaymentActivity extends MenuActivity {
         //设置背景色
         gl_coupon_top.setBackgroundColor(Color.parseColor(bgColor));
         //加载底纹
-        UniversalImageLoader imageLoader=new UniversalImageLoader();
-        imageLoader.load(iv_coupon_shading,shadingUrl,0,null);
+        Picasso.with(this).load(shadingUrl).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_coupon_shading);
         //加载自定义图片
-        imageLoader.load(iv_coupon_img,customPicUrl,0,null);
+        Picasso.with(this).load(customPicUrl).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_coupon_img);
         //加载商家logo
-        imageLoader.load(iv_coupon_logo,logoUrl,0,null);
+        Picasso.with(this).load(logoUrl).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_coupon_logo);
+
 
         tv_price.setText(benefit);
         tv_title.setText(product.getTitle());
@@ -194,71 +238,161 @@ public class CouponPaymentActivity extends MenuActivity {
     @OnClick(R.id.btn_yes)
     public void onClickButtonYes(){
         btn_yes.setEnabled(false);
-        CouponModel.getInstance().confirmCoupon(curProduct.getProductId(), new OperationListener<Coupon>() {
-            @Override
-            public void done(Coupon coupon, AppException exception) {
-                if(exception==null){
-                    boolean needUpdate=false;
-                    Product productBean=coupon.getProduct();
-                    List<SpecAttr> specAttrBeanList = productBean.getSpecAttr();
-                    for (SpecAttr specAttrBean:specAttrBeanList) {
-                        if(specAttrBean.getSpecificationAttributeId()==8){//如果是底纹
-                            if(TextUtils.isEmpty(specAttrBean.getFileUrl())) {
-                                String[] strArr = shadingUrl.split("\\.");
-                                //保存图片到手机存储空间
-                                iv_coupon_shading.setDrawingCacheEnabled(true);
-                                File shadingFile = ImageUtil.saveImage(iv_coupon_shading.getDrawingCache(), strArr[strArr.length - 1]);
-                                specAttrBean.setFileUrl(Uri.fromFile(shadingFile).toString());
-                                iv_coupon_shading.setDrawingCacheEnabled(false);
-                                iv_coupon_shading.destroyDrawingCache();
-                                needUpdate=true;
-                            }
-                        }
-                        else if(specAttrBean.getSpecificationAttributeId()==9){//如果是自定义图片
-                            if(TextUtils.isEmpty(specAttrBean.getFileUrl())) {
-                                String[] strArr = customPicUrl.split("\\.");
-                                iv_coupon_img.setDrawingCacheEnabled(true);
-                                File imageFile = ImageUtil.saveImage(iv_coupon_img.getDrawingCache(), strArr[strArr.length - 1]);
-                                specAttrBean.setFileUrl(Uri.fromFile(imageFile).toString());
-                                iv_coupon_img.setDrawingCacheEnabled(false);
-                                iv_coupon_img.destroyDrawingCache();
-                                needUpdate=true;
-                            }
-                        }
-                        else if(specAttrBean.getSpecificationAttributeId()==10){//如果是商用家logo
-                            if(TextUtils.isEmpty(specAttrBean.getFileUrl())) {
-                                String[] strArr = logoUrl.split("\\.");
-                                iv_coupon_logo.setDrawingCacheEnabled(true);
-                                File logoFile = ImageUtil.saveImage(iv_coupon_logo.getDrawingCache(), strArr[strArr.length - 1]);
-                                specAttrBean.setFileUrl(Uri.fromFile(logoFile).toString());
-                                iv_coupon_logo.setDrawingCacheEnabled(false);
-                                iv_coupon_logo.destroyDrawingCache();
-                                needUpdate=true;
-                            }
-                        }
-                    }
-                    if(needUpdate) {
-                        ProductModel.getInstance().updaeProduct(productBean);
-                    }
+        if(curProduct.getPrice()>0) {
+            Cart card=Cart.newBuilder()
+                    .setCurrencyCode(curProduct.getCurrencyCode())
+                    .setTotalPrice(curProduct.getPrice()+"")
+                    .addLineItem(LineItem.newBuilder()
+                            .setCurrencyCode(curProduct.getCurrencyCode())
+                            .setDescription(curProduct.getTitle())
+                            .setQuantity("1")
+                            .setUnitPrice(curProduct.getPrice()+"")
+                            .setTotalPrice(curProduct.getPrice()+"")
+                            .build())
+                    .build();
 
-                    toast("优惠卷已经成功收入您的钱包中!");
-                    finish();
+            DropInRequest dropInRequest = new DropInRequest()
+            .amount(curProduct.getPrice()+"")
+            .clientToken(clientToken)
+            .collectDeviceData(false)
+            .requestThreeDSecureVerification(false)
+            .androidPayCart(card)
+            .androidPayShippingAddressRequired(false)
+            .androidPayPhoneNumberRequired(false);
+
+            startActivityForResult(dropInRequest.getIntent(this), DROP_IN_REQUEST);
+//            Intent intent=new Intent(this, PaymentMethodsActivity.class);
+//            intent.putExtra("productId",curProduct.getProductId());
+//            intent.putExtra("price",curProduct.getPrice());
+//            startActivityForResult(intent, DROP_IN_REQUEST);
+            btn_yes.setEnabled(true);
+        }else{
+            CouponModel.getInstance().confirmCoupon(curProduct.getProductId(), new OperationListener<Coupon>() {
+                @Override
+                public void done(Coupon coupon, AppException exception) {
+                    if (exception == null) {
+                        saveCouponImage(coupon);
+                        toast("优惠卷已经成功收入您的钱包中!");
+                        finish();
+                    } else {
+                        btn_yes.setEnabled(true);
+                        toast("获取优惠卷失败，错误原因: " + getResources().getString(ResourcesUtils.getStringId(getApplicationContext(), exception.getErrorCode())));
+                    }
                 }
-                else{
-                    btn_yes.setEnabled(true);
-                    toast("获取优惠卷失败，错误原因: "+getResources().getString(ResourcesUtils.getStringId(getApplicationContext(),exception.getErrorCode())));
+            });
+        }
+    }
+
+    /**
+     * 保存处理Coupon图片
+     * @param coupon
+     */
+    private void saveCouponImage(Coupon coupon){
+        boolean needUpdate = false;
+        Product productBean = coupon.getProduct();
+        List<SpecAttr> specAttrBeanList = productBean.getSpecAttr();
+        for (SpecAttr specAttrBean : specAttrBeanList) {
+            if (specAttrBean.getSpecificationAttributeId() == 8) {//如果是底纹
+                if (TextUtils.isEmpty(specAttrBean.getFileUrl())) {
+                    String[] strArr = shadingUrl.split("\\.");
+                    //保存图片到手机存储空间
+                    iv_coupon_shading.setDrawingCacheEnabled(true);
+                    File shadingFile = ImageUtil.saveImage(iv_coupon_shading.getDrawingCache(), strArr[strArr.length - 1]);
+                    specAttrBean.setFileUrl(Uri.fromFile(shadingFile).toString());
+                    iv_coupon_shading.setDrawingCacheEnabled(false);
+                    iv_coupon_shading.destroyDrawingCache();
+                    needUpdate = true;
+                }
+            } else if (specAttrBean.getSpecificationAttributeId() == 9) {//如果是自定义图片
+                if (TextUtils.isEmpty(specAttrBean.getFileUrl())) {
+                    String[] strArr = customPicUrl.split("\\.");
+                    iv_coupon_img.setDrawingCacheEnabled(true);
+                    File imageFile = ImageUtil.saveImage(iv_coupon_img.getDrawingCache(), strArr[strArr.length - 1]);
+                    specAttrBean.setFileUrl(Uri.fromFile(imageFile).toString());
+                    iv_coupon_img.setDrawingCacheEnabled(false);
+                    iv_coupon_img.destroyDrawingCache();
+                    needUpdate = true;
+                }
+            } else if (specAttrBean.getSpecificationAttributeId() == 10) {//如果是商用家logo
+                if (TextUtils.isEmpty(specAttrBean.getFileUrl())) {
+                    String[] strArr = logoUrl.split("\\.");
+                    iv_coupon_logo.setDrawingCacheEnabled(true);
+                    File logoFile = ImageUtil.saveImage(iv_coupon_logo.getDrawingCache(), strArr[strArr.length - 1]);
+                    specAttrBean.setFileUrl(Uri.fromFile(logoFile).toString());
+                    iv_coupon_logo.setDrawingCacheEnabled(false);
+                    iv_coupon_logo.destroyDrawingCache();
+                    needUpdate = true;
                 }
             }
-        });
+        }
+        if (needUpdate) {
+            ProductModel.getInstance().updaeProduct(productBean);
+        }
 
     }
 
     @OnClick(R.id.btn_no)
     public void onClickButtonNo(){
         btn_no.setEnabled(false);
-        ProductModel.getInstance().deleteProductById(curProduct.getProductId());
+        if(curProduct.getCoupons()==null||curProduct.getCoupons().size()==0) {
+            ProductModel.getInstance().deleteProductById(curProduct.getProductId());
+        }
         finish();
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        if (resultCode == RESULT_OK) {
+            if (requestCode == DROP_IN_REQUEST) {
+                //使用DropIn时的处理
+                DropInResult result = data.getParcelableExtra(DropInResult.EXTRA_DROP_IN_RESULT);
+                PaymentMethodNonce paymentMethodNonce =result.getPaymentMethodNonce();
+                long productId=curProduct.getProductId();
+//                PaymentMethodNonce paymentMethodNonce = data.getParcelableExtra("NONCE");
+//                long productId=data.getLongExtra("productId",0);
+                if(productId>0) {
+                    //支付Coupon
+                    CouponModel.getInstance().paypalCoupon(productId, paymentMethodNonce.getNonce(), new OperationListener<Coupon>() {
+                        @Override
+                        public void done(Coupon coupon, AppException exception) {
+                            if (exception == null) {
+                                saveCouponImage(coupon);
+                                toast("优惠卷已经成功收入您的钱包中!");
+                                finish();
+                            } else {
+                                btn_yes.setEnabled(true);
+                                int errorId=ResourcesUtils.getStringId(getApplicationContext(), exception.getErrorCode());
+                                if(errorId>0) {
+                                    toast("获取优惠卷失败，错误原因: " + getResources().getString(errorId));
+                                }
+                                else{
+                                    toast("获取优惠卷失败，错误原因: " + exception.getErrorCode());
+                                }
+                            }
+                        }
+                    });
+                }
+                else{
+                    toast("支付异常，错误原因:支付商品ID不匹配! ");
+                }
+            }
+
+        }
+        else if (resultCode != RESULT_CANCELED) {
+            //使用DropIn时的异常处理
+            Exception exe=(Exception) data.getSerializableExtra(DropInActivity.EXTRA_ERROR);
+            //Exception exe=(Exception) data.getSerializableExtra("EXTRA_ERROR");
+            if(exe!=null) {
+                new AlertDialog.Builder(this).setMessage(exe.getMessage())
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).show();
+            }
+        }
+    }
 }

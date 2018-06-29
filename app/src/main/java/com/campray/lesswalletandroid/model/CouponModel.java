@@ -47,7 +47,9 @@ public class CouponModel extends BaseModel {
      * @param listener
      */
     public void getAllCouponsFromServer(final OperationListener<List<Coupon>> listener) {
-        this.httpPostAPI(CouponModel.URL_API_GETALLCOUPONS, null,new ApiHandleListener<JsonObject>() {
+        JsonObject jObj=new JsonObject();
+        jObj.addProperty("device",this.getDeviceId());
+        this.httpPostAPI(CouponModel.URL_API_GETALLCOUPONS, jObj,new ApiHandleListener<JsonObject>() {
             @Override
             public void done(JsonObject obj, AppException exception) {
                 if (exception == null) {
@@ -116,7 +118,7 @@ public class CouponModel extends BaseModel {
     }
 
     /**
-     * 确认支付并获取到卡卷
+     * 确认并获取免费卡卷
      * @param pid
      * @param listener
      */
@@ -139,6 +141,57 @@ public class CouponModel extends BaseModel {
                                     Coupon coupon = gson.fromJson(item, Coupon.class);
                                     try {
                                         long row = CouponDaoService.getInstance(getContext()).insertOrUpdateCoupon(coupon);
+                                        listener.done(coupon, null);
+                                        break;
+                                    }
+                                    catch (Exception exe){
+                                        listener.done(null, new AppException("E_1005"));
+                                        break;
+                                    }
+                                }
+                            }
+                            else {
+                                listener.done(null, null);
+                            }
+                        } else {
+                            listener.done(null, new AppException(obj.get("Errors").getAsString()));
+                        }
+                    }
+                    catch (Exception e){
+                        listener.done(null, new AppException("E_1004"));
+                    }
+                } else {
+                    listener.done(null, exception);
+                }
+            }
+        });
+    }
+
+    /**
+     * 确认并支付卡卷
+     * @param pid
+     * @param listener
+     */
+    public void paypalCoupon(long pid,String nonce,final OperationListener<Coupon> listener){
+        //封装登录请求参数
+        JsonObject jObj=new JsonObject();
+        jObj.addProperty("productId",pid);
+        jObj.addProperty("nonce",nonce);
+        jObj.addProperty("device",this.getDeviceId());
+        this.httpPostAPI(CouponModel.URL_API_PAYPALCOUPON, jObj,new ApiHandleListener<JsonObject>() {
+            @Override
+            public void done(JsonObject obj, AppException exception) {
+                if (exception == null) {
+                    try {
+                        //如果返回结果没有异常
+                        if (obj.get("Errors").isJsonNull()) {
+                            if (obj.get("Data").isJsonArray()) {
+                                JsonArray jArr = obj.get("Data").getAsJsonArray();
+                                Gson gson = new Gson();
+                                for(JsonElement item:jArr){
+                                    Coupon coupon = gson.fromJson(item, Coupon.class);
+                                    try {
+                                        CouponDaoService.getInstance(getContext()).insertOrUpdateCoupon(coupon);
                                         listener.done(coupon, null);
                                         break;
                                     }

@@ -198,7 +198,7 @@ public class FriendModel extends BaseModel {
                                 final Friend friend = gson.fromJson(jArr.get(0), Friend.class);
                                 if(friend!=null) {
                                     Friend savedFriend=FriendDaoService.getInstance(getContext()).getFriendByName(friend.getUserName());
-                                    if(savedFriend==null) {
+                                    if(savedFriend==null) {//如果本地数据库还没有添加为好友，则保存
                                         FriendDaoService.getInstance(getContext()).insertOrUpdateFriend(friend);
                                         //保存图片到本地
                                         final String avatarUrl = friend.getAvatarUrl();

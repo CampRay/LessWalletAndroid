@@ -1,13 +1,18 @@
 package com.campray.lesswalletandroid.db.dao;
 
+import java.util.List;
+import java.util.ArrayList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteStatement;
 
 import org.greenrobot.greendao.AbstractDao;
 import org.greenrobot.greendao.Property;
+import org.greenrobot.greendao.internal.SqlUtils;
 import org.greenrobot.greendao.internal.DaoConfig;
 import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.database.DatabaseStatement;
+
+import com.campray.lesswalletandroid.db.entity.Currency;
 
 import com.campray.lesswalletandroid.db.entity.Language;
 
@@ -29,7 +34,10 @@ public class LanguageDao extends AbstractDao<Language, Long> {
         public final static Property LanguageCulture = new Property(2, String.class, "languageCulture", false, "LANGUAGE_CULTURE");
         public final static Property UniqueSeoCode = new Property(3, String.class, "uniqueSeoCode", false, "UNIQUE_SEO_CODE");
         public final static Property DisplayOrder = new Property(4, int.class, "displayOrder", false, "DISPLAY_ORDER");
+        public final static Property DefaultCurrencyId = new Property(5, Long.class, "defaultCurrencyId", false, "DEFAULT_CURRENCY_ID");
     }
+
+    private DaoSession daoSession;
 
 
     public LanguageDao(DaoConfig config) {
@@ -38,6 +46,7 @@ public class LanguageDao extends AbstractDao<Language, Long> {
     
     public LanguageDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
+        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
@@ -48,7 +57,8 @@ public class LanguageDao extends AbstractDao<Language, Long> {
                 "\"NAME\" TEXT NOT NULL ," + // 1: name
                 "\"LANGUAGE_CULTURE\" TEXT NOT NULL ," + // 2: languageCulture
                 "\"UNIQUE_SEO_CODE\" TEXT NOT NULL ," + // 3: uniqueSeoCode
-                "\"DISPLAY_ORDER\" INTEGER NOT NULL );"); // 4: displayOrder
+                "\"DISPLAY_ORDER\" INTEGER NOT NULL ," + // 4: displayOrder
+                "\"DEFAULT_CURRENCY_ID\" INTEGER NOT NULL );"); // 5: defaultCurrencyId
     }
 
     /** Drops the underlying database table. */
@@ -69,6 +79,7 @@ public class LanguageDao extends AbstractDao<Language, Long> {
         stmt.bindString(3, entity.getLanguageCulture());
         stmt.bindString(4, entity.getUniqueSeoCode());
         stmt.bindLong(5, entity.getDisplayOrder());
+        stmt.bindLong(6, entity.getDefaultCurrencyId());
     }
 
     @Override
@@ -83,6 +94,13 @@ public class LanguageDao extends AbstractDao<Language, Long> {
         stmt.bindString(3, entity.getLanguageCulture());
         stmt.bindString(4, entity.getUniqueSeoCode());
         stmt.bindLong(5, entity.getDisplayOrder());
+        stmt.bindLong(6, entity.getDefaultCurrencyId());
+    }
+
+    @Override
+    protected final void attachEntity(Language entity) {
+        super.attachEntity(entity);
+        entity.__setDaoSession(daoSession);
     }
 
     @Override
@@ -97,7 +115,8 @@ public class LanguageDao extends AbstractDao<Language, Long> {
             cursor.getString(offset + 1), // name
             cursor.getString(offset + 2), // languageCulture
             cursor.getString(offset + 3), // uniqueSeoCode
-            cursor.getInt(offset + 4) // displayOrder
+            cursor.getInt(offset + 4), // displayOrder
+            cursor.getLong(offset + 5) // defaultCurrencyId
         );
         return entity;
     }
@@ -109,6 +128,7 @@ public class LanguageDao extends AbstractDao<Language, Long> {
         entity.setLanguageCulture(cursor.getString(offset + 2));
         entity.setUniqueSeoCode(cursor.getString(offset + 3));
         entity.setDisplayOrder(cursor.getInt(offset + 4));
+        entity.setDefaultCurrencyId(cursor.getLong(offset + 5));
      }
     
     @Override
@@ -136,4 +156,97 @@ public class LanguageDao extends AbstractDao<Language, Long> {
         return true;
     }
     
+    private String selectDeep;
+
+    protected String getSelectDeep() {
+        if (selectDeep == null) {
+            StringBuilder builder = new StringBuilder("SELECT ");
+            SqlUtils.appendColumns(builder, "T", getAllColumns());
+            builder.append(',');
+            SqlUtils.appendColumns(builder, "T0", daoSession.getCurrencyDao().getAllColumns());
+            builder.append(" FROM LANGUAGE T");
+            builder.append(" LEFT JOIN CURRENCY T0 ON T.\"DEFAULT_CURRENCY_ID\"=T0.\"_id\"");
+            builder.append(' ');
+            selectDeep = builder.toString();
+        }
+        return selectDeep;
+    }
+    
+    protected Language loadCurrentDeep(Cursor cursor, boolean lock) {
+        Language entity = loadCurrent(cursor, 0, lock);
+        int offset = getAllColumns().length;
+
+        Currency currency = loadCurrentOther(daoSession.getCurrencyDao(), cursor, offset);
+         if(currency != null) {
+            entity.setCurrency(currency);
+        }
+
+        return entity;    
+    }
+
+    public Language loadDeep(Long key) {
+        assertSinglePk();
+        if (key == null) {
+            return null;
+        }
+
+        StringBuilder builder = new StringBuilder(getSelectDeep());
+        builder.append("WHERE ");
+        SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
+        String sql = builder.toString();
+        
+        String[] keyArray = new String[] { key.toString() };
+        Cursor cursor = db.rawQuery(sql, keyArray);
+        
+        try {
+            boolean available = cursor.moveToFirst();
+            if (!available) {
+                return null;
+            } else if (!cursor.isLast()) {
+                throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
+            }
+            return loadCurrentDeep(cursor, true);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+    /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
+    public List<Language> loadAllDeepFromCursor(Cursor cursor) {
+        int count = cursor.getCount();
+        List<Language> list = new ArrayList<Language>(count);
+        
+        if (cursor.moveToFirst()) {
+            if (identityScope != null) {
+                identityScope.lock();
+                identityScope.reserveRoom(count);
+            }
+            try {
+                do {
+                    list.add(loadCurrentDeep(cursor, false));
+                } while (cursor.moveToNext());
+            } finally {
+                if (identityScope != null) {
+                    identityScope.unlock();
+                }
+            }
+        }
+        return list;
+    }
+    
+    protected List<Language> loadDeepAllAndCloseCursor(Cursor cursor) {
+        try {
+            return loadAllDeepFromCursor(cursor);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+
+    /** A raw-style query where you can pass any WHERE clause and arguments. */
+    public List<Language> queryDeep(String where, String... selectionArg) {
+        Cursor cursor = db.rawQuery(getSelectDeep() + where, selectionArg);
+        return loadDeepAllAndCloseCursor(cursor);
+    }
+ 
 }

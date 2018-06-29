@@ -1,24 +1,16 @@
 package com.campray.lesswalletandroid.model;
 
-import android.graphics.Bitmap;
-import android.view.View;
-
-import com.campray.lesswalletandroid.bean.MerchantBean;
 import com.campray.lesswalletandroid.db.entity.Merchant;
 import com.campray.lesswalletandroid.db.service.MerchantDaoService;
 import com.campray.lesswalletandroid.listener.ApiHandleListener;
 import com.campray.lesswalletandroid.listener.OperationListener;
 import com.campray.lesswalletandroid.util.AppException;
-import com.campray.lesswalletandroid.util.ImageUtil;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

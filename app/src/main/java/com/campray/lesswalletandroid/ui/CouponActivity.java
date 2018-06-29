@@ -107,40 +107,6 @@ public class CouponActivity extends MenuActivity {
             };
             adapter=new WiCouponAdapter(this,mutlipleItem,null);
         }
-        else if(typeId==2){//电子票类型
-            IMutlipleItem<Coupon> mutlipleItem = new IMutlipleItem<Coupon>() {
-                //根据对象所在位置参数和对象数据，设置对象的不同布局类型
-                @Override
-                public int getItemViewType(int postion, Coupon coupon) {
-                    if(postion>0&&coupon==null){
-                        return 2;
-                    }
-                    return 0;
-                }
-                // 根据指定的View类型参数，返回对应的布局layout资源文件ID
-                @Override
-                public int getItemLayoutId(int viewtype) {
-                    switch(viewtype){
-                        case 0:
-                            return R.layout.item_ticket;
-                        case 2:
-                            return R.layout.item_progressbar;
-                        default:
-                            return R.layout.item_ticket;
-
-                    }
-                }
-                //返回布局对象数量
-                @Override
-                public int getItemCount(List<Coupon> list) {
-                    return list.size();
-                }
-            };
-            adapter=new WiTicketAdapter(this,mutlipleItem,null);
-        }
-        else if(typeId==3){//电子会员卡类型
-
-        }
         rc_coupon_list.setAdapter(adapter);
         linearLayoutManager=new LinearLayoutManager(this);
         rc_coupon_list.setLayoutManager(linearLayoutManager);

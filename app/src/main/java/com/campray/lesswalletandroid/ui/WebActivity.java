@@ -22,10 +22,18 @@ import android.widget.TextView;
 
 import com.campray.lesswalletandroid.LessWalletApplication;
 import com.campray.lesswalletandroid.R;
+import com.campray.lesswalletandroid.db.entity.Coupon;
 import com.campray.lesswalletandroid.db.entity.User;
+import com.campray.lesswalletandroid.listener.OperationListener;
+import com.campray.lesswalletandroid.model.BaseModel;
+import com.campray.lesswalletandroid.model.CouponModel;
 import com.campray.lesswalletandroid.model.UserModel;
 import com.campray.lesswalletandroid.ui.base.MenuActivity;
+import com.campray.lesswalletandroid.util.AppException;
 import com.campray.lesswalletandroid.util.ResourcesUtils;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -46,7 +54,16 @@ public class WebActivity extends MenuActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web);
-        webview.loadUrl("http://192.168.2.2:15536");//加载url
+        //设置http请求头
+        Map<String,String> extraHeaders = new HashMap<String, String>();
+        User user= LessWalletApplication.INSTANCE().getAccount();
+        String token="";
+        if(user!=null){
+            token=user.getToken();
+        }
+        extraHeaders.put("Authorization", token);
+        extraHeaders.put("Device", UserModel.getInstance().getDeviceId());
+        webview.loadUrl(BaseModel.HOST+"/login",extraHeaders);//加载url
 
         webview.addJavascriptInterface(this,"android");//添加js监听 这样html就能调用客户端
         webview.setWebChromeClient(webChromeClient);
@@ -94,17 +111,23 @@ public class WebActivity extends MenuActivity {
         }
 
         /**
-         * 页面正在加载时
+         * 页面正在加载时(可以拦截指定url的网页)
          * @param view
          * @param url
          * @return
          */
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-//            if(url.equals("http://www.google.com/")){
-//                Toast.makeText(MainActivity.this,"国内不能访问google,拦截该url",Toast.LENGTH_LONG).show();
-//                return true;//表示我已经处理过了
-//            }
+            String prefix=UserModel.HOST+"/checkout/completed/";
+            if(url.startsWith(prefix)){
+                long id=Long.parseLong(url.replace(prefix,""));
+                //从服务端下载Coupon
+                CouponModel.getInstance().getCouponFromServer(id, new OperationListener<Coupon>() {
+                    @Override
+                    public void done(Coupon obj, AppException exception) {}
+                });
+                //return true;//表示我已经处理过了
+            }
             return super.shouldOverrideUrlLoading(view, url);
         }
 

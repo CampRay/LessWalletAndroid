@@ -25,7 +25,7 @@ import static com.campray.lesswalletandroid.LessWalletApplication.INSTANCE;
  */
 public abstract class BaseModel {
     public String deviceId=null;
-    public static final String HOST="http://192.168.2.2:15536";
+    public static final String HOST="http://192.168.2.3:15536";
     public static final String URL_API_LOGIN=HOST+"/Plugins/API/Login";
     public static final String URL_API_REGISTER=HOST+"/Plugins/API/Register";
     public static final String URL_API_GETPRODUCT=HOST+"/Plugins/API/GetProduct";
@@ -49,6 +49,10 @@ public abstract class BaseModel {
 
     public static final String URL_API_MSGSYNC=HOST+"/Plugins/API/MsgSync";
     public static final String URL_API_DEL_HISTORIES=HOST+"/Plugins/API/DelLogs";
+
+    public static final String URL_API_GETALLSLIDERS=HOST+"/Plugins/API/GetSliderData";
+    public static final String URL_API_GETCLIENTTOKEN=HOST+"/Plugins/PaymentPayPalStandard/GetClientToken";
+    public static final String URL_API_PAYPALCOUPON=HOST+"/Plugins/PaymentPayPalStandard/CreateTransaction";
 
     private Handler apiHandler;
     public Context getContext(){

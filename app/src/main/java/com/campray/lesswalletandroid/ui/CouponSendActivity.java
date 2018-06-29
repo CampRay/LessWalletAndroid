@@ -18,8 +18,9 @@ import com.campray.lesswalletandroid.listener.OperationListener;
 import com.campray.lesswalletandroid.model.CouponModel;
 import com.campray.lesswalletandroid.ui.base.MenuActivity;
 import com.campray.lesswalletandroid.util.AppException;
-import com.campray.lesswalletandroid.util.ImageLoaderFactory;
 import com.campray.lesswalletandroid.util.ResourcesUtils;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -126,17 +127,17 @@ public class CouponSendActivity extends MenuActivity {
             tv_price.setText(coupon.getCouponStyle().getBenefit());
             gl_coupon_top.setBackgroundColor(Color.parseColor(coupon.getCouponStyle().getBgColor()));
             if (!TextUtils.isEmpty(coupon.getCouponStyle().getShadingUrl())) {
-                ImageLoaderFactory.getLoader().load(iv_coupon_shading, coupon.getCouponStyle().getShadingUrl(),0,null);
+                Picasso.with(this).load(coupon.getCouponStyle().getShadingUrl()).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_coupon_shading);
             } else {
                 iv_coupon_shading.setVisibility(View.GONE);
             }
             if (!TextUtils.isEmpty(coupon.getCouponStyle().getPictureUrl())) {
-                ImageLoaderFactory.getLoader().load(iv_coupon_img, coupon.getCouponStyle().getPictureUrl(),0,null);
+                Picasso.with(this).load(coupon.getCouponStyle().getPictureUrl()).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_coupon_img);
             } else {
                 iv_coupon_img.setVisibility(View.GONE);
             }
             if (!TextUtils.isEmpty(coupon.getCouponStyle().getLogoUrl())) {
-                ImageLoaderFactory.getLoader().load(iv_coupon_logo, coupon.getCouponStyle().getLogoUrl(),0,null);
+                Picasso.with(this).load(coupon.getCouponStyle().getLogoUrl()).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_coupon_logo);
             } else {
                 iv_coupon_logo.setVisibility(View.GONE);
             }

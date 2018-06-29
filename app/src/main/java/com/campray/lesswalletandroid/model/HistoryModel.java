@@ -3,9 +3,11 @@ package com.campray.lesswalletandroid.model;
 import android.net.Uri;
 import android.text.TextUtils;
 
+import com.campray.lesswalletandroid.LessWalletApplication;
 import com.campray.lesswalletandroid.db.entity.History;
 import com.campray.lesswalletandroid.db.entity.Language;
 import com.campray.lesswalletandroid.db.entity.History;
+import com.campray.lesswalletandroid.db.entity.User;
 import com.campray.lesswalletandroid.db.service.HistoryDaoService;
 import com.campray.lesswalletandroid.db.service.LanguageDaoService;
 import com.campray.lesswalletandroid.listener.ApiHandleListener;
@@ -107,10 +109,7 @@ public class HistoryModel extends BaseModel {
                                 }
                                 listener.done(hList, null);
                             }
-                            try {
-                                int points = obj.get("ExtraData").getAsInt();
-                                if()
-                            }catch (Exception exe){}
+                            int points=obj.get("ExtraData").getAsInt();
 
                         } else {
                             listener.done(null, new AppException(obj.get("Errors").getAsString()));

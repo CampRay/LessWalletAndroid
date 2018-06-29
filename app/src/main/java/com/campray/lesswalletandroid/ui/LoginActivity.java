@@ -65,10 +65,10 @@ public class LoginActivity extends BaseActivity {
             public void done(User user, AppException exe) {
             if (exe == null) {
                 LessWalletApplication.INSTANCE().setAccount(user);
-                //获取当前用户在此App登录次数
-                int loginNum=Util.getIntValue(LoginActivity.this,user.getUserName());
-                //如果用户是第一次登录，则需从服务器获取所有的卡卷数据
-                if(loginNum==0){
+//                //获取当前用户在此App登录次数
+//                int loginNum=Util.getIntValue(LoginActivity.this,user.getUserName());
+//                //如果用户是第一次登录，则需从服务器获取所有的卡卷数据
+//                if(loginNum==0){
                     CouponModel.getInstance().getAllCouponsFromServer(new OperationListener<List<Coupon>>(){
                         @Override
                         public void done(List<Coupon> obj, AppException exception) {}
@@ -77,9 +77,9 @@ public class LoginActivity extends BaseActivity {
                         @Override
                         public void done(List<Friend> obj, AppException exception) {}
                     });
-                }
-                loginNum++;
-                Util.putIntValue(LoginActivity.this,user.getUserName(),loginNum);
+//                }
+//                loginNum++;
+//                Util.putIntValue(LoginActivity.this,user.getUserName(),loginNum);
                 startActivity(MainActivity.class, null, true);
             } else {
                 toast(exe.toString(getApplicationContext()));

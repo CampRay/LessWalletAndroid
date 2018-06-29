@@ -13,7 +13,8 @@ import android.widget.TextView;
 
 import com.campray.lesswalletandroid.R;
 import com.campray.lesswalletandroid.db.entity.Friend;
-import com.campray.lesswalletandroid.util.ImageLoaderFactory;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -47,7 +48,7 @@ public class FriendAdapter extends ArrayAdapter {
         TextView emailView = (TextView) view.findViewById(R.id.tv_email);
         TextView mobileView = (TextView) view.findViewById(R.id.tv_mobile);
         //为图片视图设置好友头像，如果没有则显示默认头像图片
-        ImageLoaderFactory.getLoader().load(avatarImage,friend.getAvatorPath(),R.mipmap.icon_account,null);
+        Picasso.with(this.getContext()).load(friend.getAvatorPath()).placeholder(R.mipmap.icon_account).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(avatarImage);
         usernameView.setText(friend.getUserName());//为文本视图设置文本内容
         emailView.setText(friend.getEmail());
         mobileView.setText(friend.getMobile());

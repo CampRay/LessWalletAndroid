@@ -1,48 +1,36 @@
 package com.campray.lesswalletandroid.ui.base;
 
 import android.Manifest;
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Base64;
-import android.util.Config;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.campray.lesswalletandroid.LessWalletApplication;
 import com.campray.lesswalletandroid.R;
-import com.campray.lesswalletandroid.bean.CouponBean;
-import com.campray.lesswalletandroid.bean.ProductBean;
-import com.campray.lesswalletandroid.bean.UserBean;
+import com.campray.lesswalletandroid.db.entity.Country;
+import com.campray.lesswalletandroid.db.entity.Friend;
 import com.campray.lesswalletandroid.db.entity.History;
-import com.campray.lesswalletandroid.db.entity.Product;
 import com.campray.lesswalletandroid.db.entity.User;
+import com.campray.lesswalletandroid.db.service.CountryDaoService;
 import com.campray.lesswalletandroid.event.MessageEvent;
 import com.campray.lesswalletandroid.listener.OperationListener;
-import com.campray.lesswalletandroid.model.CouponModel;
+import com.campray.lesswalletandroid.model.FriendModel;
 import com.campray.lesswalletandroid.model.HistoryModel;
-import com.campray.lesswalletandroid.model.ProductModel;
+import com.campray.lesswalletandroid.model.UserModel;
+import com.campray.lesswalletandroid.ui.AccountActivity;
 import com.campray.lesswalletandroid.ui.CardPaymentActivity;
-import com.campray.lesswalletandroid.ui.CollectActivity;
 import com.campray.lesswalletandroid.ui.CollectPaymentActivity;
 import com.campray.lesswalletandroid.ui.CouponPaymentActivity;
+import com.campray.lesswalletandroid.ui.FriendActivity;
+import com.campray.lesswalletandroid.ui.FriendsActivity;
 import com.campray.lesswalletandroid.ui.MainActivity;
 import com.campray.lesswalletandroid.ui.MessageActivity;
-import com.campray.lesswalletandroid.ui.ProfileActivity;
 import com.campray.lesswalletandroid.ui.QRCodeCaptureActivity;
 import com.campray.lesswalletandroid.ui.TicketPaymentActivity;
 import com.campray.lesswalletandroid.util.AppException;
-import com.campray.lesswalletandroid.util.EncryptionUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -90,7 +78,7 @@ public class MenuActivity extends BaseActivity implements EasyPermissions.Permis
      */
     @OnClick(R.id.ib_my)
     public void onMyClick(View view){
-        startActivity(ProfileActivity.class,null,false);
+        startActivity(AccountActivity.class,null,false);
     }
 
     /**
@@ -109,12 +97,12 @@ public class MenuActivity extends BaseActivity implements EasyPermissions.Permis
     }
 
     /**
-     * 点击收款按钮的事件方法
+     * 点击配置按钮的事件方法
      * @param view
      */
-    @OnClick(R.id.ib_collect)
+    @OnClick(R.id.ib_friends)
     public void onCollectClick(View view){
-        startActivity(CollectActivity.class,null,false);
+        startActivity(FriendsActivity.class,null,false);
     }
 
     /**
@@ -201,6 +189,43 @@ public class MenuActivity extends BaseActivity implements EasyPermissions.Permis
                                     bundle.putString("amount", amount);
                                 }
                                 this.startActivity(CollectPaymentActivity.class,bundle,true);
+                            }
+                            else if("user".equals(model)){
+                                long uid = Long.parseLong(strArr[1]);
+                                Friend friend=FriendModel.getInstance().getFriendById(uid);
+                                if(friend==null) {
+                                    UserModel.getInstance().searchUserById(uid, new OperationListener<User>() {
+                                        @Override
+                                        public void done(User obj, AppException exception) {
+                                            if (obj != null) {
+                                                Bundle bund = new Bundle();
+                                                bund.putString("userName", obj.getUserName());
+                                                bund.putString("mobile", obj.getMobile());
+                                                bund.putString("email", obj.getEmail());
+                                                bund.putString("firstName", obj.getFirstName());
+                                                bund.putString("lastName", obj.getLastName());
+                                                bund.putString("avatarUrl", obj.getAvatarUrl());
+                                                Country country = CountryDaoService.getInstance(getApplicationContext()).getCountry(obj.getCountryId());
+                                                bund.putString("country", country.getName());
+                                                startActivity(FriendActivity.class, bund, true);
+                                            }
+                                        }
+                                    });
+                                }
+                                else{
+                                    Bundle bund = new Bundle();
+                                    bund.putLong("id", friend.getId());
+                                    bund.putString("userName", friend.getUserName());
+                                    bund.putString("mobile", friend.getMobile());
+                                    bund.putString("email", friend.getEmail());
+                                    bund.putString("firstName", friend.getFirstName());
+                                    bund.putString("lastName", friend.getLastName());
+                                    bund.putString("avatarUrl", friend.getAvatarUrl());
+                                    Country country = CountryDaoService.getInstance(getApplicationContext()).getCountry(friend.getCountryId());
+                                    bund.putString("country", country.getName());
+                                    startActivity(FriendActivity.class, bund, true);
+                                }
+
                             }
                         }
                     } catch (Exception e) {

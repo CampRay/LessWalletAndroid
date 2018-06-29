@@ -103,6 +103,15 @@ public class CurrencyDaoService {
         return dao.queryBuilder().where(CurrencyDao.Properties.Name.eq(name)).build().unique();
     }
 
+    /**
+     * 查询默认主货币对象
+     * @return
+     */
+    public Currency getDefaultCurrency(){
+        CurrencyDao dao =openReadableDb().getCurrencyDao();
+        return dao.queryBuilder().where(CurrencyDao.Properties.IsDefault.eq(true)).build().unique();
+    }
+
     /**创建或更新货币信息
      * @param currency
      * @return long:返回插入或修改的id

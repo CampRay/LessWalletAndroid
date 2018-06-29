@@ -3,12 +3,9 @@ package com.campray.lesswalletandroid;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.text.TextUtils;
 
-import com.campray.lesswalletandroid.bean.UserBean;
 import com.campray.lesswalletandroid.db.entity.User;
 import com.campray.lesswalletandroid.model.UserModel;
-import com.campray.lesswalletandroid.util.UniversalImageLoader;
 import com.campray.lesswalletandroid.util.Util;
 
 import java.io.BufferedReader;
@@ -42,12 +39,7 @@ public class LessWalletApplication extends Application{
         //只有主进程运行的时候才需要初始化
         if (getApplicationInfo().packageName.equals(getMyProcessName())){
             //初始化
-//            BmobIM.init(this);
-//            //注册消息接收器
-//            BmobIM.registerDefaultMessageHandler(new DemoMessageHandler(this));
         }
-        //图片加载工具初始化
-        UniversalImageLoader.initImageLoader(this);
     }
 
     /**
@@ -87,4 +79,5 @@ public class LessWalletApplication extends Application{
             Util.RemoveValue(this,"userId");
         }
     }
+
 }

@@ -24,8 +24,9 @@ import com.campray.lesswalletandroid.ui.base.MenuActivity;
 import com.campray.lesswalletandroid.util.AppException;
 import com.campray.lesswalletandroid.util.ImageUtil;
 import com.campray.lesswalletandroid.util.ResourcesUtils;
-import com.campray.lesswalletandroid.util.UniversalImageLoader;
 import com.campray.lesswalletandroid.view.InnerCornerView;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.List;
@@ -172,11 +173,8 @@ public class TicketPaymentActivity extends MenuActivity {
             icv_tright.setCornerColor(topColor);
             tv_top_bg.setBackgroundColor(topColor);
 
-            //加载底纹
-            UniversalImageLoader imageLoader=new UniversalImageLoader();
             //加载自定义图片
-            imageLoader.load(iv_coupon_img,customPicUrl,0,null);
-
+            Picasso.with(this).load(customPicUrl).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_coupon_img);
             tv_title.setText(product.getTitle());
             tv_desc.setText(product.getShortDesc());
             tv_price.setText(product.getPrice()+"");

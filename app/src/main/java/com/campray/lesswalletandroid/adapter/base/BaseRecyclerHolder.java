@@ -11,8 +11,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.campray.lesswalletandroid.util.ImageLoaderFactory;
-import com.campray.lesswalletandroid.util.UniversalImageLoader;
+import com.campray.lesswalletandroid.LessWalletApplication;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.Picasso;
 
 /**
  * 列表视图对象的显示支架
@@ -20,7 +21,6 @@ import com.campray.lesswalletandroid.util.UniversalImageLoader;
  *
  */
 public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
-    private UniversalImageLoader imageLoader=new UniversalImageLoader();
     private final SparseArray<View> mViews;
     public  int layoutId;
 
@@ -180,9 +180,8 @@ public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
      */
     public BaseRecyclerHolder setImageView(int viewId,String url, int defaultRes) {
         ImageView iv = getView(viewId);
-        ImageLoaderFactory.getLoader().load(iv,url,defaultRes,null);
+        Picasso.with(LessWalletApplication.INSTANCE()).load(url).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv);
         //iv.setImageBitmap(BitmapFactory.decodeFile(url));
-        //imageLoader.load(iv,url,0,null);
         return this;
     }
 

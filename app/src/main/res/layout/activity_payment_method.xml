@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="0dp"
+    android:background="#70000000"
+    android:onClick="onBackgroundClicked"
+    tools:context=".ui.PaymentMethodsActivity">
+
+    <LinearLayout
+        android:id="@+id/ll_dropin_bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:animateLayoutChanges="true"
+        android:background="@color/bt_base_background"
+        android:elevation="5dp"
+        android:orientation="vertical"
+        tools:targetApi="lollipop">
+
+        <ViewSwitcher
+            android:id="@+id/vs_loading_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:measureAllChildren="false">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ProgressBar
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_gravity="center"
+                    android:indeterminate="true" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_supported_payment_methods_header"
+                    style="@style/bt_choose_payment_label"
+                    android:paddingTop="@dimen/bt_choose_new_payment_label_padding_top"
+                    android:text="@string/bt_select_payment_method" />
+
+                <ListView
+                    android:id="@+id/lv_supported_payment_methods"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:divider="@drawable/bt_list_view_divider"
+                    android:dividerHeight="1dp" />
+
+            </LinearLayout>
+
+        </ViewSwitcher>
+
+    </LinearLayout>
+
+</RelativeLayout>

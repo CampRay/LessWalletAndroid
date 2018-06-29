@@ -30,6 +30,7 @@ public class CurrencyDao extends AbstractDao<Currency, Long> {
         public final static Property Rate = new Property(3, String.class, "rate", false, "RATE");
         public final static Property CustomFormatting = new Property(4, String.class, "customFormatting", false, "CUSTOM_FORMATTING");
         public final static Property DisplayOrder = new Property(5, int.class, "displayOrder", false, "DISPLAY_ORDER");
+        public final static Property IsDefault = new Property(6, boolean.class, "isDefault", false, "IS_DEFAULT");
     }
 
 
@@ -50,7 +51,8 @@ public class CurrencyDao extends AbstractDao<Currency, Long> {
                 "\"CURRENCY_CODE\" TEXT NOT NULL ," + // 2: currencyCode
                 "\"RATE\" TEXT NOT NULL ," + // 3: rate
                 "\"CUSTOM_FORMATTING\" TEXT NOT NULL ," + // 4: customFormatting
-                "\"DISPLAY_ORDER\" INTEGER NOT NULL );"); // 5: displayOrder
+                "\"DISPLAY_ORDER\" INTEGER NOT NULL ," + // 5: displayOrder
+                "\"IS_DEFAULT\" INTEGER NOT NULL );"); // 6: isDefault
     }
 
     /** Drops the underlying database table. */
@@ -72,6 +74,7 @@ public class CurrencyDao extends AbstractDao<Currency, Long> {
         stmt.bindString(4, entity.getRate());
         stmt.bindString(5, entity.getCustomFormatting());
         stmt.bindLong(6, entity.getDisplayOrder());
+        stmt.bindLong(7, entity.getIsDefault() ? 1L: 0L);
     }
 
     @Override
@@ -87,6 +90,7 @@ public class CurrencyDao extends AbstractDao<Currency, Long> {
         stmt.bindString(4, entity.getRate());
         stmt.bindString(5, entity.getCustomFormatting());
         stmt.bindLong(6, entity.getDisplayOrder());
+        stmt.bindLong(7, entity.getIsDefault() ? 1L: 0L);
     }
 
     @Override
@@ -102,7 +106,8 @@ public class CurrencyDao extends AbstractDao<Currency, Long> {
             cursor.getString(offset + 2), // currencyCode
             cursor.getString(offset + 3), // rate
             cursor.getString(offset + 4), // customFormatting
-            cursor.getInt(offset + 5) // displayOrder
+            cursor.getInt(offset + 5), // displayOrder
+            cursor.getShort(offset + 6) != 0 // isDefault
         );
         return entity;
     }
@@ -115,6 +120,7 @@ public class CurrencyDao extends AbstractDao<Currency, Long> {
         entity.setRate(cursor.getString(offset + 3));
         entity.setCustomFormatting(cursor.getString(offset + 4));
         entity.setDisplayOrder(cursor.getInt(offset + 5));
+        entity.setIsDefault(cursor.getShort(offset + 6) != 0);
      }
     
     @Override

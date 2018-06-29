@@ -69,7 +69,6 @@
                         android:layout_height="56dp"
                         android:layout_gravity="right|center_vertical"
                         android:gravity="right|center_vertical"
-                        android:text="FREE"
                         android:textColor="#ffffff"
                         android:textSize="24sp"
                         android:textStyle="bold" />

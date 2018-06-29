@@ -83,10 +83,13 @@ public class UserModel extends BaseModel {
                                     user.setPassword(EncryptionUtil.getHash2(password,"MD5"));
                                     user.setRemember(remember);
                                     Locale locale = getContext().getResources().getConfiguration().locale;
-                                    String languageCode = locale.getLanguage();
+                                    String languageCode =locale.getLanguage() ;
                                     Language language=LanguageDaoService.getInstance(getContext()).getLanguageByCode(languageCode);
                                     user.setLanguage(language);
-                                    Currency currency=CurrencyDaoService.getInstance(getContext()).getCurrencyByCode("USD");
+                                    Currency currency= CurrencyDaoService.getInstance(getContext()).getDefaultCurrency();
+//                                    if(language!=null) {
+//                                        currency = language.getCurrency();
+//                                    }
                                     user.setCurrenty(currency);
                                     try {
                                         UserDaoService.getInstance(getContext()).insertOrUpdateUser(user);
@@ -148,7 +151,10 @@ public class UserModel extends BaseModel {
                                     String languageCode = locale.getLanguage();
                                     Language language=LanguageDaoService.getInstance(getContext()).getLanguageByCode(languageCode);
                                     user.setLanguage(language);
-                                    Currency currency=CurrencyDaoService.getInstance(getContext()).getCurrencyByCode("USD");
+                                    Currency currency=language.getCurrency();
+                                    if(currency==null) {
+                                        currency = CurrencyDaoService.getInstance(getContext()).getDefaultCurrency();
+                                    }
                                     user.setCurrenty(currency);
                                     LessWalletApplication.INSTANCE().setAccount(user);
                                     long row = UserDaoService.getInstance(getContext()).insertOrUpdateUser(user);
@@ -186,7 +192,7 @@ public class UserModel extends BaseModel {
         JsonObject jObj=new JsonObject();
         jObj.addProperty("device",this.getDeviceId());
         jObj.addProperty("id",id);
-        this.httpPostAPI(FriendModel.URL_API_GET_USER_BYID, jObj,new ApiHandleListener<JsonObject>() {
+        this.httpPostAPI(UserModel.URL_API_GET_USER_BYID, jObj,new ApiHandleListener<JsonObject>() {
             @Override
             public void done(JsonObject obj, AppException exception) {
                 if (exception == null) {
@@ -215,6 +221,35 @@ public class UserModel extends BaseModel {
     }
 
     /**
+     * 从服务端查找用户积分
+     *  @param id
+     * @param listener
+     */
+    public void getUserPoints(long id, final OperationListener<User> listener) {
+        this.searchUserById(id, new OperationListener<User>() {
+            @Override
+            public void done(User obj, AppException exception) {
+                if(obj!=null) {
+                    try {
+                        User user = UserDaoService.getInstance(getContext()).getUserById(obj.getId());
+                        if (user.getPoints() != obj.getPoints()) {
+                            user.setPoints(obj.getPoints());
+                            UserDaoService.getInstance(getContext()).insertOrUpdateUser(user);
+                            LessWalletApplication.INSTANCE().setAccount(user);
+                        }
+                        listener.done(obj, null);
+                    } catch (Exception e) {
+                        listener.done(null, new AppException("E_1000",e));
+                    }
+                }
+                else{
+                    listener.done(null, exception);
+                }
+            }
+        });
+    }
+
+    /**
      * 退出登录
      */
     public void logout() {
@@ -228,5 +263,37 @@ public class UserModel extends BaseModel {
         catch (Exception e){ }
         return null;
     }
+
+    /**
+     * 从服务端查找Paypal Braintree支付的Client Token
+     * @param listener
+     */
+    public void getPaypalClientToken(final OperationListener<String> listener) {
+        //封装登录请求参数
+        JsonObject jObj=new JsonObject();
+        jObj.addProperty("device",this.getDeviceId());
+        this.httpPostAPI(UserModel.URL_API_GETCLIENTTOKEN, jObj,new ApiHandleListener<JsonObject>() {
+            @Override
+            public void done(JsonObject obj, AppException exception) {
+                if (exception == null) {
+                    try {
+                        //如果返回结果没有异常
+                        if (obj.get("Errors")==null) {
+                            String clientToken=obj.get("Data").getAsString();
+                            listener.done(clientToken,null);
+                        } else {
+                            listener.done(null, new AppException(obj.get("Errors").getAsString()));
+                        }
+                    }
+                    catch (Exception e){
+                        listener.done(null, new AppException("E_1004"));
+                    }
+                } else {
+                    listener.done(null, exception);
+                }
+            }
+        });
+    }
+
 
 }

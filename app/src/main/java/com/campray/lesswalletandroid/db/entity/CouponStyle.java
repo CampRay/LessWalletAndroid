@@ -16,6 +16,8 @@ public class CouponStyle {
 
     private String logoUrl;
 
+    private int cardLevel=0;
+
     public String getBenefit() {
         return benefit;
     }
@@ -54,5 +56,13 @@ public class CouponStyle {
 
     public void setLogoUrl(String logoUrl) {
         this.logoUrl = logoUrl;
+    }
+
+    public int getCardLevel() {
+        return cardLevel;
+    }
+
+    public void setCardLevel(int cardLevel) {
+        this.cardLevel = cardLevel;
     }
 }

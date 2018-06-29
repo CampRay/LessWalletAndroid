@@ -41,7 +41,7 @@
                 android:layout_weight="1"
                 android:background="#00000000"
                 android:scaleType="fitCenter"
-                android:src="@drawable/tab_home_btn" />
+                android:src="@mipmap/btn_home" />
 
             <ImageButton
                 android:id="@+id/ib_my"
@@ -50,7 +50,7 @@
                 android:layout_weight="1"
                 android:background="#00000000"
                 android:scaleType="fitCenter"
-                android:src="@drawable/tab_my_btn" />
+                android:src="@mipmap/btn_my" />
 
             <ImageButton
                 android:id="@+id/ib_scan"
@@ -59,16 +59,16 @@
                 android:layout_weight="1"
                 android:background="#00000000"
                 android:scaleType="fitCenter"
-                android:src="@drawable/tab_scan_btn" />
+                android:src="@mipmap/btn_pay" />
 
             <ImageButton
-                android:id="@+id/ib_collect"
+                android:id="@+id/ib_friends"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="#00000000"
                 android:scaleType="fitCenter"
-                android:src="@drawable/tab_account_btn" />
+                android:src="@mipmap/btn_friends" />
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -82,7 +82,7 @@
                     android:layout_centerHorizontal="true"
                     android:background="#00000000"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/tab_coupon_btn" />
+                    android:src="@mipmap/btn_coupon" />
 
                 <TextView
                     android:id="@+id/tv_point"
@@ -149,7 +149,7 @@
                 android:paddingRight="5dp"
                 android:paddingTop="5dp"
                 android:textColor="#ffffff"
-                android:textSize="@dimen/text_size_suplarge" />
+                android:textSize="@dimen/text_size_large" />
 
         </RelativeLayout>
 

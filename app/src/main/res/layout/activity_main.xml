@@ -34,7 +34,7 @@
                     android:isScrollContainer="false"
                     android:layoutDirection="locale"
                     android:layoutMode="opticalBounds">
-
+                    <!--
                     <ImageButton
                         android:id="@+id/ib_wicoupon"
                         android:layout_width="wrap_content"
@@ -70,6 +70,11 @@
                         android:adjustViewBounds="true"
                         android:scaleType="fitCenter"
                         android:src="@mipmap/layer_shodow" />
+                        -->
+                    <com.youth.banner.Banner xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/banner"
+                        android:layout_width="match_parent"
+                        android:layout_height="170dp" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -202,32 +207,32 @@
                     android:layoutDirection="locale"
                     android:layoutMode="opticalBounds">
 
-                    <ImageButton
-                        android:id="@+id/ib_addpay"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                    <ImageView
+                        android:id="@+id/iv_wicoupon"
+                        android:layout_width="150dp"
+                        android:layout_height="110dp"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentLeft="true"
-                        android:background="@mipmap/btn_addpay"
                         android:scaleType="fitCenter" />
 
-                    <ImageButton
-                        android:id="@+id/ib_coin"
+                    <ImageView
+                        android:id="@+id/iv_website"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentRight="true"
-                        android:background="@mipmap/btn_wicoin"
+                        android:background="@mipmap/btn_website"
                         android:scaleType="fitCenter" />
 
-                    <ImageButton
-                        android:id="@+id/ib_web"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                    <ImageView
+                        android:id="@+id/iv_wicard"
+                        android:layout_width="150dp"
+                        android:layout_height="110dp"
                         android:layout_alignParentBottom="true"
                         android:layout_centerHorizontal="true"
-                        android:background="@mipmap/btn_web"
                         android:scaleType="fitCenter" />
+
+
                 </RelativeLayout>
             </LinearLayout>
         </ScrollView>

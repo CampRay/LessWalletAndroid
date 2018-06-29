@@ -64,7 +64,7 @@ public class CollectPaymentActivity extends MenuActivity {
     private void setCurrencyDisplayData() {
         currencyList= CurrencyModel.getInstance().getAllCurrencies();
         if(currencyList==null) {
-            currencyList.add(new Currency(1L,"US Dollar","USD","1","US$",1));
+            currencyList.add(new Currency(1L,"HK Dollar","HKD","1","HK$",1,false));
         }
         for (Currency bean : currencyList) {
             displayDataList.add(bean.getName());
@@ -93,7 +93,11 @@ public class CollectPaymentActivity extends MenuActivity {
 
         if(!TextUtils.isEmpty(currencyCode)&&!TextUtils.isEmpty(amount)){
             Currency currency=CurrencyModel.getInstance().getCurrencyByCode(currencyCode);
-            tv_amount.setText(currency.getCustomFormatting()+amount);
+            String fmtStr="%s";
+            if(!TextUtils.isEmpty(currency.getCustomFormatting())){
+                fmtStr=currency.getCustomFormatting().replace("0.00","%.2f");
+            }
+            tv_amount.setText(String.format(fmtStr,amount));
         }
         else{
             ll_input.setVisibility(View.VISIBLE);

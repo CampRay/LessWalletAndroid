@@ -7,7 +7,6 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <!-- sd卡存储 -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <!--读取手机状态权限-->
@@ -34,8 +33,6 @@
 
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!--互联网访问权限-->
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -65,20 +62,34 @@
         <activity android:name=".ui.CouponPaymentActivity" />
         <activity android:name=".ui.CardActivity" />
         <activity android:name=".ui.CardPaymentActivity" />
+        <activity android:name=".ui.CardUseActivity" />
         <activity android:name=".ui.ProfileActivity" />
         <activity android:name=".ui.AccountActivity" />
+        <activity android:name=".ui.SettingsActivity" android:theme="@style/AppTheme"/>
         <activity android:name=".ui.FriendsActivity" />
         <activity android:name=".ui.FriendActivity" />
         <activity android:name=".ui.CollectActivity" />
         <activity android:name=".ui.CollectPaymentActivity" />
         <activity android:name=".ui.WebActivity" />
         <activity android:name=".ui.MessageActivity" />
+        <activity android:name=".ui.PaymentMethodsActivity" android:theme="@style/AppTheme.Translucent.FullScreen" />
         <activity
             android:name=".ui.QRCodeCaptureActivity"
             android:clearTaskOnLaunch="true"
             android:screenOrientation="sensorPortrait"
             android:stateNotNeeded="true"
             android:windowSoftInputMode="stateAlwaysHidden" />
+        <meta-data android:name="com.google.android.gms.wallet.api.enabled" android:value="true" />
+        <activity android:name="com.braintreepayments.api.BraintreeBrowserSwitchActivity"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" ></action>
+                <category android:name="android.intent.category.DEFAULT" ></category>
+                <category android:name="android.intent.category.BROWSABLE" ></category>
+                <data android:scheme="${applicationId}.braintree" ></data>
+            </intent-filter>
+        </activity>
+
 
         <!-- 开机广播接收者 -->
         <receiver android:name=".receiver.BootCompleteReceiver">

@@ -1,78 +1,78 @@
 package com.campray.lesswalletandroid.ui;
 
-import android.Manifest;
-import android.app.FragmentTransaction;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
+import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.campray.lesswalletandroid.LessWalletApplication;
 import com.campray.lesswalletandroid.R;
-import com.campray.lesswalletandroid.bean.CouponBean;
-import com.campray.lesswalletandroid.bean.UserBean;
-import com.campray.lesswalletandroid.listener.OperationListener;
-import com.campray.lesswalletandroid.model.CouponModel;
-import com.campray.lesswalletandroid.service.DetectionService;
-import com.campray.lesswalletandroid.ui.base.BaseActivity;
+import com.campray.lesswalletandroid.db.entity.Slider;
+import com.campray.lesswalletandroid.model.SliderModel;
 import com.campray.lesswalletandroid.ui.base.MenuActivity;
-import com.campray.lesswalletandroid.util.AppException;
+import com.campray.lesswalletandroid.util.SliderImageLoader;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.Picasso;
+import com.youth.banner.Banner;
+import com.youth.banner.BannerConfig;
+import com.youth.banner.listener.OnBannerListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import pub.devrel.easypermissions.AfterPermissionGranted;
-import pub.devrel.easypermissions.AppSettingsDialog;
-import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * Created by Phills on 11/2/2017.
  */
 
 public class MainActivity extends MenuActivity {
-    @BindView(R.id.ib_wicoupon)
-    ImageButton ib_wicoupon;
-    @BindView(R.id.ib_wicard)
-    ImageButton ib_wicard;
-    @BindView(R.id.ib_witicket)
-    ImageButton ib_witicket;
+    @BindView(R.id.iv_wicoupon)
+    ImageView iv_wicoupon;
+    @BindView(R.id.iv_wicard)
+    ImageView iv_wicard;
 
-
-
-    @BindView(R.id.iv_alipay)
-    ImageView iv_alipay;
-    @BindView(R.id.iv_wechat)
-    ImageView iv_wechat;
-
-    @BindView(R.id.ib_addpay)
-    ImageButton ib_addpay;
-    @BindView(R.id.ib_web)
-    ImageButton ib_web;
-    @BindView(R.id.ib_coin)
-    ImageButton ib_coin;
-
+    @BindView(R.id.iv_website)
+    ImageView iv_website;
+    @BindView(R.id.banner)
+    Banner banner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.initPermissions();
+
+        Picasso.with(this).load(R.mipmap.img_coupon).resize(250,213).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_wicoupon);
+        Picasso.with(this).load(R.mipmap.img_card).resize(250,213).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_wicard);
+
+        //设置图片加载器
+        banner.setImageLoader(new SliderImageLoader());
+        List<Slider> list=SliderModel.getInstance().getAllSliders();
+        List<String> images=new ArrayList<String>();
+        List<String> titles=new ArrayList<String>();
+        for (Slider slider:list) {
+            if(!TextUtils.isEmpty(slider.getPicUrl())) {
+                images.add(slider.getPicUrl());
+                titles.add(slider.getText());
+            }
+        }
+        banner.setImages(images);
+        //banner.setBannerTitles(titles);
+        //设置轮播时间
+        banner.setDelayTime(4000);
+        //banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE);
+        //设置指示器位置（当banner模式中有指示器时）
+        banner.setIndicatorGravity(BannerConfig.RIGHT);
+        banner.start();
     }
 
     /**
      * 点击wicoupon按钮的事件方法
      * @param view
      */
-    @OnClick(R.id.ib_wicoupon)
+    @OnClick(R.id.iv_wicoupon)
     public void onWicouponClick(View view){
         Bundle bundle=new Bundle();
         bundle.putInt("type_id", 1);
@@ -82,74 +82,21 @@ public class MainActivity extends MenuActivity {
      * 点击wicard按钮的事件方法
      * @param view
      */
-    @OnClick(R.id.ib_wicard)
+    @OnClick(R.id.iv_wicard)
     public void onWicardClick(View view){
         Bundle bundle=new Bundle();
-        bundle.putInt("type_id", 2);
-        startActivity(CardActivity.class,bundle,true);
-    }
-    /**
-     * 点击witicket按钮的事件方法
-     * @param view
-     */
-    @OnClick(R.id.ib_witicket)
-    public void onWiticketClick(View view){
-        Bundle bundle=new Bundle();
         bundle.putInt("type_id", 3);
-        startActivity(CouponActivity.class,bundle,true);
-    }
-
-    /**
-     * 点击Alipay按钮的事件方法
-     * @param view
-     */
-    @OnClick(R.id.iv_alipay)
-    public void onAlipayClick(View view){
-        Bundle bundle=new Bundle();
-        bundle.putInt("type_id", 1);
-        startActivity(CouponActivity.class,bundle,true);
-    }
-
-    /**
-     * 点击Wechat按钮的事件方法
-     * @param view
-     */
-    @OnClick(R.id.iv_wechat)
-    public void onWechatClick(View view){
-        Bundle bundle=new Bundle();
-        bundle.putInt("type_id", 1);
-        startActivity(CouponActivity.class,bundle,true);
-    }
-
-    /**
-     * 点击AddPay按钮的事件方法
-     * @param view
-     */
-    @OnClick(R.id.ib_addpay)
-    public void onAddPayClick(View view){
-        Bundle bundle=new Bundle();
-        bundle.putInt("type_id", 1);
-        startActivity(CouponActivity.class,bundle,true);
+        startActivity(CardActivity.class,bundle,true);
     }
 
     /**
      * 点击Web按钮的事件方法
      * @param view
      */
-    @OnClick(R.id.ib_web)
+    @OnClick(R.id.iv_website)
     public void onWebClick(View view){
         startActivity(WebActivity.class,null,true);
     }
 
-    /**
-     * 点击Coin按钮的事件方法
-     * @param view
-     */
-    @OnClick(R.id.ib_coin)
-    public void onCoinClick(View view){
-        Bundle bundle=new Bundle();
-        bundle.putInt("type_id", 1);
-        startActivity(CouponActivity.class,bundle,true);
-    }
 
 }
