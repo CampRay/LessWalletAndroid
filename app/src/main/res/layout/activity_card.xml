@@ -66,7 +66,7 @@
                         tools:src="@mipmap/ic_launcher_round"/>
 
                     <TextView
-                        android:id="@+id/tv_price"
+                        android:id="@+id/tv_benefit"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
                         android:layout_gravity="right|center_vertical"
@@ -74,7 +74,7 @@
                         android:textColor="#ffffff"
                         android:textSize="24sp"
                         android:textStyle="bold"
-                        tools:text="FREE"/>
+                        tools:text="FREE" />
                 </LinearLayout>
 
                 <TextView

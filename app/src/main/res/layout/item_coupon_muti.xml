@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--Coupon列表对象的样式布局-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_coupon"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="10dp"
@@ -43,10 +45,13 @@
                 android:layout_row="0"
                 android:layout_rowWeight="1"
                 android:adjustViewBounds="true"
-                android:scaleType="fitStart" />
+                android:scaleType="fitStart"
+                tools:src="@mipmap/ic_launcher_round" />
 
             <TextView
                 android:id="@+id/tv_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_column="1"
                 android:layout_columnWeight="1"
                 android:layout_gravity="right|center_vertical"
@@ -54,23 +59,25 @@
                 android:layout_row="0"
                 android:layout_rowWeight="1"
                 android:gravity="center_vertical"
-                android:text="FREE"
                 android:textColor="#ffffff"
                 android:textSize="28sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:text="FREE" />
 
             <TextView
                 android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_column="0"
                 android:layout_columnSpan="2"
                 android:layout_columnWeight="1"
                 android:layout_gravity="left"
-                android:layout_marginLeft="12dp"
-                android:layout_marginRight="12dp"
                 android:layout_row="1"
                 android:layout_rowWeight="1"
-                android:text="Title"
-                android:textColor="#ffffff" />
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:textColor="#ffffff"
+                tools:text="Title" />
 
             <ImageView
                 android:id="@+id/iv_coupon_img"
@@ -94,14 +101,77 @@
             android:padding="10dp"
             android:visibility="gone">
 
-            <TextView
-                android:id="@+id/tv_desc"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/rl_coupon_top"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:text="@string/coupon_benefit"
+                    android:textColor="#000000"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tv_benefit"
+                    android:layout_width="135dp"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="12sp"
+                    tools:text="@string/coupon_benefit_buyngetone" />
+
+                <TextView
+                    android:id="@+id/tv_benefit_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="12sp"
+                    tools:text="10" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:text="@string/coupon_validity"
+                    android:textColor="#000000"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tv_validity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="12sp"
+                    tools:text="3月" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:text="@string/coupon_short_desc"
+                android:textColor="#000000"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tv_shortdesc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:padding="10dp"
-                android:textColor="#313131" />
+                android:textColor="#313131"
+                android:textSize="10sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -154,11 +224,13 @@
 
             <TextView
                 android:id="@+id/tv_merchant"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_column="0"
-                android:layout_columnWeight="4"
+                android:layout_columnWeight="3.5"
                 android:layout_gravity="left|center_vertical"
                 android:layout_row="0"
-                android:text="CampRay"
+                tools:text="CampRay"
                 android:textColor="#000000" />
 
             <ImageView
@@ -174,23 +246,28 @@
 
             <TextView
                 android:id="@+id/tv_expired"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_column="0"
-                android:layout_columnWeight="4"
+                android:layout_columnWeight="3.5"
                 android:layout_gravity="bottom"
                 android:layout_row="1"
                 android:drawableLeft="@mipmap/date"
                 android:drawablePadding="6dp"
                 android:gravity="bottom"
-                android:text="15/OCT/2017 - 30/OCT/2017"
                 android:textColor="#313131"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                tools:text="15/OCT/2017 - 30/OCT/2017" />
 
             <TextView
                 android:id="@+id/tv_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_column="1"
+                android:layout_columnWeight="1"
                 android:layout_gravity="bottom"
                 android:layout_row="1"
-                android:gravity="bottom"
+                android:gravity="bottom|right"
                 android:text="12345678"
                 android:textColor="#313131"
                 android:textSize="12sp" />

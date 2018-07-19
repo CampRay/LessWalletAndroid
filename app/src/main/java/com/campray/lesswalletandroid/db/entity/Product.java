@@ -18,6 +18,7 @@ import com.campray.lesswalletandroid.db.dao.DaoSession;
 import com.campray.lesswalletandroid.db.dao.MerchantDao;
 import com.campray.lesswalletandroid.db.dao.CurrencyDao;
 import com.campray.lesswalletandroid.db.dao.ProductDao;
+import com.campray.lesswalletandroid.model.CurrencyModel;
 import com.campray.lesswalletandroid.util.TimeUtil;
 
 import java.util.List;
@@ -48,6 +49,8 @@ public class Product {
     private String endTime;//过期时间
     private boolean published;//是否已发布
     private boolean deleted;//是否已删除
+    private int stockQuantity=0;//库存数量
+
 //    private String specAttrStr;//所有规格属性的Json字符串
     @Convert(columnType = String.class,converter = SpecAttrConverter.class)
     private List<SpecAttr> specAttr;//样式属性
@@ -86,6 +89,52 @@ public class Product {
         this.endTimeLocal = endTimeLocal;
     }
 
+    public String getPriceStr(){
+        Currency currency= CurrencyModel.getInstance().getDefaultCurrency();
+        String fmtStr="%s";
+        if(!TextUtils.isEmpty(currency.getCustomFormatting())){
+            fmtStr=currency.getCustomFormatting().replace("0.00","%.2f");
+        }
+        return String.format(fmtStr,price);
+    }
+
+    public CouponStyle getCouponStyle() {
+        CouponStyle couponStyle = new CouponStyle();
+        //循环遍历当前优惠卷的产品规格属性
+        for (SpecAttr specAttr : this.getSpecAttr()) {
+            String value = specAttr.getValueRaw();//用户自已输入的值
+            if (specAttr.getSpecificationAttributeId() == 1) {
+                couponStyle.setBenefitOne(value);
+            } else if (specAttr.getSpecificationAttributeId() == 2) {
+                couponStyle.setBenefitPrepaidCash(value);
+            } else if (specAttr.getSpecificationAttributeId() == 3) {
+                couponStyle.setBenefitPrepaidService(value);
+            } else if (specAttr.getSpecificationAttributeId() == 4) {
+                couponStyle.setBenefitBuyNGetOne(value);
+            }else if (specAttr.getSpecificationAttributeId() == 5) {//如果是背景色
+                couponStyle.setBgColor(value);
+            } else if (specAttr.getSpecificationAttributeId() == 6) {//如果是底纹
+                couponStyle.setShadingUrl(TextUtils.isEmpty(specAttr.getFileUrl()) ? value : specAttr.getFileUrl());
+            } else if (specAttr.getSpecificationAttributeId() == 7) {//如果是自定义图片
+                couponStyle.setPictureUrl(TextUtils.isEmpty(specAttr.getFileUrl()) ? value : specAttr.getFileUrl());
+            } else if (specAttr.getSpecificationAttributeId() == 8) {//如果是商用家logo
+                couponStyle.setLogoUrl(TextUtils.isEmpty(specAttr.getFileUrl()) ? value : specAttr.getFileUrl());
+            } else if (specAttr.getSpecificationAttributeId() == 9) {//如果是商用会员卡级别
+                try {
+                    couponStyle.setCardLevel(Integer.parseInt(value));
+                }catch (Exception e){}
+            } else if (specAttr.getSpecificationAttributeId() == 10) {//如果是有效期（日）
+                couponStyle.setValidityDay(Integer.parseInt(value));
+            } else if (specAttr.getSpecificationAttributeId() == 11) {//如果是有效期（月）
+                couponStyle.setValidityMonth(Integer.parseInt(value));
+            } else if (specAttr.getSpecificationAttributeId() == 12) {//如果是有效期（年）
+                couponStyle.setValidityYear(Integer.parseInt(value));
+            } else {
+
+            }
+        }
+        return couponStyle;
+    }
 
     /** Used to resolve relations */
     @Generated(hash = 2040040024)
@@ -93,12 +142,10 @@ public class Product {
     /** Used for active entity operations. */
     @Generated(hash = 694336451)
     private transient ProductDao myDao;
-    @Generated(hash = 1776038469)
-    public Product(Long productId, int productTypeId, int productTemplateId,
-            @NotNull String title, String shortDesc, String fullDesc,
-            String agreement, String numPrefix, float price, String currencyCode,
-            String startTime, String endTime, boolean published, boolean deleted,
-            List<SpecAttr> specAttr, List<UserAttr> userAttr, Long merchantId) {
+    @Generated(hash = 597044329)
+    public Product(Long productId, int productTypeId, int productTemplateId, @NotNull String title, String shortDesc, String fullDesc, String agreement, String numPrefix,
+            float price, String currencyCode, String startTime, String endTime, boolean published, boolean deleted, int stockQuantity, List<SpecAttr> specAttr,
+            List<UserAttr> userAttr, Long merchantId) {
         this.productId = productId;
         this.productTypeId = productTypeId;
         this.productTemplateId = productTemplateId;
@@ -113,10 +160,12 @@ public class Product {
         this.endTime = endTime;
         this.published = published;
         this.deleted = deleted;
+        this.stockQuantity = stockQuantity;
         this.specAttr = specAttr;
         this.userAttr = userAttr;
         this.merchantId = merchantId;
     }
+
     @Generated(hash = 1890278724)
     public Product() {
     }
@@ -315,6 +364,14 @@ public class Product {
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getProductDao() : null;
+    }
+
+    public int getStockQuantity() {
+        return this.stockQuantity;
+    }
+
+    public void setStockQuantity(int stockQuantity) {
+        this.stockQuantity = stockQuantity;
     }
 
 

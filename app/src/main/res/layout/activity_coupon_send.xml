@@ -45,9 +45,7 @@
                 android:spinnerMode="dialog"
                 android:textColor="@android:color/black" />
 
-            <include
-                android:id="@+id/layout_coupon"
-                layout="@layout/item_coupon" />
+            <include layout="@layout/item_coupon" />
 
             <EditText
                 android:id="@+id/tv_msg"

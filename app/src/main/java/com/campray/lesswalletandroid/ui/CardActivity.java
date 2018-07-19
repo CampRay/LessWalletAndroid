@@ -2,14 +2,11 @@ package com.campray.lesswalletandroid.ui;
 
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -17,17 +14,10 @@ import android.widget.TextView;
 
 import com.campray.lesswalletandroid.LessWalletApplication;
 import com.campray.lesswalletandroid.R;
-import com.campray.lesswalletandroid.adapter.WiCouponAdapter;
-import com.campray.lesswalletandroid.adapter.WiTicketAdapter;
-import com.campray.lesswalletandroid.adapter.base.BaseRecyclerAdapter;
-import com.campray.lesswalletandroid.adapter.base.IMutlipleItem;
-import com.campray.lesswalletandroid.adapter.listener.OnRecyclerViewListener;
 import com.campray.lesswalletandroid.db.entity.Coupon;
-import com.campray.lesswalletandroid.db.entity.Product;
 import com.campray.lesswalletandroid.db.entity.User;
 import com.campray.lesswalletandroid.listener.OperationListener;
 import com.campray.lesswalletandroid.model.CouponModel;
-import com.campray.lesswalletandroid.model.ProductModel;
 import com.campray.lesswalletandroid.model.UserModel;
 import com.campray.lesswalletandroid.qrcode.encode.QRCodeEncoder;
 import com.campray.lesswalletandroid.ui.base.MenuActivity;
@@ -57,8 +47,8 @@ public class CardActivity extends MenuActivity {
     RoundImageView iv_card_img;
     @BindView(R.id.iv_card_logo)
     ImageView iv_card_logo;
-    @BindView(R.id.tv_price)
-    TextView tv_price;
+    @BindView(R.id.tv_benefit)
+    TextView tv_benefit;
     @BindView(R.id.tv_title)
     TextView tv_title;
     @BindView(R.id.tv_number)
@@ -111,7 +101,7 @@ public class CardActivity extends MenuActivity {
             tv_title.setText(card.getProduct().getTitle());
             tv_number.setText(card.getCid());
             tv_merchant.setText(card.getProduct().getMerchant().getName());
-            tv_price.setText(card.getCouponStyle().getBenefit());
+            tv_benefit.setText("");
             User user=LessWalletApplication.INSTANCE().getAccount();
             tv_points.setText(user.getPoints()+"");
             if (card.getCouponStyle() != null) {
@@ -133,9 +123,10 @@ public class CardActivity extends MenuActivity {
             }
 
             try{
-                Bitmap qrCodeBitmap= QRCodeEncoder.encodeAsBitmap("Card:"+card.getOrderId(), BarcodeFormat.QR_CODE,200);
+                String couponStr="card:"+card.getOrderId();
+                Bitmap qrCodeBitmap= QRCodeEncoder.encodeAsBitmap(Base64.encodeToString(couponStr.getBytes("UTF-8"),Base64.DEFAULT), BarcodeFormat.QR_CODE,200);
                 iv_qrcode.setImageBitmap(qrCodeBitmap);
-            } catch (WriterException e) {
+            } catch (Exception e) {
                 toast("Failed to load QR Code.");
             }
             //查询用户积分

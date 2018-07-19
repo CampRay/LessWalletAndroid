@@ -80,7 +80,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@mipmap/bg_layer"
+                    android:background="@mipmap/bg_layout"
                     android:clipChildren="false"
                     android:clipToPadding="false"
                     android:isScrollContainer="false"
@@ -102,6 +102,7 @@
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
                         android:adjustViewBounds="true"
                         android:scaleType="fitCenter"
                         android:src="@mipmap/layer_shodow" />
@@ -110,7 +111,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@mipmap/bg_layer"
+                    android:background="@mipmap/bg_layout"
                     android:clipChildren="false"
                     android:clipToPadding="false"
                     android:isScrollContainer="false"
@@ -132,6 +133,7 @@
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
                         android:adjustViewBounds="true"
                         android:background="@mipmap/layer_shodow"
                         android:scaleType="fitCenter" />
@@ -140,7 +142,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@mipmap/bg_layer"
+                    android:background="@mipmap/bg_layout"
                     android:clipChildren="false"
                     android:clipToPadding="false"
                     android:isScrollContainer="false"
@@ -162,6 +164,7 @@
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
                         android:adjustViewBounds="true"
                         android:background="@mipmap/layer_shodow"
                         android:scaleType="fitCenter" />
@@ -175,7 +178,8 @@
                     android:clipToPadding="false"
                     android:isScrollContainer="false"
                     android:layoutDirection="locale"
-                    android:layoutMode="opticalBounds">
+                    android:layoutMode="opticalBounds"
+                    android:visibility="gone">
 
                     <ImageView
                         android:id="@+id/iv_paypal"

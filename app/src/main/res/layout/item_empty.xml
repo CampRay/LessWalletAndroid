@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Coupon列表对象的样式布局-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_message"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#ffffff"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:padding="10dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="没有找到j记录"
+        android:textAlignment="center"
+        android:textColor="@android:color/darker_gray" />
+</LinearLayout>

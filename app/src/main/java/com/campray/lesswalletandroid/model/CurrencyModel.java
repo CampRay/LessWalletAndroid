@@ -1,6 +1,5 @@
 package com.campray.lesswalletandroid.model;
 
-import com.campray.lesswalletandroid.bean.CurrencyBean;
 import com.campray.lesswalletandroid.db.entity.Currency;
 import com.campray.lesswalletandroid.db.service.CurrencyDaoService;
 import com.campray.lesswalletandroid.listener.ApiHandleListener;
@@ -11,7 +10,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

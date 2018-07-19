@@ -3,26 +3,21 @@ package com.campray.lesswalletandroid.ui;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.Toast;
 
 import com.campray.lesswalletandroid.R;
 import com.campray.lesswalletandroid.adapter.HistoryAdapter;
-import com.campray.lesswalletandroid.adapter.WiCouponAdapter;
-import com.campray.lesswalletandroid.adapter.WiTicketAdapter;
 import com.campray.lesswalletandroid.adapter.base.BaseRecyclerAdapter;
-import com.campray.lesswalletandroid.adapter.base.IMutlipleItem;
+import com.campray.lesswalletandroid.adapter.base.ILayoutItem;
 import com.campray.lesswalletandroid.adapter.listener.OnRecyclerViewListener;
-import com.campray.lesswalletandroid.db.entity.Coupon;
 import com.campray.lesswalletandroid.db.entity.History;
-import com.campray.lesswalletandroid.db.entity.Product;
-import com.campray.lesswalletandroid.model.CouponModel;
 import com.campray.lesswalletandroid.model.HistoryModel;
-import com.campray.lesswalletandroid.model.ProductModel;
 import com.campray.lesswalletandroid.ui.base.MenuActivity;
+import com.campray.lesswalletandroid.view.CustomDialog;
+import com.campray.lesswalletandroid.view.RecyclerViewItemDecoration;
 
 import java.util.List;
 
@@ -34,8 +29,7 @@ import butterknife.BindView;
  */
 
 public class MessageActivity extends MenuActivity {
-    @BindView(R.id.sw_refresh)
-    SwipeRefreshLayout sw_refresh;
+    
     @BindView(R.id.rc_message_list)
     RecyclerView rc_message_list;
     //Coupon列表的适配器
@@ -51,13 +45,9 @@ public class MessageActivity extends MenuActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_message);
-        //设置刷新进度条的颜色
-        sw_refresh.setColorSchemeResources(android.R.color.holo_orange_light);
-        sw_refresh.setProgressViewOffset(true, 0, 50);//设置加载圈是否有缩放效果，后两个参数是展示的位置y轴坐标
+        setContentView(R.layout.activity_message);        
         showMessageList();
-        setListener();
-        //设置SwipeRefreshLayout进行刷新，以便加载数据
+        setListener();        
     }
     @Override
     public void onResume() {
@@ -71,43 +61,38 @@ public class MessageActivity extends MenuActivity {
      */
     private void showMessageList(){
         //布局对象
-        IMutlipleItem<History> mutlipleItem = new IMutlipleItem<History>() {
-            //根据对象所在位置参数和对象数据，设置对象的不同布局类型
-            @Override
-            public int getItemViewType(int postion, History history) {
-                return 0;
-            }
+        ILayoutItem<History> layoutItem = new ILayoutItem<History>() {
             // 根据指定的View类型参数，返回对应的布局layout资源文件ID
             @Override
             public int getItemLayoutId(int viewtype) {
                 return R.layout.item_message;
             }
-            //返回布局对象数量
-            @Override
-            public int getItemCount(List<History> list) {
-                return list.size();
-            }
         };
-        adapter=new HistoryAdapter(this,mutlipleItem,null);
+        adapter=new HistoryAdapter(this,R.layout.item_message,null);
 
         rc_message_list.setAdapter(adapter);
         linearLayoutManager=new LinearLayoutManager(this);
+        //设置消息列表对象显示布局
         rc_message_list.setLayoutManager(linearLayoutManager);
+        //设置分隔线
+        rc_message_list.addItemDecoration( new RecyclerViewItemDecoration(this));
+        //设置增加或删除条目的动画
+        rc_message_list.setItemAnimator( new DefaultItemAnimator());
+
+
     }
 
     /**
      * 设置相关事件
      */
     private void setListener(){
-        //SwipeRefreshLayout下拉刷新时加载新数据
-        sw_refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                queryData(1);
-            }
-        });
         //设置RecyclerView滚动事件监听器
         rc_message_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            /**
+             * 滚动状态变更事件
+             * @param recyclerView
+             * @param newState
+             */
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -122,12 +107,19 @@ public class MessageActivity extends MenuActivity {
                 }
             }
 
+            /**
+             * 列表滚动事件
+             * @param recyclerView
+             * @param dx horizontal distance scrolled in pixels
+             * @param dy vertical distance scrolled in pixels
+             */
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 lastPosition=linearLayoutManager.findLastVisibleItemPosition();
             }
         });
+
         //设置列表适配器中自定义的事件监听器
         adapter.setOnRecyclerViewListener(new OnRecyclerViewListener() {
             @Override
@@ -156,6 +148,30 @@ public class MessageActivity extends MenuActivity {
                             }
                         }).create();
                 dialog.show();
+
+//                CustomDialog.Builder normalDialog =
+//                        new CustomDialog.Builder(MessageActivity.this);
+//                normalDialog.setIcon(R.mipmap.face_sad);
+//                normalDialog.setTitle("Remove Message");
+//                normalDialog.setMessage("Do you want to remove this message?");
+//                normalDialog.setPositiveButton("YES",
+//                        new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(final DialogInterface dialog, int which) {
+//                                final History delHistory=(History)adapter.getItem(position);
+//                                HistoryModel.getInstance().delHistory(delHistory);
+//                                adapter.remove(position);
+//                            }
+//                        });
+//                normalDialog.setNegativeButton("NO",
+//                        new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                dialog.cancel();
+//                            }
+//                        });
+//                // 显示
+//                normalDialog.show();
                 return true;
             }
         });
@@ -169,7 +185,7 @@ public class MessageActivity extends MenuActivity {
      */
     private void queryData(final int page){
         if(page>1) {
-            adapter.addFooter();
+            //adapter.addFooter();
             rc_message_list.scrollToPosition(lastPosition+1);
         }
 
@@ -187,19 +203,16 @@ public class MessageActivity extends MenuActivity {
                                 adapter.bindDatas(messageList);
                             }
                             else{
-                                adapter.removeFooter();
+                                //adapter.removeFooter();
                                 adapter.appendDatas(messageList);
                             }
                             lastPage=page;
                             adapter.notifyDataSetChanged();
                         }
-                        sw_refresh.setRefreshing(false);
                     }
                 });
             }
         }).start();
-
-
     }
 
 }

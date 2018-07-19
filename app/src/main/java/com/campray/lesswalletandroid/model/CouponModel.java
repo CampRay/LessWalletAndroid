@@ -3,10 +3,8 @@ package com.campray.lesswalletandroid.model;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import com.campray.lesswalletandroid.bean.CouponBean;
-import com.campray.lesswalletandroid.bean.ProductBean;
-import com.campray.lesswalletandroid.bean.UserBean;
 import com.campray.lesswalletandroid.db.entity.Coupon;
+import com.campray.lesswalletandroid.db.entity.CouponStyle;
 import com.campray.lesswalletandroid.db.entity.Product;
 import com.campray.lesswalletandroid.db.entity.SpecAttr;
 import com.campray.lesswalletandroid.db.service.CouponDaoService;
@@ -15,15 +13,17 @@ import com.campray.lesswalletandroid.listener.ApiHandleListener;
 import com.campray.lesswalletandroid.listener.OperationListener;
 import com.campray.lesswalletandroid.util.AppException;
 import com.campray.lesswalletandroid.util.ImageUtil;
+import com.campray.lesswalletandroid.util.TimeUtil;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 
-import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * 卡卷对象业务处理模型
@@ -59,48 +59,20 @@ public class CouponModel extends BaseModel {
                             if (obj.get("Data").isJsonArray()) {
                                 JsonArray jArr = obj.get("Data").getAsJsonArray();
                                 Gson gson = new Gson();
+                                List<Coupon> couponList=new ArrayList<Coupon>();
                                 for(JsonElement item:jArr){
                                     final Coupon coupon = gson.fromJson(item, Coupon.class);
                                     try {
-                                        long row = CouponDaoService.getInstance(getContext()).insertOrUpdateCoupon(coupon);
-                                        //如果卡卷商品在手机上没有保存过
-                                        if(!ProductDaoService.getInstance(getContext()).hasProduct(coupon.getProductId())){
-                                            ProductModel.getInstance().getProductFromServer(coupon.getProductId(),new OperationListener<Product>(){
-                                                @Override
-                                                public void done(Product product, AppException exception) {
-                                                    if(exception!=null){
-                                                        //保存优惠卷相关图片到手机
-                                                        boolean needUpdate=false;
-                                                        List<SpecAttr> specAttrBeanList = product.getSpecAttr();
-                                                        for (SpecAttr specAttrBean:specAttrBeanList) {
-                                                            String selectValue = specAttrBean.getColorSquaresRgb();
-                                                            String customValue = specAttrBean.getValueRaw();
-                                                            String imgUrl=(TextUtils.isEmpty(selectValue)&& TextUtils.isEmpty(customValue))? specAttrBean.getSpecificationAttributeName(): (TextUtils.isEmpty(selectValue)?customValue : selectValue);
-                                                            //如果是底纹,样式图片或logo
-                                                            if(specAttrBean.getSpecificationAttributeId()==8||specAttrBean.getSpecificationAttributeId()==9||specAttrBean.getSpecificationAttributeId()==10){
-                                                                if(TextUtils.isEmpty(specAttrBean.getFileUrl())) {
-                                                                    //保存网络图片到手机存储空间,并返回uri
-                                                                    Uri imgUri = ImageUtil.saveImageToUri(imgUrl);
-                                                                    specAttrBean.setFileUrl(imgUri.toString());
-                                                                    needUpdate=true;
-                                                                }
-                                                            }
-                                                        }
-                                                        if(needUpdate) {
-                                                            ProductModel.getInstance().updaeProduct(product);
-                                                        }
-                                                    }
-                                                }
-                                            });
-                                        }
+                                        CouponDaoService.getInstance(getContext()).insertOrUpdateCoupon(coupon);
+                                        getProduct(coupon);
+                                        couponList.add(coupon);
                                     }
                                     catch (Exception exe){
                                         listener.done(null, new AppException("E_1005"));
                                         break;
                                     }
-
                                 }
-
+                                listener.done(couponList, null);
                             }
                             listener.done(null, null);
                         } else {
@@ -138,9 +110,10 @@ public class CouponModel extends BaseModel {
                                 JsonArray jArr = obj.get("Data").getAsJsonArray();
                                 Gson gson = new Gson();
                                 for(JsonElement item:jArr){
-                                    Coupon coupon = gson.fromJson(item, Coupon.class);
+                                    final Coupon coupon = gson.fromJson(item, Coupon.class);
                                     try {
-                                        long row = CouponDaoService.getInstance(getContext()).insertOrUpdateCoupon(coupon);
+                                        CouponDaoService.getInstance(getContext()).insertOrUpdateCoupon(coupon);
+                                        getProduct(coupon);
                                         listener.done(coupon, null);
                                         break;
                                     }
@@ -188,17 +161,14 @@ public class CouponModel extends BaseModel {
                             if (obj.get("Data").isJsonArray()) {
                                 JsonArray jArr = obj.get("Data").getAsJsonArray();
                                 Gson gson = new Gson();
-                                for(JsonElement item:jArr){
-                                    Coupon coupon = gson.fromJson(item, Coupon.class);
+                                for(JsonElement item:jArr) {
+                                    final Coupon coupon = gson.fromJson(item, Coupon.class);
                                     try {
                                         CouponDaoService.getInstance(getContext()).insertOrUpdateCoupon(coupon);
+                                        getProduct(coupon);
                                         listener.done(coupon, null);
-                                        break;
                                     }
-                                    catch (Exception exe){
-                                        listener.done(null, new AppException("E_1005"));
-                                        break;
-                                    }
+                                    catch (Exception e){listener.done(null, new AppException("E_1005"));}
                                 }
                             }
                             else {
@@ -239,39 +209,10 @@ public class CouponModel extends BaseModel {
                                 JsonArray jArr = obj.get("Data").getAsJsonArray();
                                 Gson gson = new Gson();
                                 for(JsonElement item:jArr){
-                                    Coupon coupon = gson.fromJson(item, Coupon.class);
+                                    final Coupon coupon = gson.fromJson(item, Coupon.class);
                                     try {
-                                        long row = CouponDaoService.getInstance(getContext()).insertOrUpdateCoupon(coupon);
-                                        //如果卡卷商品在手机上没有保存过
-                                        if(!ProductDaoService.getInstance(getContext()).hasProduct(coupon.getProductId())){
-                                            ProductModel.getInstance().getProductFromServer(coupon.getProductId(),new OperationListener<Product>(){
-                                                @Override
-                                                public void done(Product product, AppException exception) {
-                                                    if(exception!=null){
-                                                        //保存优惠卷相关图片到手机
-                                                        boolean needUpdate=false;
-                                                        List<SpecAttr> specAttrBeanList = product.getSpecAttr();
-                                                        for (SpecAttr specAttrBean:specAttrBeanList) {
-                                                            String selectValue = specAttrBean.getColorSquaresRgb();
-                                                            String customValue = specAttrBean.getValueRaw();
-                                                            String imgUrl=(TextUtils.isEmpty(selectValue)&& TextUtils.isEmpty(customValue))? specAttrBean.getSpecificationAttributeName(): (TextUtils.isEmpty(selectValue)?customValue : selectValue);
-                                                            //如果是底纹,样式图片或logo
-                                                            if(specAttrBean.getSpecificationAttributeId()==8||specAttrBean.getSpecificationAttributeId()==9||specAttrBean.getSpecificationAttributeId()==10){
-                                                                if(TextUtils.isEmpty(specAttrBean.getFileUrl())) {
-                                                                    //保存网络图片到手机存储空间,并返回uri
-                                                                    Uri imgUri = ImageUtil.saveImageToUri(imgUrl);
-                                                                    specAttrBean.setFileUrl(imgUri.toString());
-                                                                    needUpdate=true;
-                                                                }
-                                                            }
-                                                        }
-                                                        if(needUpdate) {
-                                                            ProductModel.getInstance().updaeProduct(product);
-                                                        }
-                                                    }
-                                                }
-                                            });
-                                        }
+                                        CouponDaoService.getInstance(getContext()).insertOrUpdateCoupon(coupon);
+                                        getProduct(coupon);
                                         listener.done(coupon, null);
                                         break;
                                     }
@@ -474,6 +415,64 @@ public class CouponModel extends BaseModel {
         }
         catch (Exception exe){
             return false;
+        }
+    }
+
+
+    private void getProduct(final Coupon coupon){
+        //如果卡卷商品在手机上没有保存过
+        if(!ProductDaoService.getInstance(getContext()).hasProduct(coupon.getProductId())){
+            ProductModel.getInstance().getProductFromServer(coupon.getProductId(),new OperationListener<Product>(){
+                @Override
+                public void done(final Product product, AppException exception) {
+                    if(exception==null){
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    //保存优惠卷相关图片到手机
+                                    boolean needUpdate = false;
+                                    List<SpecAttr> specAttrBeanList = product.getSpecAttr();
+                                    for (SpecAttr specAttrBean : specAttrBeanList) {
+                                        //如果是底纹,样式图片或logo
+                                        if (specAttrBean.getSpecificationAttributeId() == 6 || specAttrBean.getSpecificationAttributeId() == 7 || specAttrBean.getSpecificationAttributeId() == 8) {
+                                            if (TextUtils.isEmpty(specAttrBean.getFileUrl())) {
+                                                String imgUrl = specAttrBean.getValueRaw();
+                                                //保存网络图片到手机存储空间,并返回uri
+                                                Uri imgUri = ImageUtil.saveImageToUri(imgUrl);
+                                                specAttrBean.setFileUrl(imgUri.toString());
+                                                needUpdate = true;
+                                            }
+                                        }
+                                    }
+                                    if (needUpdate) {
+                                        ProductModel.getInstance().updaeProduct(product);
+                                    }
+                                }
+                                catch (Exception e){}
+                            }
+                        }).start();
+
+                        try{
+                            CouponStyle couponStyle = product.getCouponStyle();
+                            if (couponStyle.getValidityYear() > 0 || couponStyle.getValidityMonth() > 0 || couponStyle.getValidityDay() > 0) {
+                                String endDateStr = TimeUtil.modifyDateStr(coupon.getStartTime(), TimeUtil.FORMAT_DATE_TIME_SECOND, TimeZone.getTimeZone("UTC"), couponStyle.getValidityYear(), couponStyle.getValidityMonth(), couponStyle.getValidityDay());
+                                coupon.setEndTime(endDateStr);
+                                CouponDaoService.getInstance(getContext()).updateCoupon(coupon);
+                            }
+                        }
+                        catch (Exception e){}
+                    }
+                }
+            });
+        }
+        else{
+            CouponStyle couponStyle=coupon.getCouponStyle();
+            if(couponStyle.getValidityYear()>0||couponStyle.getValidityMonth()>0||couponStyle.getValidityDay()>0) {
+                String endDateStr = TimeUtil.modifyDateStr(coupon.getStartTime(), TimeUtil.FORMAT_DATE_TIME_SECOND, TimeZone.getTimeZone("UTC"), couponStyle.getValidityYear(), couponStyle.getValidityMonth(), couponStyle.getValidityDay());
+                coupon.setEndTime(endDateStr);
+                CouponDaoService.getInstance(getContext()).updateCoupon(coupon);
+            }
         }
     }
 

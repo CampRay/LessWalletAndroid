@@ -1,24 +1,16 @@
 package com.campray.lesswalletandroid.adapter;
 
-import android.animation.ObjectAnimator;
-import android.animation.PropertyValuesHolder;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.campray.lesswalletandroid.R;
 import com.campray.lesswalletandroid.adapter.base.BaseRecyclerAdapter;
 import com.campray.lesswalletandroid.adapter.base.BaseRecyclerHolder;
-import com.campray.lesswalletandroid.adapter.base.IMutlipleItem;
-import com.campray.lesswalletandroid.common.SmartCouponType;
+import com.campray.lesswalletandroid.adapter.base.ILayoutItem;
 import com.campray.lesswalletandroid.db.entity.Coupon;
 import com.campray.lesswalletandroid.db.entity.Product;
 import com.campray.lesswalletandroid.listener.OperationListener;
@@ -41,8 +33,8 @@ import java.util.List;
  */
 public class ProductAdapter extends BaseRecyclerAdapter<Product> {
 
-    public ProductAdapter(Context context, IMutlipleItem<Product> items, Collection<Product> datas) {
-        super(context,items,datas);
+    public ProductAdapter(Context context, int layoutResourceId, Collection<Product> datas) {
+        super(context,layoutResourceId,datas);
     }
 
     /**
@@ -80,7 +72,7 @@ public class ProductAdapter extends BaseRecyclerAdapter<Product> {
             holder.setText(R.id.tv_number, coupon.getProduct().getNumPrefix()+coupon.getCid().substring(10));
 
             if (coupon.getCouponStyle() != null) {
-                holder.setText(R.id.tv_price, coupon.getCouponStyle().getBenefit());
+                holder.setText(R.id.tv_benefit, "");
                 holder.setBackgroundColor(R.id.gl_coupon_top, coupon.getCouponStyle().getBgColor());
                 if (!TextUtils.isEmpty(coupon.getCouponStyle().getShadingUrl())) {
                     holder.setImageView(R.id.iv_coupon_shading, coupon.getCouponStyle().getShadingUrl(), 0);

@@ -3,6 +3,7 @@ package com.campray.lesswalletandroid.ui;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.widget.PopupMenu;
+import android.util.Base64;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -74,9 +75,9 @@ public class AccountActivity extends MenuActivity {
         String userStr="user:"+ user.getId();
         Bitmap qrCodeBitmap= null;
         try {
-            qrCodeBitmap = QRCodeEncoder.encodeAsBitmap(userStr, BarcodeFormat.QR_CODE,120);
+            qrCodeBitmap = QRCodeEncoder.encodeAsBitmap(Base64.encodeToString(userStr.getBytes("UTF-8"),Base64.DEFAULT), BarcodeFormat.QR_CODE,120);
             iv_qrcode.setImageBitmap(qrCodeBitmap);
-        } catch (WriterException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

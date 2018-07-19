@@ -46,9 +46,10 @@ public class ProductDao extends AbstractDao<Product, Long> {
         public final static Property EndTime = new Property(11, String.class, "endTime", false, "END_TIME");
         public final static Property Published = new Property(12, boolean.class, "published", false, "PUBLISHED");
         public final static Property Deleted = new Property(13, boolean.class, "deleted", false, "DELETED");
-        public final static Property SpecAttr = new Property(14, String.class, "specAttr", false, "SPEC_ATTR");
-        public final static Property UserAttr = new Property(15, String.class, "userAttr", false, "USER_ATTR");
-        public final static Property MerchantId = new Property(16, Long.class, "merchantId", false, "MERCHANT_ID");
+        public final static Property StockQuantity = new Property(14, int.class, "stockQuantity", false, "STOCK_QUANTITY");
+        public final static Property SpecAttr = new Property(15, String.class, "specAttr", false, "SPEC_ATTR");
+        public final static Property UserAttr = new Property(16, String.class, "userAttr", false, "USER_ATTR");
+        public final static Property MerchantId = new Property(17, Long.class, "merchantId", false, "MERCHANT_ID");
     }
 
     private DaoSession daoSession;
@@ -83,9 +84,10 @@ public class ProductDao extends AbstractDao<Product, Long> {
                 "\"END_TIME\" TEXT," + // 11: endTime
                 "\"PUBLISHED\" INTEGER NOT NULL ," + // 12: published
                 "\"DELETED\" INTEGER NOT NULL ," + // 13: deleted
-                "\"SPEC_ATTR\" TEXT," + // 14: specAttr
-                "\"USER_ATTR\" TEXT," + // 15: userAttr
-                "\"MERCHANT_ID\" INTEGER);"); // 16: merchantId
+                "\"STOCK_QUANTITY\" INTEGER NOT NULL ," + // 14: stockQuantity
+                "\"SPEC_ATTR\" TEXT," + // 15: specAttr
+                "\"USER_ATTR\" TEXT," + // 16: userAttr
+                "\"MERCHANT_ID\" INTEGER);"); // 17: merchantId
     }
 
     /** Drops the underlying database table. */
@@ -143,20 +145,21 @@ public class ProductDao extends AbstractDao<Product, Long> {
         }
         stmt.bindLong(13, entity.getPublished() ? 1L: 0L);
         stmt.bindLong(14, entity.getDeleted() ? 1L: 0L);
+        stmt.bindLong(15, entity.getStockQuantity());
  
         List specAttr = entity.getSpecAttr();
         if (specAttr != null) {
-            stmt.bindString(15, specAttrConverter.convertToDatabaseValue(specAttr));
+            stmt.bindString(16, specAttrConverter.convertToDatabaseValue(specAttr));
         }
  
         List userAttr = entity.getUserAttr();
         if (userAttr != null) {
-            stmt.bindString(16, userAttrConverter.convertToDatabaseValue(userAttr));
+            stmt.bindString(17, userAttrConverter.convertToDatabaseValue(userAttr));
         }
  
         Long merchantId = entity.getMerchantId();
         if (merchantId != null) {
-            stmt.bindLong(17, merchantId);
+            stmt.bindLong(18, merchantId);
         }
     }
 
@@ -209,20 +212,21 @@ public class ProductDao extends AbstractDao<Product, Long> {
         }
         stmt.bindLong(13, entity.getPublished() ? 1L: 0L);
         stmt.bindLong(14, entity.getDeleted() ? 1L: 0L);
+        stmt.bindLong(15, entity.getStockQuantity());
  
         List specAttr = entity.getSpecAttr();
         if (specAttr != null) {
-            stmt.bindString(15, specAttrConverter.convertToDatabaseValue(specAttr));
+            stmt.bindString(16, specAttrConverter.convertToDatabaseValue(specAttr));
         }
  
         List userAttr = entity.getUserAttr();
         if (userAttr != null) {
-            stmt.bindString(16, userAttrConverter.convertToDatabaseValue(userAttr));
+            stmt.bindString(17, userAttrConverter.convertToDatabaseValue(userAttr));
         }
  
         Long merchantId = entity.getMerchantId();
         if (merchantId != null) {
-            stmt.bindLong(17, merchantId);
+            stmt.bindLong(18, merchantId);
         }
     }
 
@@ -254,9 +258,10 @@ public class ProductDao extends AbstractDao<Product, Long> {
             cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // endTime
             cursor.getShort(offset + 12) != 0, // published
             cursor.getShort(offset + 13) != 0, // deleted
-            cursor.isNull(offset + 14) ? null : specAttrConverter.convertToEntityProperty(cursor.getString(offset + 14)), // specAttr
-            cursor.isNull(offset + 15) ? null : userAttrConverter.convertToEntityProperty(cursor.getString(offset + 15)), // userAttr
-            cursor.isNull(offset + 16) ? null : cursor.getLong(offset + 16) // merchantId
+            cursor.getInt(offset + 14), // stockQuantity
+            cursor.isNull(offset + 15) ? null : specAttrConverter.convertToEntityProperty(cursor.getString(offset + 15)), // specAttr
+            cursor.isNull(offset + 16) ? null : userAttrConverter.convertToEntityProperty(cursor.getString(offset + 16)), // userAttr
+            cursor.isNull(offset + 17) ? null : cursor.getLong(offset + 17) // merchantId
         );
         return entity;
     }
@@ -277,9 +282,10 @@ public class ProductDao extends AbstractDao<Product, Long> {
         entity.setEndTime(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
         entity.setPublished(cursor.getShort(offset + 12) != 0);
         entity.setDeleted(cursor.getShort(offset + 13) != 0);
-        entity.setSpecAttr(cursor.isNull(offset + 14) ? null : specAttrConverter.convertToEntityProperty(cursor.getString(offset + 14)));
-        entity.setUserAttr(cursor.isNull(offset + 15) ? null : userAttrConverter.convertToEntityProperty(cursor.getString(offset + 15)));
-        entity.setMerchantId(cursor.isNull(offset + 16) ? null : cursor.getLong(offset + 16));
+        entity.setStockQuantity(cursor.getInt(offset + 14));
+        entity.setSpecAttr(cursor.isNull(offset + 15) ? null : specAttrConverter.convertToEntityProperty(cursor.getString(offset + 15)));
+        entity.setUserAttr(cursor.isNull(offset + 16) ? null : userAttrConverter.convertToEntityProperty(cursor.getString(offset + 16)));
+        entity.setMerchantId(cursor.isNull(offset + 17) ? null : cursor.getLong(offset + 17));
      }
     
     @Override

@@ -49,8 +49,8 @@ public class CardPaymentActivity extends MenuActivity {
     ImageView iv_card_img;
     @BindView(R.id.iv_card_logo)
     ImageView iv_card_logo;
-    @BindView(R.id.tv_price)
-    TextView tv_price;
+    @BindView(R.id.tv_benefit)
+    TextView tv_benefit;
     @BindView(R.id.tv_title)
     TextView tv_title;
 

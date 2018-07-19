@@ -66,7 +66,7 @@
 
                 <TextView
                     android:id="@+id/tv_price"
-                    android:layout_width="130dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_column="1"
                     android:layout_columnWeight="1"
@@ -81,6 +81,8 @@
 
                 <TextView
                     android:id="@+id/tv_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_column="0"
                     android:layout_columnSpan="2"
                     android:layout_columnWeight="1"
@@ -104,14 +106,90 @@
 
             </GridLayout>
 
-            <TextView
-                android:id="@+id/tv_desc"
+            <LinearLayout
+                android:id="@+id/ll_desc"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
+                android:layout_height="match_parent"
                 android:background="#ededed"
+                android:orientation="vertical"
                 android:padding="10dp"
-                android:textColor="#313131" />
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:text="@string/coupon_benefit"
+                        android:textColor="#000000"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/tv_benefit"
+                        android:layout_width="135dp"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="5dp"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="12sp"
+                        tools:text="@string/coupon_benefit_buyngetone" />
+
+                    <TextView
+                        android:id="@+id/tv_benefit_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="12sp"
+                        tools:text="10" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:text="@string/coupon_validity"
+                        android:textColor="#000000"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/tv_validity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="5dp"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="12sp"
+                        tools:text="3月" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:text="@string/coupon_short_desc"
+                    android:textColor="#000000"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tv_shortdesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:textColor="#313131"
+                    android:textSize="10sp" />
+
+            </LinearLayout>
 
             <GridLayout
                 android:id="@+id/gl_coupon_info"
@@ -135,7 +213,7 @@
                     android:layout_columnWeight="2"
                     android:layout_gravity="left|center_vertical"
                     android:layout_row="0"
-                    android:text="Starbucks"
+                    tools:text="Starbucks"
                     android:textColor="#000000"
                     android:textStyle="bold" />
 
@@ -148,9 +226,9 @@
                     android:layout_gravity="right|center_vertical"
                     android:layout_row="0"
                     android:adjustViewBounds="true"
+                    android:text="@string/coupon_stock_quantity"
                     android:textColor="#000000"
-                    android:textStyle="bold"
-                    tools:text="Purchase Price:" />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tv_expired"

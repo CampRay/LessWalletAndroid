@@ -9,6 +9,7 @@ import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.NotNull;
 
+import java.util.Date;
 import java.util.TimeZone;
 
 /**
@@ -32,7 +33,13 @@ public class History {
 
     public String getCreatedTimeLocal() {
         if (!TextUtils.isEmpty(createdTime)) {
-            return  TimeUtil.dateToString(TimeUtil.stringToDate(createdTime, TimeUtil.FORMAT_DATE_TIME_SECOND, TimeZone.getTimeZone("UTC")), TimeUtil.FORMAT_DATE);
+            Date date = TimeUtil.stringToDate(createdTime, TimeUtil.FORMAT_DATE_TIME_SECOND, TimeZone.getTimeZone("UTC"));
+            if(TimeUtil.isToday(createdTime,TimeUtil.FORMAT_DATE_TIME_SECOND, TimeZone.getTimeZone("UTC"))){
+                return TimeUtil.dateToString(date, TimeUtil.FORMAT_TIME);
+            }
+            else {
+                return TimeUtil.dateToString(date, TimeUtil.FORMAT_DATE);
+            }
         }
         return "";
     }

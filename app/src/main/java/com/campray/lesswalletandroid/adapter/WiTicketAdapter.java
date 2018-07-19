@@ -13,7 +13,7 @@ import android.view.View;
 import com.campray.lesswalletandroid.R;
 import com.campray.lesswalletandroid.adapter.base.BaseRecyclerAdapter;
 import com.campray.lesswalletandroid.adapter.base.BaseRecyclerHolder;
-import com.campray.lesswalletandroid.adapter.base.IMutlipleItem;
+import com.campray.lesswalletandroid.adapter.base.ILayoutItem;
 import com.campray.lesswalletandroid.db.entity.Coupon;
 import com.campray.lesswalletandroid.listener.OperationListener;
 import com.campray.lesswalletandroid.model.CouponModel;
@@ -33,8 +33,8 @@ import java.util.Collection;
  * @author Phills
  */
 public class WiTicketAdapter extends BaseRecyclerAdapter<Coupon> {
-    public WiTicketAdapter(Context context, IMutlipleItem<Coupon> items, Collection<Coupon> datas) {
-        super(context,items,datas);
+    public WiTicketAdapter(Context context, int layoutResourceId, Collection<Coupon> datas) {
+        super(context,layoutResourceId,datas);
     }
 
     /**
@@ -71,7 +71,7 @@ public class WiTicketAdapter extends BaseRecyclerAdapter<Coupon> {
             holder.setText(R.id.tv_number, coupon.getProduct().getNumPrefix()+coupon.getCid().substring(10));
 
             if (coupon.getCouponStyle() != null) {
-                holder.setText(R.id.tv_price, coupon.getCouponStyle().getBenefit());
+                //holder.setText(R.id.tv_price, "");
                 int topColor=Color.parseColor(coupon.getCouponStyle().getBgColor());
                 InnerCornerView leftInnerCornerView=(InnerCornerView)holder.getView(R.id.icv_tleft);
                 leftInnerCornerView.setCornerColor(topColor);

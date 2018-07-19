@@ -45,16 +45,15 @@
     <string name="error_empty_amount">The collection amount is required</string>
     <string name="error_format_amount">The collection amount must be float number with two decimals.</string>
     <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
 
     <string name="dialog_camera_permission">This App need the camera permission to scan QRCode</string>
     <string name="dialog_camera_permission_setting">This App need the camera permission, do you want to open the system setting page?</string>
     <string name="dialog_permission_title">Request Permission</string>
     <string name="button_ok">OK</string>
+    <string name="button_confirm">Confirm</string>
     <string name="button_cancel">Cancel</string>
     <string name="button_give">GIVE</string>
+    <string name="button_detail">More Details</string>
 
     <string name="scan_title">QRCode Scan</string>
     <string name="scan_text">Put the QRCode into the scan box.</string>
@@ -73,13 +72,99 @@
     <string name="friend_select_hint">Please select your friend</string>
     <string name="coupon_sent_to">SENT TO:</string>
     <string name="coupon_sent_success">Send successfully.</string>
+    <string name="coupon_publish_merchant">Publish Merchant:</string>
+    <string name="coupon_publish_date">Publish Date:</string>
+    <string name="coupon_publish_price">Publish Price:</string>
+    <string name="coupon_benefit">Benefit:</string>
+    <string name="coupon_benefit_onetime">One Time Only</string>
+    <string name="coupon_benefit_precash">Prepay Cash</string>
+    <string name="coupon_benefit_preservice">Prepay Service</string>
+    <string name="coupon_benefit_buyngetone">Buy N Get One Gift</string>
+    <string name="coupon_validity">Validity Period:</string>
+    <string name="coupon_validity_day">days</string>
+    <string name="coupon_validity_month">months</string>
+    <string name="coupon_validity_year">years</string>
+    <string name="coupon_validity_nolimit">Limitless</string>
+    <string name="coupon_short_desc">Short Descrption:</string>
+    <string name="coupon_description">Full Description:</string>
+    <string name="coupon_free">FREE</string>
+    <string name="coupon_stock_quantity">Stock Quantity:</string>
+    <string name="coupon_prepaid_cash">Prepaid Cash:</string>
+    <string name="coupon_prepaid_service">Prepaid Service:</string>
+    <string name="coupon_cash_add">Add Cash</string>
+    <string name="coupon_cash_deduct">Deduct Cash</string>
+    <string name="coupon_service_add">Add Service Time</string>
+    <string name="coupon_service_deduct">Deduct Service Time</string>
 
+    <string name="card_firstname">First Name:</string>
+    <string name="card_lastname">Last Name:</string>
+    <string name="card_phone">Phone Number:</string>
     <string name="card_points">Current Points:</string>
+    <string name="card_expired_time">Term of validity:</string>
+    <string name="card_point_add">Add Points</string>
+    <string name="card_point_deduct">Deduct Points</string>
+    <string name="card_point_amount">Points Amount</string>
+    <string name="card_btn_add">Add</string>
+    <string name="card_btn_deduct">Deduct</string>
+
+
 
     <string name="notification_coupon_received">Received a coupon</string>
     <string name="notification_coupon_received_text">Your friend sent a coupon to you</string>
-    <string name="notification_coupon_sent">Sent a coupon</string>
+    <string name="notification_coupon_sent">Sent out a coupon</string>
     <string name="notification_coupon_sent_text">Gave a coupon to your friend</string>
+
+    <string name="notification_user_coupon_received">Received a coupon</string>
+    <string name="notification_user_coupon_received_text">You have received a coupon from the merchant</string>
+    <string name="notification_user_card_received">Received a membership card</string>
+    <string name="notification_user_card_received_text">You have received a membership card from merchant</string>
+    <string name="notification_user_point_add">Your points have been increased</string>
+    <string name="notification_user_point_add_text">%s membership points are added to your account by merchant</string>
+    <string name="notification_user_point_redeemed">Your points have been deducted</string>
+    <string name="notification_user_point_redeemed_text">%s membership points are deducted from your account by merchant</string>
+    <string name="notification_user_service_add">Service time have been increased</string>
+    <string name="notification_user_service_add_text">%s time of service are added to your coupon by merchant</string>
+    <string name="notification_user_service_redeemed">Service time have been deducted</string>
+    <string name="notification_user_service_redeemed_text">%s time of service are deducted from your coupon by merchant</string>
+    <string name="notification_user_coupon_used">Coupon has been used</string>
+    <string name="notification_user_coupon_used_text">You one-time coupon has been used</string>
+    <string name="notification_user_buy_redeemed">Coupon purchase time have been deducted</string>
+    <string name="notification_user_buy_redeemed_text">%s time of purchase are deducted from your coupon by merchant</string>
+    <string name="notification_user_buy_added">Coupon purchase time have been increased</string>
+    <string name="notification_user_buy_added_text">%s time of purchase are added to your coupon by merchant</string>
+
+    <string name="notification_user_cash_add">Coupon amount have been increased</string>
+    <string name="notification_user_cash_add_text">Your coupon prepay amount have been increased by merchant</string>
+    <string name="notification_user_cash_redeemed">Coupon amount have been deducted</string>
+    <string name="notification_user_cash_redeemed_text">You coupon prepay amount have been deducted by merchant</string>
+
+    <string name="notification_merchant_coupon_sent">Sent out a coupon successfully</string>
+    <string name="notification_merchant_coupon_sent_text">Gave a coupon to user</string>
+    <string name="notification_merchant_card_sent">Sent out a card successfully</string>
+    <string name="notification_merchant_card_sent_text">Gave a card to user</string>
+
+    <string name="notification_merchant_coupon_redeemed">Redeemed a coupon successfully</string>
+    <string name="notification_merchant_coupon_redeemed_text">Redeemed a coupon from user</string>
+
+    <string name="notification_merchant_point_redeemed">Deducted points successfully</string>
+    <string name="notification_merchant_point_redeemed_text">Deducted %s points from user</string>
+    <string name="notification_merchant_point_added">Added points successfully</string>
+    <string name="notification_merchant_point_added_text">Added %s points from user</string>
+
+    <string name="notification_merchant_cash_redeemed">Deducted cash successfully</string>
+    <string name="notification_merchant_cash_redeemed_text">Deducted %s cash from user coupon</string>
+    <string name="notification_merchant_cash_added">Added cash successfully</string>
+    <string name="notification_merchant_cash_added_text">Added %s cash to user coupon successfully</string>
+
+    <string name="notification_merchant_service_redeemed">Deducted service time successfully</string>
+    <string name="notification_merchant_service_redeemed_text">Deducted %s service time from user coupon</string>
+    <string name="notification_merchant_service_added">Added service time successfully</string>
+    <string name="notification_merchant_service_added_text">Added %s service time to user coupon successfully</string>
+
+    <string name="notification_merchant_buy_redeemed">Deducted purchase time successfully</string>
+    <string name="notification_merchant_buy_redeemed_text">Deducted %s purchase time from user coupon</string>
+    <string name="notification_merchant_buy_added">Added purchase time successfully</string>
+    <string name="notification_merchant_buy_added_text">Added %s purchase time to user coupon successfully</string>
 
     <!--错误码-->
     <string name="E_0000">Error Message</string>
@@ -104,10 +189,16 @@
     <string name="E_2012">The first name is required</string>
     <string name="E_2013">The last name is required</string>
     <string name="E_2014">The mobile name is required</string>
-    <string name="E_2015"></string>
-    <string name="E_2016"></string>
+    <string name="E_2015">The user does not exist</string>
+    <string name="E_2050">The account point is not enough.</string>
+    <string name="E_2051">Your do not have the permission to do this.</string>
+
     <string name="E_3000">Failed to get the smart coupon</string>
     <string name="E_3001">Failed to delete the coupon</string>
+    <string name="E_3002">The smart coupon does not exist.</string>
+    <string name="E_3003">The coupon cash amount is not enough.</string>
+
+    <string name="E_3020">The coupon does not exist or disabled</string>
 
 
     <string name="qrcode_hint">Place a QRCode inside the viewfinder rectangle to scan it.</string>

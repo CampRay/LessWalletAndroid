@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.campray.lesswalletandroid.R;
 import com.campray.lesswalletandroid.db.entity.Coupon;
+import com.campray.lesswalletandroid.db.entity.CouponStyle;
 import com.campray.lesswalletandroid.db.entity.Friend;
 import com.campray.lesswalletandroid.db.service.FriendDaoService;
 import com.campray.lesswalletandroid.listener.OperationListener;
@@ -47,18 +48,24 @@ public class CouponSendActivity extends MenuActivity {
     ImageView iv_coupon_logo;
     @BindView(R.id.iv_coupon_img)
     ImageView iv_coupon_img;
-    @BindView(R.id.tv_price)
-    TextView tv_price;
+    @BindView(R.id.tv_validity)
+    TextView tv_validity;
+    @BindView(R.id.tv_benefit)
+    TextView tv_benefit;
+    @BindView(R.id.tv_benefit_value)
+    TextView tv_benefit_value;
     @BindView(R.id.tv_title)
     TextView tv_title;
     @BindView(R.id.tv_merchant)
     TextView tv_merchant;
-    @BindView(R.id.tv_desc)
-    TextView tv_desc;
+    @BindView(R.id.tv_shortdesc)
+    TextView tv_shortdesc;
     @BindView(R.id.tv_expired)
     TextView tv_expired;
     @BindView(R.id.tv_number)
     TextView tv_number;
+    @BindView(R.id.tv_price)
+    TextView tv_price;
     @BindView(R.id.sp_friend)
     Spinner sp_friend;
     //要送出的卡卷ID
@@ -123,31 +130,63 @@ public class CouponSendActivity extends MenuActivity {
 
     private void loadData(long couponId){
         Coupon coupon=CouponModel.getInstance().getCouponById(couponId);
-        if (coupon.getCouponStyle() != null) {
-            tv_price.setText(coupon.getCouponStyle().getBenefit());
-            gl_coupon_top.setBackgroundColor(Color.parseColor(coupon.getCouponStyle().getBgColor()));
-            if (!TextUtils.isEmpty(coupon.getCouponStyle().getShadingUrl())) {
-                Picasso.with(this).load(coupon.getCouponStyle().getShadingUrl()).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_coupon_shading);
+        CouponStyle couponStyle=coupon.getCouponStyle();
+        if (couponStyle != null) {
+            if(couponStyle.getValidityDay()>0) {
+                tv_validity.setText(couponStyle.getValidityDay()+getResources().getString(R.string.coupon_validity_day) );
+            }else if(couponStyle.getValidityMonth()>0) {
+                tv_validity.setText(couponStyle.getValidityMonth()+getResources().getString(R.string.coupon_validity_month) );
+            }else if(couponStyle.getValidityYear()>0) {
+                tv_validity.setText(couponStyle.getValidityYear()+getResources().getString(R.string.coupon_validity_year) );
+            }
+            else{
+                tv_validity.setText(getResources().getString(R.string.coupon_validity_nolimit) );
+            }
+
+            if (!TextUtils.isEmpty(couponStyle.getBenefitOne())) {
+                tv_benefit.setText(R.string.coupon_benefit_onetime);
+                tv_benefit_value.setText(couponStyle.getBenefitOne());
+            } else if (!TextUtils.isEmpty(couponStyle.getBenefitPrepaidCash())) {
+                tv_benefit.setText(R.string.coupon_benefit_precash);
+                tv_benefit_value.setText(couponStyle.getBenefitPrepaidCash()+"/"+coupon.getCustomValues().get("2"));
+            } else if (!TextUtils.isEmpty(couponStyle.getBenefitPrepaidService())) {
+                tv_benefit.setText(R.string.coupon_benefit_preservice);
+                tv_benefit_value.setText(couponStyle.getBenefitPrepaidService()+"/"+coupon.getCustomValues().get("3"));
+            } else if (!TextUtils.isEmpty(couponStyle.getBenefitBuyNGetOne())) {
+                tv_benefit.setText(R.string.coupon_benefit_buyngetone);
+                tv_benefit_value.setText(couponStyle.getBenefitBuyNGetOne()+"/"+coupon.getCustomValues().get("4"));
+            }
+
+            gl_coupon_top.setBackgroundColor(Color.parseColor(couponStyle.getBgColor()));
+            if (!TextUtils.isEmpty(couponStyle.getShadingUrl())) {
+                Picasso.with(this).load(couponStyle.getShadingUrl()).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_coupon_shading);
             } else {
                 iv_coupon_shading.setVisibility(View.GONE);
             }
-            if (!TextUtils.isEmpty(coupon.getCouponStyle().getPictureUrl())) {
-                Picasso.with(this).load(coupon.getCouponStyle().getPictureUrl()).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_coupon_img);
+            if (!TextUtils.isEmpty(couponStyle.getPictureUrl())) {
+                Picasso.with(this).load(couponStyle.getPictureUrl()).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_coupon_img);
             } else {
                 iv_coupon_img.setVisibility(View.GONE);
             }
-            if (!TextUtils.isEmpty(coupon.getCouponStyle().getLogoUrl())) {
-                Picasso.with(this).load(coupon.getCouponStyle().getLogoUrl()).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_coupon_logo);
+            if (!TextUtils.isEmpty(couponStyle.getLogoUrl())) {
+                Picasso.with(this).load(couponStyle.getLogoUrl()).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_coupon_logo);
             } else {
                 iv_coupon_logo.setVisibility(View.GONE);
             }
         }
+        if(coupon.getProduct().getPrice()>0){
+            tv_price.setText(coupon.getProduct().getPriceStr());
+        }
+        else{
+            tv_price.setText(getResources().getString(R.string.coupon_free));
+        }
+
         tv_title.setText(coupon.getProduct().getTitle());
         tv_merchant.setText(coupon.getProduct().getMerchant().getName());
-        tv_desc.setText(coupon.getProduct().getShortDesc());
+        tv_shortdesc.setText(coupon.getProduct().getShortDesc());
         String expired = (TextUtils.isEmpty(coupon.getStartTimeLocal()) ? "" : coupon.getStartTimeLocal()) + (TextUtils.isEmpty(coupon.getEndTimeLocal()) ? "" : " - " + coupon.getEndTimeLocal());
         tv_expired.setText(expired);
-        tv_number.setText("no."+coupon.getProduct().getNumPrefix()+coupon.getCid().substring(10));
+        tv_number.setText(coupon.getCid());
 
     }
 

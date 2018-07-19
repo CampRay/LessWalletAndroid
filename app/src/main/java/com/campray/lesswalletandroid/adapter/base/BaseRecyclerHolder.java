@@ -61,6 +61,18 @@ public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
     }
 
     /**
+     * 设置View对象显示的文本
+     * @param viewId
+     * @param resid
+     * @return
+     */
+    public BaseRecyclerHolder setText(int viewId, int resid) {
+        TextView view = getView(viewId);
+        view.setText(resid);
+        return this;
+    }
+
+    /**
      * 设置View对象显示的背景色
      * @param viewId
      * @param color

@@ -1,15 +1,7 @@
 package com.campray.lesswalletandroid.model;
 
-import com.campray.lesswalletandroid.bean.MerchantBean;
-import com.campray.lesswalletandroid.bean.ProductBean;
-import com.campray.lesswalletandroid.bean.ProductBean;
-import com.campray.lesswalletandroid.bean.SpecAttrBean;
-import com.campray.lesswalletandroid.bean.UserBean;
-import com.campray.lesswalletandroid.db.entity.Coupon;
 import com.campray.lesswalletandroid.db.entity.Merchant;
 import com.campray.lesswalletandroid.db.entity.Product;
-import com.campray.lesswalletandroid.db.entity.Product;
-import com.campray.lesswalletandroid.db.entity.SpecAttr;
 import com.campray.lesswalletandroid.db.service.MerchantDaoService;
 import com.campray.lesswalletandroid.db.service.ProductDaoService;
 import com.campray.lesswalletandroid.listener.ApiHandleListener;
@@ -17,11 +9,8 @@ import com.campray.lesswalletandroid.listener.OperationListener;
 import com.campray.lesswalletandroid.util.AppException;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

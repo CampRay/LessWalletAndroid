@@ -5,7 +5,6 @@ import android.os.Handler;
 import android.text.TextUtils;
 
 import com.campray.lesswalletandroid.LessWalletApplication;
-import com.campray.lesswalletandroid.bean.UserBean;
 import com.campray.lesswalletandroid.db.entity.User;
 import com.campray.lesswalletandroid.listener.ApiHandleListener;
 import com.campray.lesswalletandroid.util.AppException;

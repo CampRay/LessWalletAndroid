@@ -91,6 +91,7 @@ public class HistoryModel extends BaseModel {
         //封装登录请求参数
         JsonObject jObj=new JsonObject();
         jObj.addProperty("device",this.getDeviceId());
+        jObj.addProperty("isvendor",false);
         this.httpPostAPI(HistoryModel.URL_API_MSGSYNC, jObj,new ApiHandleListener<JsonObject>() {
             @Override
             public void done(JsonObject obj, AppException exception) {
