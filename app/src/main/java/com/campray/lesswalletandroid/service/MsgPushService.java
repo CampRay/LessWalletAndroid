@@ -21,6 +21,7 @@ import com.campray.lesswalletandroid.db.entity.Coupon;
 import com.campray.lesswalletandroid.db.entity.History;
 import com.campray.lesswalletandroid.db.entity.User;
 import com.campray.lesswalletandroid.event.MessageEvent;
+import com.campray.lesswalletandroid.event.RefreshEvent;
 import com.campray.lesswalletandroid.listener.OperationListener;
 import com.campray.lesswalletandroid.model.CouponModel;
 import com.campray.lesswalletandroid.model.HistoryModel;
@@ -116,7 +117,7 @@ public class MsgPushService extends Service {
                                                     case 152://服务次数增加消息
                                                         CouponModel.getInstance().getCouponFromServer(Long.parseLong(strArr[1]), new OperationListener<Coupon>() {
                                                             @Override
-                                                            public void done(Coupon obj, AppException exception) {}
+                                                            public void done(Coupon obj, AppException exception) {EventBus.getDefault().post(new RefreshEvent(obj.getOrderId()));}
                                                         });
                                                         title = getResources().getString(ResourcesUtils.getStringId(getApplicationContext(), "notification_user_service_add"));
                                                         text = String.format(getResources().getString(ResourcesUtils.getStringId(getApplicationContext(), "notification_user_service_add_text")),strArr[2].replace("-",""));
@@ -125,7 +126,7 @@ public class MsgPushService extends Service {
                                                     case 153://服务次数减少消息
                                                         CouponModel.getInstance().getCouponFromServer(Long.parseLong(strArr[1]), new OperationListener<Coupon>() {
                                                             @Override
-                                                            public void done(Coupon obj, AppException exception) {}
+                                                            public void done(Coupon obj, AppException exception) {EventBus.getDefault().post(new RefreshEvent(obj.getOrderId()));}
                                                         });
                                                         title = getResources().getString(ResourcesUtils.getStringId(getApplicationContext(), "notification_user_service_redeemed"));
                                                         text = String.format(getResources().getString(ResourcesUtils.getStringId(getApplicationContext(), "notification_user_service_redeemed_text")),strArr[2].replace("-",""));
@@ -134,7 +135,7 @@ public class MsgPushService extends Service {
                                                     case 154://金额增加消息
                                                         CouponModel.getInstance().getCouponFromServer(Long.parseLong(strArr[1]), new OperationListener<Coupon>() {
                                                             @Override
-                                                            public void done(Coupon obj, AppException exception) {}
+                                                            public void done(Coupon obj, AppException exception) {EventBus.getDefault().post(new RefreshEvent(obj.getOrderId()));}
                                                         });
                                                         title = getResources().getString(ResourcesUtils.getStringId(getApplicationContext(), "notification_user_cash_add"));
                                                         text = String.format(getResources().getString(ResourcesUtils.getStringId(getApplicationContext(), "notification_user_cash_add_text")),fmt+strArr[2].replace("-",""));
@@ -143,7 +144,7 @@ public class MsgPushService extends Service {
                                                     case 155://金额减少消息
                                                         CouponModel.getInstance().getCouponFromServer(Long.parseLong(strArr[1]), new OperationListener<Coupon>() {
                                                             @Override
-                                                            public void done(Coupon obj, AppException exception) {}
+                                                            public void done(Coupon obj, AppException exception) {EventBus.getDefault().post(new RefreshEvent(obj.getOrderId()));}
                                                         });
                                                         title = getResources().getString(ResourcesUtils.getStringId(getApplicationContext(), "notification_user_cash_redeemed"));
                                                         text = String.format(getResources().getString(ResourcesUtils.getStringId(getApplicationContext(), "notification_user_cash_redeemed_text")),fmt+strArr[2].replace("-",""));
@@ -172,6 +173,7 @@ public class MsgPushService extends Service {
                                                     case 158://Coupon使用移除消息
                                                         //从服务端下载Coupon
                                                         CouponModel.getInstance().deleteCouponById(Long.parseLong(strArr[1]));
+                                                        EventBus.getDefault().post(new RefreshEvent());
                                                         title = getResources().getString(ResourcesUtils.getStringId(getApplicationContext(), "notification_user_coupon_used"));
                                                         text = getResources().getString(ResourcesUtils.getStringId(getApplicationContext(), "notification_user_coupon_used_text"));
                                                         showNotification(LessWalletApplication.INSTANCE(), history.getId().intValue(), title, text);
@@ -179,7 +181,7 @@ public class MsgPushService extends Service {
                                                     case 159://购买次数增加消息
                                                         CouponModel.getInstance().getCouponFromServer(Long.parseLong(strArr[1]), new OperationListener<Coupon>() {
                                                             @Override
-                                                            public void done(Coupon obj, AppException exception) {}
+                                                            public void done(Coupon obj, AppException exception) {EventBus.getDefault().post(new RefreshEvent(obj.getOrderId()));}
                                                         });
                                                         title = getResources().getString(ResourcesUtils.getStringId(getApplicationContext(), "notification_user_buy_add"));
                                                         text = String.format(getResources().getString(ResourcesUtils.getStringId(getApplicationContext(), "notification_user_cash_add_text")),strArr[2].replace("-",""));
@@ -188,7 +190,7 @@ public class MsgPushService extends Service {
                                                     case 160://购买次数减少消息
                                                         CouponModel.getInstance().getCouponFromServer(Long.parseLong(strArr[1]), new OperationListener<Coupon>() {
                                                             @Override
-                                                            public void done(Coupon obj, AppException exception) {}
+                                                            public void done(Coupon obj, AppException exception) {EventBus.getDefault().post(new RefreshEvent(obj.getOrderId()));}
                                                         });
                                                         title = getResources().getString(ResourcesUtils.getStringId(getApplicationContext(), "notification_user_buy_redeemed"));
                                                         text = String.format(getResources().getString(ResourcesUtils.getStringId(getApplicationContext(), "notification_user_cash_redeemed_text")),strArr[2].replace("-",""));

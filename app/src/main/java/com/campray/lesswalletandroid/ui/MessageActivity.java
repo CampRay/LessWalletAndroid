@@ -11,12 +11,10 @@ import android.support.v7.widget.RecyclerView;
 import com.campray.lesswalletandroid.R;
 import com.campray.lesswalletandroid.adapter.HistoryAdapter;
 import com.campray.lesswalletandroid.adapter.base.BaseRecyclerAdapter;
-import com.campray.lesswalletandroid.adapter.base.ILayoutItem;
 import com.campray.lesswalletandroid.adapter.listener.OnRecyclerViewListener;
 import com.campray.lesswalletandroid.db.entity.History;
 import com.campray.lesswalletandroid.model.HistoryModel;
 import com.campray.lesswalletandroid.ui.base.MenuActivity;
-import com.campray.lesswalletandroid.view.CustomDialog;
 import com.campray.lesswalletandroid.view.RecyclerViewItemDecoration;
 
 import java.util.List;
@@ -60,14 +58,6 @@ public class MessageActivity extends MenuActivity {
      * 显示消息列表
      */
     private void showMessageList(){
-        //布局对象
-        ILayoutItem<History> layoutItem = new ILayoutItem<History>() {
-            // 根据指定的View类型参数，返回对应的布局layout资源文件ID
-            @Override
-            public int getItemLayoutId(int viewtype) {
-                return R.layout.item_message;
-            }
-        };
         adapter=new HistoryAdapter(this,R.layout.item_message,null);
 
         rc_message_list.setAdapter(adapter);

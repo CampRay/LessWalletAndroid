@@ -16,6 +16,7 @@ import com.campray.lesswalletandroid.LessWalletApplication;
 import com.campray.lesswalletandroid.R;
 import com.campray.lesswalletandroid.db.entity.Coupon;
 import com.campray.lesswalletandroid.db.entity.User;
+import com.campray.lesswalletandroid.event.RefreshEvent;
 import com.campray.lesswalletandroid.listener.OperationListener;
 import com.campray.lesswalletandroid.model.CouponModel;
 import com.campray.lesswalletandroid.model.UserModel;
@@ -27,6 +28,9 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -63,12 +67,13 @@ public class CardActivity extends MenuActivity {
 
 
     private long couponId=0;
+    private int typeId=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card);
-        int typeId=this.getBundle().getInt("type_id");
+        typeId=this.getBundle().getInt("type_id");
         showCard(typeId);
 
     }
@@ -152,6 +157,5 @@ public class CardActivity extends MenuActivity {
         bundle.putLong("coupon_id", couponId);
         startActivity(CardUseActivity.class,bundle,false);
     }
-
 
 }

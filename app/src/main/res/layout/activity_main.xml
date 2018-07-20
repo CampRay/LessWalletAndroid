@@ -88,14 +88,38 @@
                     android:layoutMode="opticalBounds">
 
                     <ImageView
-                        android:id="@+id/iv_alipay"
+                        android:id="@+id/iv_card"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
                         android:layout_centerHorizontal="true"
                         android:layout_centerInParent="false"
                         android:adjustViewBounds="true"
-                        android:background="@mipmap/img_alipay"
+                        android:background="@mipmap/icon_card"
+                        android:cropToPadding="false"
+                        android:scaleType="fitCenter" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/bg_layout"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:isScrollContainer="false"
+                    android:layoutDirection="locale"
+                    android:layoutMode="opticalBounds">
+
+                    <ImageView
+                        android:id="@+id/iv_ticket"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerInParent="false"
+                        android:adjustViewBounds="true"
+                        android:background="@mipmap/icon_ticket"
                         android:cropToPadding="false"
                         android:scaleType="fitCenter" />
 
@@ -103,102 +127,52 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
+                        android:adjustViewBounds="true"
+                        android:background="@mipmap/layer_shodow"
+                        android:scaleType="fitCenter" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:adjustViewBounds="true"
+                        android:background="@mipmap/layer_shodow"
+                        android:scaleType="fitCenter" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/bg_layout"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:isScrollContainer="false"
+                    android:layoutDirection="locale"
+                    android:layoutMode="opticalBounds">
+
+                    <ImageView
+                        android:id="@+id/iv_coupon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerInParent="false"
+                        android:adjustViewBounds="false"
+                        android:background="@mipmap/icon_coupon"
+                        android:cropToPadding="false"
+                        android:scaleType="fitCenter" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
                         android:adjustViewBounds="true"
                         android:scaleType="fitCenter"
                         android:src="@mipmap/layer_shodow" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@mipmap/bg_layout"
-                    android:clipChildren="false"
-                    android:clipToPadding="false"
-                    android:isScrollContainer="false"
-                    android:layoutDirection="locale"
-                    android:layoutMode="opticalBounds">
-
-                    <ImageView
-                        android:id="@+id/iv_wechat"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerInParent="false"
-                        android:adjustViewBounds="true"
-                        android:background="@mipmap/img_wechat"
-                        android:cropToPadding="false"
-                        android:scaleType="fitCenter" />
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:adjustViewBounds="true"
-                        android:background="@mipmap/layer_shodow"
-                        android:scaleType="fitCenter" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@mipmap/bg_layout"
-                    android:clipChildren="false"
-                    android:clipToPadding="false"
-                    android:isScrollContainer="false"
-                    android:layoutDirection="locale"
-                    android:layoutMode="opticalBounds">
-
-                    <ImageView
-                        android:id="@+id/iv_union"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerInParent="false"
-                        android:adjustViewBounds="true"
-                        android:background="@mipmap/img_unionpay"
-                        android:cropToPadding="false"
-                        android:scaleType="fitCenter" />
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:adjustViewBounds="true"
-                        android:background="@mipmap/layer_shodow"
-                        android:scaleType="fitCenter" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@mipmap/bg_layer"
-                    android:clipChildren="false"
-                    android:clipToPadding="false"
-                    android:isScrollContainer="false"
-                    android:layoutDirection="locale"
-                    android:layoutMode="opticalBounds"
-                    android:visibility="gone">
-
-                    <ImageView
-                        android:id="@+id/iv_paypal"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerInParent="false"
-                        android:adjustViewBounds="true"
-                        android:background="@mipmap/img_paypal"
-                        android:cropToPadding="false"
-                        android:scaleType="fitCenter" />
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:adjustViewBounds="true"
-                        android:background="@mipmap/layer_shadow_bottom"
-                        android:scaleType="fitCenter" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -212,29 +186,15 @@
                     android:layoutMode="opticalBounds">
 
                     <ImageView
-                        android:id="@+id/iv_wicoupon"
-                        android:layout_width="150dp"
-                        android:layout_height="110dp"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentLeft="true"
-                        android:scaleType="fitCenter" />
-
-                    <ImageView
                         android:id="@+id/iv_website"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentRight="true"
-                        android:background="@mipmap/btn_website"
-                        android:scaleType="fitCenter" />
-
-                    <ImageView
-                        android:id="@+id/iv_wicard"
-                        android:layout_width="150dp"
-                        android:layout_height="110dp"
-                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentBottom="false"
                         android:layout_centerHorizontal="true"
-                        android:scaleType="fitCenter" />
+                        android:layout_centerInParent="true"
+                        android:layout_centerVertical="true"
+                        android:scaleType="fitXY"
+                        android:src="@mipmap/logo_footer" />
 
 
                 </RelativeLayout>

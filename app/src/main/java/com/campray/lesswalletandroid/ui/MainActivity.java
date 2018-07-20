@@ -28,10 +28,12 @@ import butterknife.OnClick;
  */
 
 public class MainActivity extends MenuActivity {
-    @BindView(R.id.iv_wicoupon)
-    ImageView iv_wicoupon;
-    @BindView(R.id.iv_wicard)
-    ImageView iv_wicard;
+    @BindView(R.id.iv_coupon)
+    ImageView iv_coupon;
+    @BindView(R.id.iv_card)
+    ImageView iv_card;
+    @BindView(R.id.iv_ticket)
+    ImageView iv_ticket;
 
     @BindView(R.id.iv_website)
     ImageView iv_website;
@@ -43,9 +45,6 @@ public class MainActivity extends MenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.initPermissions();
-
-        Picasso.with(this).load(R.mipmap.img_coupon).resize(250,213).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_wicoupon);
-        Picasso.with(this).load(R.mipmap.img_card).resize(250,213).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_wicard);
 
         //设置图片加载器
         banner.setImageLoader(new SliderImageLoader());
@@ -72,7 +71,7 @@ public class MainActivity extends MenuActivity {
      * 点击wicoupon按钮的事件方法
      * @param view
      */
-    @OnClick(R.id.iv_wicoupon)
+    @OnClick(R.id.iv_coupon)
     public void onWicouponClick(View view){
         Bundle bundle=new Bundle();
         bundle.putInt("type_id", 1);
@@ -82,7 +81,7 @@ public class MainActivity extends MenuActivity {
      * 点击wicard按钮的事件方法
      * @param view
      */
-    @OnClick(R.id.iv_wicard)
+    @OnClick(R.id.iv_card)
     public void onWicardClick(View view){
         Bundle bundle=new Bundle();
         bundle.putInt("type_id", 3);

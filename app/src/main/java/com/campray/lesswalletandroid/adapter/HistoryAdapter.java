@@ -8,7 +8,6 @@ import com.campray.lesswalletandroid.LessWalletApplication;
 import com.campray.lesswalletandroid.R;
 import com.campray.lesswalletandroid.adapter.base.BaseRecyclerAdapter;
 import com.campray.lesswalletandroid.adapter.base.BaseRecyclerHolder;
-import com.campray.lesswalletandroid.adapter.base.ILayoutItem;
 import com.campray.lesswalletandroid.db.entity.History;
 import com.campray.lesswalletandroid.db.entity.User;
 import com.campray.lesswalletandroid.model.HistoryModel;
@@ -67,50 +66,42 @@ public class HistoryAdapter extends BaseRecyclerAdapter<History> {
                     title = this.context.getResources().getString(ResourcesUtils.getStringId(this.context, "notification_coupon_received"));
                     desc = this.context.getResources().getString(ResourcesUtils.getStringId(this.context, "notification_coupon_received_text"));
                     break;
-                case 148://积分增加成功消息
+                case 150://积分增加成功消息
                     title = this.context.getResources().getString(ResourcesUtils.getStringId(this.context, "notification_user_point_add"));
                     desc = String.format(this.context.getResources().getString(ResourcesUtils.getStringId(this.context, "notification_user_point_add_text")),strArr[1].replace("-",""));
                     break;
-                case 149://积分减少的消息
+                case 151://积分减少的消息
                     title = this.context.getResources().getString(ResourcesUtils.getStringId(this.context, "notification_user_point_redeemed"));
                     desc = String.format(this.context.getResources().getString(ResourcesUtils.getStringId(this.context, "notification_user_point_redeemed_text")),strArr[1].replace("-",""));
                     break;
-                case 150://服务次数增加成功消息
+                case 152://服务次数增加成功消息
                     title = this.context.getResources().getString(ResourcesUtils.getStringId(this.context, "notification_user_service_add"));
                     desc = String.format(this.context.getResources().getString(ResourcesUtils.getStringId(this.context, "notification_user_service_add_text")),strArr[2].replace("-",""));
 
                     break;
-                case 151://服务次数减少的消息
+                case 153://服务次数减少的消息
                     title = this.context.getResources().getString(ResourcesUtils.getStringId(this.context, "notification_user_service_redeemed"));
                     desc = String.format(this.context.getResources().getString(ResourcesUtils.getStringId(this.context, "notification_user_service_redeemed_text")),strArr[2].replace("-",""));
                     break;
-                case 152://金额增加的消息
+                case 154://金额增加的消息
                     title = this.context.getResources().getString(ResourcesUtils.getStringId(this.context, "notification_user_cash_add"));
                     desc = String.format(this.context.getResources().getString(ResourcesUtils.getStringId(this.context, "notification_user_cash_add_text")),fmt+strArr[2].replace("-",""));
 
                     break;
-                case 153://金额减少的消息
+                case 155://金额减少的消息
                     title = this.context.getResources().getString(ResourcesUtils.getStringId(this.context, "notification_user_cash_redeemed"));
                     desc = String.format(this.context.getResources().getString(ResourcesUtils.getStringId(this.context, "notification_user_cash_redeemed_text")),fmt+strArr[2].replace("-",""));
                     break;
-                case 154://收到商户赠送的Coupon消息
+                case 156://收到商户赠送的Coupon消息
                     title = this.context.getResources().getString(ResourcesUtils.getStringId(this.context, "notification_user_coupon_received"));
                     desc = this.context.getResources().getString(ResourcesUtils.getStringId(this.context, "notification_user_coupon_received_text"));
 
                     break;
-                case 155://收到商户赠送的Card消息
+                case 157://收到商户赠送的Card消息
                     title = this.context.getResources().getString(ResourcesUtils.getStringId(this.context, "notification_user_card_received"));
                     desc = this.context.getResources().getString(ResourcesUtils.getStringId(this.context, "notification_user_card_received_text"));
                     break;
-                case 156://Coupon被用掉的消息
-                    title = this.context.getResources().getString(ResourcesUtils.getStringId(this.context, "notification_user_coupon_used"));
-                    desc = this.context.getResources().getString(ResourcesUtils.getStringId(this.context, "notification_user_coupon_used_text"));
-                    break;
-                case 157://收到商家赠送Card消息
-                    title = this.context.getResources().getString(ResourcesUtils.getStringId(this.context, "notification_user_card_received"));
-                    desc = this.context.getResources().getString(ResourcesUtils.getStringId(this.context, "notification_user_card_received_text"));
-                    break;
-                case 158://Coupon使用移除消息
+                case 158://Coupon被用掉的消息
                     title = this.context.getResources().getString(ResourcesUtils.getStringId(this.context, "notification_user_coupon_used"));
                     desc = this.context.getResources().getString(ResourcesUtils.getStringId(this.context, "notification_user_coupon_used_text"));
                     break;

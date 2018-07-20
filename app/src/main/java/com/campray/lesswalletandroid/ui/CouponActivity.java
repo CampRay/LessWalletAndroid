@@ -9,14 +9,17 @@ import android.support.v7.widget.RecyclerView;
 import com.campray.lesswalletandroid.R;
 import com.campray.lesswalletandroid.adapter.WiCouponAdapter;
 import com.campray.lesswalletandroid.adapter.base.BaseRecyclerAdapter;
-import com.campray.lesswalletandroid.adapter.base.ILayoutItem;
 import com.campray.lesswalletandroid.adapter.listener.OnRecyclerViewListener;
 import com.campray.lesswalletandroid.db.entity.Coupon;
 import com.campray.lesswalletandroid.db.entity.Product;
+import com.campray.lesswalletandroid.event.RefreshEvent;
 import com.campray.lesswalletandroid.model.CouponModel;
 import com.campray.lesswalletandroid.model.ProductModel;
 import com.campray.lesswalletandroid.ui.base.MenuActivity;
 
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -58,7 +61,6 @@ public class CouponActivity extends MenuActivity {
      * 根据电子卷的类型适配显示不同的电子卷列表
      */
     private void showCouponList(final int typeId){
-
         adapter=new WiCouponAdapter(this,R.layout.item_coupon,null);
         rc_coupon_list.setAdapter(adapter);
         linearLayoutManager=new LinearLayoutManager(this);
@@ -112,7 +114,7 @@ public class CouponActivity extends MenuActivity {
      */
     private void queryData(final int page){
         if(page>1) {
-            adapter.addFooter();
+            //adapter.addFooter();
             rc_coupon_list.scrollToPosition(lastPosition+1);
         }
 
@@ -124,15 +126,15 @@ public class CouponActivity extends MenuActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        List<Coupon> couponList= CouponModel.getInstance().getCouponsPageByType(typeId,page,pageSize);
-                        //List<Product> productList= ProductModel.getInstance().getProductPageByType(typeId,page,pageSize);
-                        if(couponList!=null) {
+                        //List<Coupon> couponList= CouponModel.getInstance().getCouponsPageByType(typeId,page,pageSize);
+                        List<Product> productList= ProductModel.getInstance().getProductPageByType(typeId,page,pageSize);
+                        if(productList!=null) {
                             if(page==1){
-                                adapter.bindDatas(couponList);
+                                adapter.bindDatas(productList);
                             }
                             else{
-                                adapter.removeFooter();
-                                adapter.appendDatas(couponList);
+                                //adapter.removeFooter();
+                                adapter.appendDatas(productList);
                             }
                             lastPage=page;
                             adapter.notifyDataSetChanged();
@@ -143,6 +145,15 @@ public class CouponActivity extends MenuActivity {
         }).start();
 
 
+    }
+
+    /**
+     * 注册消息接收事件，接收EventBus通過EventBus.getDefault().post(T)方法发出的事件通知，onMessageEvent(T)方法就会自动接收并处理些事件通知
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(RefreshEvent event){
+        queryData(lastPage);
     }
 
 }

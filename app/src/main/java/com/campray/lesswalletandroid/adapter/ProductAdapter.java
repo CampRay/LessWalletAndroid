@@ -10,7 +10,6 @@ import android.view.View;
 import com.campray.lesswalletandroid.R;
 import com.campray.lesswalletandroid.adapter.base.BaseRecyclerAdapter;
 import com.campray.lesswalletandroid.adapter.base.BaseRecyclerHolder;
-import com.campray.lesswalletandroid.adapter.base.ILayoutItem;
 import com.campray.lesswalletandroid.db.entity.Coupon;
 import com.campray.lesswalletandroid.db.entity.Product;
 import com.campray.lesswalletandroid.listener.OperationListener;

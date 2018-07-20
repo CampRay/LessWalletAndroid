@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.campray.lesswalletandroid.LessWalletApplication;
 import com.campray.lesswalletandroid.R;
 import com.campray.lesswalletandroid.db.entity.User;
-import com.campray.lesswalletandroid.db.service.UserDaoService;
 import com.campray.lesswalletandroid.listener.OperationListener;
 import com.campray.lesswalletandroid.model.UserModel;
 import com.campray.lesswalletandroid.qrcode.encode.QRCodeEncoder;
@@ -21,7 +20,6 @@ import com.campray.lesswalletandroid.ui.base.MenuActivity;
 import com.campray.lesswalletandroid.util.AppException;
 import com.campray.lesswalletandroid.util.ResourcesUtils;
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.WriterException;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
@@ -99,7 +97,7 @@ public class AccountActivity extends MenuActivity {
      */
     @OnClick(R.id.iv_left)
     public void onBackClick(View view){
-        startActivity(ProfileActivity.class,null,true);
+        startActivity(MainActivity.class,null,true);
     }
 
     /**

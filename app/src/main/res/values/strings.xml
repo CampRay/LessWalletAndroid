@@ -28,6 +28,7 @@
     <string name="account_country">Country</string>
     <string name="account_points">Points</string>
     <string name="account_scan">Scan this QR code to add me as friend</string>
+    <string name="merchant_scan">Scan this QR code to add a favorite merchant</string>
     <string name="account_setting">Setting</string>
 
     <string name="collect_title">Collection by QR code</string>
@@ -91,10 +92,13 @@
     <string name="coupon_stock_quantity">Stock Quantity:</string>
     <string name="coupon_prepaid_cash">Prepaid Cash:</string>
     <string name="coupon_prepaid_service">Prepaid Service:</string>
+    <string name="coupon_one_redeemed">Redeem</string>
     <string name="coupon_cash_add">Add Cash</string>
     <string name="coupon_cash_deduct">Deduct Cash</string>
     <string name="coupon_service_add">Add Service Time</string>
     <string name="coupon_service_deduct">Deduct Service Time</string>
+    <string name="coupon_buy_add">Add Purchase Time</string>
+    <string name="coupon_buy_deduct">Deduct Purchase Time</string>
 
     <string name="card_firstname">First Name:</string>
     <string name="card_lastname">Last Name:</string>
@@ -103,11 +107,30 @@
     <string name="card_expired_time">Term of validity:</string>
     <string name="card_point_add">Add Points</string>
     <string name="card_point_deduct">Deduct Points</string>
-    <string name="card_point_amount">Points Amount</string>
+    <string name="card_point_amount">Point Amount</string>
     <string name="card_btn_add">Add</string>
     <string name="card_btn_deduct">Deduct</string>
 
+    <string name="text_point_amount_add">Add points amount</string>
+    <string name="text_point_amount_deduct">Deduct points amount</string>
+    <string name="text_cash_amount_add">Add cash amount</string>
+    <string name="text_cash_amount_deduct">Deduct cash amount</string>
+    <string name="text_service_time_add">Add service time</string>
+    <string name="text_service_time_deduct">Deduct service time</string>
+    <string name="text_buy_time_add">Add Purchase time</string>
+    <string name="text_buy_time_deduct">Deduct Purchase time</string>
 
+    <string name="text_operate_failed">Your operation is failed，error message is:</string>
+    <string name="text_coupon_is_deleded">This coupon has been deleded or used.</string>
+    <string name="text_coupon_redeemed_success">This coupon has been used, and redeemed successfully</string>
+    <string name="text_coupon_add_points_success">You successfully added points for user</string>
+    <string name="text_coupon_deduct_points_success">You successfully deducted points for user</string>
+    <string name="text_coupon_add_cash_success">You successfully added cash amount for this coupon</string>
+    <string name="text_coupon_deduct_cash_success">You successfully deducted cash amount for this coupon</string>
+    <string name="text_coupon_add_service_success">You successfully added service time for this coupon</string>
+    <string name="text_coupon_deduct_service_success">You successfully deducted service time for this coupon</string>
+    <string name="text_coupon_add_buy_success">You successfully added purchase time for this coupon</string>
+    <string name="text_coupon_deduct_buy_success">You successfully deducted purchase time for this coupon</string>
 
     <string name="notification_coupon_received">Received a coupon</string>
     <string name="notification_coupon_received_text">Your friend sent a coupon to you</string>
@@ -134,9 +157,9 @@
     <string name="notification_user_buy_added_text">%s time of purchase are added to your coupon by merchant</string>
 
     <string name="notification_user_cash_add">Coupon amount have been increased</string>
-    <string name="notification_user_cash_add_text">Your coupon prepay amount have been increased by merchant</string>
+    <string name="notification_user_cash_add_text">%s prepaid cash are added to your coupon by merchant</string>
     <string name="notification_user_cash_redeemed">Coupon amount have been deducted</string>
-    <string name="notification_user_cash_redeemed_text">You coupon prepay amount have been deducted by merchant</string>
+    <string name="notification_user_cash_redeemed_text">%s prepaid cash are deducted from your coupon by merchant</string>
 
     <string name="notification_merchant_coupon_sent">Sent out a coupon successfully</string>
     <string name="notification_merchant_coupon_sent_text">Gave a coupon to user</string>
@@ -147,22 +170,22 @@
     <string name="notification_merchant_coupon_redeemed_text">Redeemed a coupon from user</string>
 
     <string name="notification_merchant_point_redeemed">Deducted points successfully</string>
-    <string name="notification_merchant_point_redeemed_text">Deducted %s points from user</string>
+    <string name="notification_merchant_point_redeemed_text">Deducted %s points from user successfully</string>
     <string name="notification_merchant_point_added">Added points successfully</string>
     <string name="notification_merchant_point_added_text">Added %s points from user</string>
 
     <string name="notification_merchant_cash_redeemed">Deducted cash successfully</string>
-    <string name="notification_merchant_cash_redeemed_text">Deducted %s cash from user coupon</string>
+    <string name="notification_merchant_cash_redeemed_text">Deducted %s prepaid cash from user coupon</string>
     <string name="notification_merchant_cash_added">Added cash successfully</string>
-    <string name="notification_merchant_cash_added_text">Added %s cash to user coupon successfully</string>
+    <string name="notification_merchant_cash_added_text">Added %s prepaid cash to user coupon successfully</string>
 
     <string name="notification_merchant_service_redeemed">Deducted service time successfully</string>
     <string name="notification_merchant_service_redeemed_text">Deducted %s service time from user coupon</string>
     <string name="notification_merchant_service_added">Added service time successfully</string>
     <string name="notification_merchant_service_added_text">Added %s service time to user coupon successfully</string>
 
-    <string name="notification_merchant_buy_redeemed">Deducted purchase time successfully</string>
-    <string name="notification_merchant_buy_redeemed_text">Deducted %s purchase time from user coupon</string>
+    <string name="notification_merchant_buy_deduct">Deducted purchase time successfully</string>
+    <string name="notification_merchant_buy_deducted_text">Deducted %s purchase time from user coupon successfully</string>
     <string name="notification_merchant_buy_added">Added purchase time successfully</string>
     <string name="notification_merchant_buy_added_text">Added %s purchase time to user coupon successfully</string>
 
@@ -197,9 +220,12 @@
     <string name="E_3001">Failed to delete the coupon</string>
     <string name="E_3002">The smart coupon does not exist.</string>
     <string name="E_3003">The coupon cash amount is not enough.</string>
+    <string name="E_3004">The coupon has not this benefit or function.</string>
 
-    <string name="E_3020">The coupon does not exist or disabled</string>
-
+    <string name="E_3020">Merchant don\'t published this coupon</string>
+    <string name="E_3021">Insufficient inventory for this coupon</string>
+    <string name="E_3022">Insufficient inventory for this card</string>
+    <string name="E_3023">This is an expired coupon</string>
 
     <string name="qrcode_hint">Place a QRCode inside the viewfinder rectangle to scan it.</string>
     <string name="msg_camera_framework_bug">Sorry, the Android camera encountered a problem. You may need to restart the device.</string>

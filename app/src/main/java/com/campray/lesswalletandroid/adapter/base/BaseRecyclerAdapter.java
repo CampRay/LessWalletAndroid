@@ -17,6 +17,7 @@ import java.util.List;
 
 
 /**
+ * 列表视图控件的数据集合的显示处理器
  * 支持添加自定义头部布局；
  * 支持扩展多种item布局；
  * 支持设置recycleview点击/长按事件

@@ -268,7 +268,7 @@
                 android:layout_gravity="bottom"
                 android:layout_row="1"
                 android:gravity="bottom|right"
-                android:text="12345678"
+                tools:text="12345678"
                 android:textColor="#313131"
                 android:textSize="12sp" />
 
@@ -290,7 +290,7 @@
         android:layout_height="18dp"
         android:layout_alignParentRight="true"
         android:background="@drawable/shape_oval"
-        android:text="2"
+        tools:text="2"
         android:textAlignment="center"
         android:textColor="#ffffff" />
 </RelativeLayout>

@@ -13,11 +13,15 @@ import com.campray.lesswalletandroid.LessWalletApplication;
 import com.campray.lesswalletandroid.R;
 import com.campray.lesswalletandroid.db.entity.Coupon;
 import com.campray.lesswalletandroid.db.entity.CouponStyle;
+import com.campray.lesswalletandroid.event.RefreshEvent;
 import com.campray.lesswalletandroid.model.CouponModel;
 import com.campray.lesswalletandroid.qrcode.encode.QRCodeEncoder;
 import com.campray.lesswalletandroid.ui.base.MenuActivity;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -54,12 +58,14 @@ public class CardUseActivity extends MenuActivity {
     @BindView(R.id.iv_qrcode)
     ImageView iv_qrcode;
 
+    private long couponId=0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card_use);
         tv_navi_title.setText("Membership Card");
-        long couponId=this.getBundle().getLong("coupon_id");
+        couponId=this.getBundle().getLong("coupon_id");
         loadData(couponId);
     }
 
@@ -74,55 +80,59 @@ public class CardUseActivity extends MenuActivity {
 
     private void loadData(long couponId){
         Coupon coupon=CouponModel.getInstance().getCouponById(couponId);
-        CouponStyle couponStyle=coupon.getCouponStyle();
-        if (couponStyle != null) {
-            if(couponStyle.getValidityDay()>0) {
-                tv_validity.setText(couponStyle.getValidityDay()+getResources().getString(R.string.coupon_validity_day) );
-            }else if(couponStyle.getValidityMonth()>0) {
-                tv_validity.setText(couponStyle.getValidityMonth()+getResources().getString(R.string.coupon_validity_month) );
-            }else if(couponStyle.getValidityYear()>0) {
-                tv_validity.setText(couponStyle.getValidityYear()+getResources().getString(R.string.coupon_validity_year) );
-            }
-            else{
-                tv_validity.setText(getResources().getString(R.string.coupon_validity_nolimit) );
-            }
+        if(coupon!=null) {
+            CouponStyle couponStyle = coupon.getCouponStyle();
+            if (couponStyle != null) {
+                if (couponStyle.getValidityDay() > 0) {
+                    tv_validity.setText(couponStyle.getValidityDay() + getResources().getString(R.string.coupon_validity_day));
+                } else if (couponStyle.getValidityMonth() > 0) {
+                    tv_validity.setText(couponStyle.getValidityMonth() + getResources().getString(R.string.coupon_validity_month));
+                } else if (couponStyle.getValidityYear() > 0) {
+                    tv_validity.setText(couponStyle.getValidityYear() + getResources().getString(R.string.coupon_validity_year));
+                } else {
+                    tv_validity.setText(getResources().getString(R.string.coupon_validity_nolimit));
+                }
 
-            if (!TextUtils.isEmpty(couponStyle.getBenefitOne())) {
-                tv_benefit.setText(R.string.coupon_benefit_onetime);
-                tv_benefit_value.setText(couponStyle.getBenefitOne());
-            } else if (!TextUtils.isEmpty(couponStyle.getBenefitPrepaidCash())) {
-                tv_benefit.setText(R.string.coupon_benefit_precash);
-                tv_benefit_value.setText(couponStyle.getBenefitPrepaidCash()+"/"+coupon.getCustomValues().get("2"));
-            } else if (!TextUtils.isEmpty(couponStyle.getBenefitPrepaidService())) {
-                tv_benefit.setText(R.string.coupon_benefit_preservice);
-                tv_benefit_value.setText(couponStyle.getBenefitPrepaidService()+"/"+coupon.getCustomValues().get("3"));
-            } else if (!TextUtils.isEmpty(couponStyle.getBenefitBuyNGetOne())) {
-                tv_benefit.setText(R.string.coupon_benefit_buyngetone);
-                tv_benefit_value.setText(couponStyle.getBenefitBuyNGetOne()+"/"+coupon.getCustomValues().get("4"));
+                if (!TextUtils.isEmpty(couponStyle.getBenefitOne())) {
+                    tv_benefit.setText(R.string.coupon_benefit_onetime);
+                    tv_benefit_value.setText(couponStyle.getBenefitOne());
+                } else if (!TextUtils.isEmpty(couponStyle.getBenefitPrepaidCash())) {
+                    tv_benefit.setText(R.string.coupon_benefit_precash);
+                    tv_benefit_value.setText(couponStyle.getBenefitPrepaidCash() + "/" + coupon.getCustomValues().get("2"));
+                } else if (!TextUtils.isEmpty(couponStyle.getBenefitPrepaidService())) {
+                    tv_benefit.setText(R.string.coupon_benefit_preservice);
+                    tv_benefit_value.setText(couponStyle.getBenefitPrepaidService() + "/" + coupon.getCustomValues().get("3"));
+                } else if (!TextUtils.isEmpty(couponStyle.getBenefitBuyNGetOne())) {
+                    tv_benefit.setText(R.string.coupon_benefit_buyngetone);
+                    tv_benefit_value.setText(couponStyle.getBenefitBuyNGetOne() + "/" + coupon.getCustomValues().get("4"));
+                }
             }
-        }
-        if(coupon.getProduct().getPrice()>0){
-            tv_price.setText(coupon.getProduct().getPriceStr());
+            if (coupon.getProduct().getPrice() > 0) {
+                tv_price.setText(coupon.getProduct().getPriceStr());
+            } else {
+                tv_price.setText(getResources().getString(R.string.coupon_free));
+            }
+            tv_title.setText(coupon.getProduct().getTitle());
+            tv_merchant.setText(coupon.getProduct().getMerchant().getName());
+            tv_shortdesc.setText(coupon.getProduct().getShortDesc());
+            String expired = (TextUtils.isEmpty(coupon.getStartTimeLocal()) ? "" : coupon.getStartTimeLocal()) + (TextUtils.isEmpty(coupon.getEndTimeLocal()) ? "" : " - " + coupon.getEndTimeLocal());
+            tv_expired.setText(expired);
+
+            //显示html文本（只有html样式,不带图片）
+            if (!TextUtils.isEmpty(coupon.getProduct().getAgreement())) {
+                tv_desc.setText(Html.fromHtml(coupon.getProduct().getFullDesc()));
+            }
+            try {
+                String couponStr = "card:" + coupon.getOrderId();
+                Bitmap qrCodeBitmap = QRCodeEncoder.encodeAsBitmap(Base64.encodeToString(couponStr.getBytes("UTF-8"), Base64.DEFAULT), BarcodeFormat.QR_CODE, 200);
+                iv_qrcode.setImageBitmap(qrCodeBitmap);
+            } catch (Exception e) {
+                toast("Failed to load QR Code.");
+            }
         }
         else{
-            tv_price.setText(getResources().getString(R.string.coupon_free));
-        }
-        tv_title.setText(coupon.getProduct().getTitle());
-        tv_merchant.setText(coupon.getProduct().getMerchant().getName());
-        tv_shortdesc.setText(coupon.getProduct().getShortDesc());
-        String expired = (TextUtils.isEmpty(coupon.getStartTimeLocal()) ? "" : coupon.getStartTimeLocal()) + (TextUtils.isEmpty(coupon.getEndTimeLocal()) ? "" : " - " + coupon.getEndTimeLocal());
-        tv_expired.setText(expired);
-
-        //显示html文本（只有html样式,不带图片）
-        if(!TextUtils.isEmpty(coupon.getProduct().getAgreement())) {
-            tv_desc.setText(Html.fromHtml(coupon.getProduct().getFullDesc()));
-        }
-        try {
-            String couponStr="card:"+coupon.getOrderId();
-            Bitmap qrCodeBitmap=QRCodeEncoder.encodeAsBitmap(Base64.encodeToString(couponStr.getBytes("UTF-8"),Base64.DEFAULT), BarcodeFormat.QR_CODE,200);
-            iv_qrcode.setImageBitmap(qrCodeBitmap);
-        } catch (Exception e) {
-            toast("Failed to load QR Code.");
+            toast(getResources().getString(R.string.text_coupon_is_deleded));
+            finish();
         }
 
     }
