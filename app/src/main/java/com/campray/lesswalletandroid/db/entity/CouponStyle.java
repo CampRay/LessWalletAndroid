@@ -10,13 +10,13 @@ import com.campray.lesswalletandroid.model.CurrencyModel;
  */
 
 public class CouponStyle {
-    private String benefitOne;
+    private String benefitCustomized;
 
-    private String benefitPrepaidCash;
+    private String benefitCash;
 
-    private String benefitPrepaidService;
+    private String benefitDiscount;
 
-    private String benefitBuyNGetOne;
+    private String benefitFree;
 
 
     private String bgColor="#00000000";
@@ -34,42 +34,41 @@ public class CouponStyle {
     private int validityMonth=0;
     private int validityYear=0;
 
-
-    public String getBenefitOne() {
-        return benefitOne;
+    public String getBenefitCustomized() {
+        return benefitCustomized;
     }
 
-    public void setBenefitOne(String benefitOne) {
-        this.benefitOne = benefitOne;
+    public void setBenefitCustomized(String benefitCustomized) {
+        this.benefitCustomized = benefitCustomized;
     }
 
-    public String getBenefitPrepaidCash() {
-        if(!TextUtils.isEmpty(benefitPrepaidCash)) {
+    public String getBenefitCash() {
+        if(!TextUtils.isEmpty(benefitCash)) {
             Currency currency = CurrencyModel.getInstance().getDefaultCurrency();
             String fmtStr = currency.getCustomFormatting().replace("0.00", "");
-            return fmtStr+benefitPrepaidCash;
+            return fmtStr+benefitCash;
         }
-        return benefitPrepaidCash;
+        return "";
     }
 
-    public void setBenefitPrepaidCash(String benefitPrepaidCash) {
-        this.benefitPrepaidCash = benefitPrepaidCash;
+    public void setBenefitCash(String benefitCash) {
+        this.benefitCash = benefitCash;
     }
 
-    public String getBenefitPrepaidService() {
-        return benefitPrepaidService;
+    public String getBenefitDiscount() {
+        return benefitDiscount;
     }
 
-    public void setBenefitPrepaidService(String benefitPrepaidService) {
-        this.benefitPrepaidService = benefitPrepaidService;
+    public void setBenefitDiscount(String benefitDiscount) {
+        this.benefitDiscount = benefitDiscount;
     }
 
-    public String getBenefitBuyNGetOne() {
-        return benefitBuyNGetOne;
+    public String getBenefitFree() {
+        return benefitFree;
     }
 
-    public void setBenefitBuyNGetOne(String benefitBuyNGetOne) {
-        this.benefitBuyNGetOne = benefitBuyNGetOne;
+    public void setBenefitFree(String benefitFree) {
+        this.benefitFree = benefitFree;
     }
 
     public String getBgColor() {

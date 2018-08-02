@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_card"
-    android:layout_width="match_parent"
+    android:layout_width="320dp"
     android:layout_height="wrap_content">
 
     <LinearLayout
@@ -86,9 +86,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:gravity="center_vertical"
-                    tools:text="A0000001"
                     android:textColor="#ffffff"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    tools:text="A0000001" />
 
                 <TextView
                     android:id="@+id/tv_merchant"
@@ -175,7 +175,7 @@
                         android:layout_columnWeight="3"
                         android:layout_gravity="left|center_vertical"
                         android:layout_row="0"
-                        android:text="@string/coupon_publish_date"
+                        android:text="@string/coupon_validity"
                         android:textColor="#000000"
                         android:textSize="11sp" />
 
@@ -186,12 +186,12 @@
                         android:layout_columnWeight="1"
                         android:layout_gravity="right|center_vertical"
                         android:layout_row="0"
-                        android:text="@string/coupon_stock_quantity"
+                        android:text="@string/coupon_level"
                         android:textColor="#000000"
                         android:textSize="11sp" />
 
                     <TextView
-                        android:id="@+id/tv_expired"
+                        android:id="@+id/tv_validity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_column="0"
@@ -204,7 +204,7 @@
                         tools:text="15/OCT/2017 - 30/OCT/2017" />
 
                     <TextView
-                        android:id="@+id/tv_validity"
+                        android:id="@+id/tv_class"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_column="1"
@@ -239,7 +239,7 @@
                         android:textColor="#ffffff"
                         android:textStyle="bold" />
 
-                    
+
                 </LinearLayout>
 
             </RelativeLayout>

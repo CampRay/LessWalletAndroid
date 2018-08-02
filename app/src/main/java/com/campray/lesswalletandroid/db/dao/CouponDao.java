@@ -14,9 +14,7 @@ import org.greenrobot.greendao.database.DatabaseStatement;
 import org.greenrobot.greendao.query.Query;
 import org.greenrobot.greendao.query.QueryBuilder;
 
-import com.campray.lesswalletandroid.db.converter.BenefitAttrConverter;
 import com.campray.lesswalletandroid.db.entity.Product;
-import java.util.HashMap;
 
 import com.campray.lesswalletandroid.db.entity.Coupon;
 
@@ -42,12 +40,10 @@ public class CouponDao extends AbstractDao<Coupon, Long> {
         public final static Property StartTime = new Property(6, String.class, "startTime", false, "START_TIME");
         public final static Property EndTime = new Property(7, String.class, "endTime", false, "END_TIME");
         public final static Property Deleted = new Property(8, boolean.class, "deleted", false, "DELETED");
-        public final static Property CustomValues = new Property(9, String.class, "customValues", false, "CUSTOM_VALUES");
     }
 
     private DaoSession daoSession;
 
-    private final BenefitAttrConverter customValuesConverter = new BenefitAttrConverter();
     private Query<Coupon> product_CouponsQuery;
 
     public CouponDao(DaoConfig config) {
@@ -71,8 +67,7 @@ public class CouponDao extends AbstractDao<Coupon, Long> {
                 "\"PAYMENT_STATUS\" INTEGER NOT NULL ," + // 5: paymentStatus
                 "\"START_TIME\" TEXT NOT NULL ," + // 6: startTime
                 "\"END_TIME\" TEXT," + // 7: endTime
-                "\"DELETED\" INTEGER NOT NULL ," + // 8: deleted
-                "\"CUSTOM_VALUES\" TEXT);"); // 9: customValues
+                "\"DELETED\" INTEGER NOT NULL );"); // 8: deleted
     }
 
     /** Drops the underlying database table. */
@@ -109,11 +104,6 @@ public class CouponDao extends AbstractDao<Coupon, Long> {
             stmt.bindString(8, endTime);
         }
         stmt.bindLong(9, entity.getDeleted() ? 1L: 0L);
- 
-        HashMap customValues = entity.getCustomValues();
-        if (customValues != null) {
-            stmt.bindString(10, customValuesConverter.convertToDatabaseValue(customValues));
-        }
     }
 
     @Override
@@ -144,11 +134,6 @@ public class CouponDao extends AbstractDao<Coupon, Long> {
             stmt.bindString(8, endTime);
         }
         stmt.bindLong(9, entity.getDeleted() ? 1L: 0L);
- 
-        HashMap customValues = entity.getCustomValues();
-        if (customValues != null) {
-            stmt.bindString(10, customValuesConverter.convertToDatabaseValue(customValues));
-        }
     }
 
     @Override
@@ -173,8 +158,7 @@ public class CouponDao extends AbstractDao<Coupon, Long> {
             cursor.getInt(offset + 5), // paymentStatus
             cursor.getString(offset + 6), // startTime
             cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // endTime
-            cursor.getShort(offset + 8) != 0, // deleted
-            cursor.isNull(offset + 9) ? null : customValuesConverter.convertToEntityProperty(cursor.getString(offset + 9)) // customValues
+            cursor.getShort(offset + 8) != 0 // deleted
         );
         return entity;
     }
@@ -190,7 +174,6 @@ public class CouponDao extends AbstractDao<Coupon, Long> {
         entity.setStartTime(cursor.getString(offset + 6));
         entity.setEndTime(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
         entity.setDeleted(cursor.getShort(offset + 8) != 0);
-        entity.setCustomValues(cursor.isNull(offset + 9) ? null : customValuesConverter.convertToEntityProperty(cursor.getString(offset + 9)));
      }
     
     @Override

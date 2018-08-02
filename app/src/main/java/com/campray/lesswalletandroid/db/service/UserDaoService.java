@@ -77,22 +77,22 @@ public class UserDaoService {
 
     /**
      * 根据帐号获取本地已保存的登录过的用户对象
-     * @param uid*
+     * @param username*
      * @return
      */
-    public User getUser(String uid){
+    public User getUser(String username){
         UserDao dao =openReadableDb().getUserDao();
-        return dao.queryBuilder().where(UserDao.Properties.UserName.eq(uid)).build().unique();
+        return dao.queryBuilder().where(UserDao.Properties.UserName.eq(username)).build().unique();
     }
 
     /**
      * 查询帐号或Email相同的的用户对象
-     * @param uid*
+     * @param account*
      * @return
      */
-    public User getUserByNameOrEmail(String uid){
+    public User getUserByNameOrEmail(String account){
         UserDao dao =openReadableDb().getUserDao();
-        return dao.queryBuilder().whereOr(UserDao.Properties.UserName.eq(uid), Email.eq(uid)).build().unique();
+        return dao.queryBuilder().whereOr(UserDao.Properties.UserName.eq(account), Email.eq(account)).build().unique();
     }
 
     /**

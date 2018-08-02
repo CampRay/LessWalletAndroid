@@ -77,11 +77,13 @@
     <string name="coupon_publish_date">Publish Date:</string>
     <string name="coupon_publish_price">Publish Price:</string>
     <string name="coupon_benefit">Benefit:</string>
-    <string name="coupon_benefit_onetime">One Time Only</string>
-    <string name="coupon_benefit_precash">Prepay Cash</string>
-    <string name="coupon_benefit_preservice">Prepay Service</string>
-    <string name="coupon_benefit_buyngetone">Buy N Get One Gift</string>
+    <string name="coupon_benefit_free">Free</string>
+    <string name="coupon_benefit_precash">Voucher</string>
+    <string name="coupon_benefit_discount">Discount</string>
+    <string name="coupon_benefit_customized"></string>
+    <string name="coupon_level">Card Class:</string>
     <string name="coupon_validity">Validity Period:</string>
+    <string name="coupon_expiry_date">Expiry Date:</string>
     <string name="coupon_validity_day">days</string>
     <string name="coupon_validity_month">months</string>
     <string name="coupon_validity_year">years</string>

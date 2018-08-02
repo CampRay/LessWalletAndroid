@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.util.Base64;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.campray.lesswalletandroid.LessWalletApplication;
@@ -54,6 +55,11 @@ public class CardUseActivity extends MenuActivity {
     TextView tv_expired;
     @BindView(R.id.tv_price)
     TextView tv_price;
+    @BindView(R.id.tv_level)
+    TextView tv_level;
+
+    @BindView(R.id.ll_benefit)
+    LinearLayout ll_benefit;
 
     @BindView(R.id.iv_qrcode)
     ImageView iv_qrcode;
@@ -93,19 +99,23 @@ public class CardUseActivity extends MenuActivity {
                     tv_validity.setText(getResources().getString(R.string.coupon_validity_nolimit));
                 }
 
-                if (!TextUtils.isEmpty(couponStyle.getBenefitOne())) {
-                    tv_benefit.setText(R.string.coupon_benefit_onetime);
-                    tv_benefit_value.setText(couponStyle.getBenefitOne());
-                } else if (!TextUtils.isEmpty(couponStyle.getBenefitPrepaidCash())) {
-                    tv_benefit.setText(R.string.coupon_benefit_precash);
-                    tv_benefit_value.setText(couponStyle.getBenefitPrepaidCash() + "/" + coupon.getCustomValues().get("2"));
-                } else if (!TextUtils.isEmpty(couponStyle.getBenefitPrepaidService())) {
-                    tv_benefit.setText(R.string.coupon_benefit_preservice);
-                    tv_benefit_value.setText(couponStyle.getBenefitPrepaidService() + "/" + coupon.getCustomValues().get("3"));
-                } else if (!TextUtils.isEmpty(couponStyle.getBenefitBuyNGetOne())) {
-                    tv_benefit.setText(R.string.coupon_benefit_buyngetone);
-                    tv_benefit_value.setText(couponStyle.getBenefitBuyNGetOne() + "/" + coupon.getCustomValues().get("4"));
+                if (!TextUtils.isEmpty(couponStyle.getBenefitFree())) {
+                    tv_benefit.setText( R.string.coupon_benefit_free);
+                    tv_benefit_value.setText(couponStyle.getBenefitFree());
+                } else if (!TextUtils.isEmpty(couponStyle.getBenefitCash())) {
+                    tv_benefit.setText( R.string.coupon_benefit_precash);
+                    tv_benefit_value.setText( couponStyle.getBenefitCash());
+                } else if (!TextUtils.isEmpty(couponStyle.getBenefitDiscount())) {
+                    tv_benefit.setText(R.string.coupon_benefit_discount);
+                    tv_benefit_value.setText(couponStyle.getBenefitDiscount());
+                } else if (!TextUtils.isEmpty(couponStyle.getBenefitCustomized())) {
+                    tv_benefit.setText( R.string.coupon_benefit_customized);
+                    tv_benefit_value.setText(couponStyle.getBenefitCustomized());
                 }
+                else{
+                    ll_benefit.setVisibility(View.GONE);
+                }
+                tv_level.setText(couponStyle.getCardLevel()+"");
             }
             if (coupon.getProduct().getPrice() > 0) {
                 tv_price.setText(coupon.getProduct().getPriceStr());
@@ -115,7 +125,7 @@ public class CardUseActivity extends MenuActivity {
             tv_title.setText(coupon.getProduct().getTitle());
             tv_merchant.setText(coupon.getProduct().getMerchant().getName());
             tv_shortdesc.setText(coupon.getProduct().getShortDesc());
-            String expired = (TextUtils.isEmpty(coupon.getStartTimeLocal()) ? "" : coupon.getStartTimeLocal()) + (TextUtils.isEmpty(coupon.getEndTimeLocal()) ? "" : " - " + coupon.getEndTimeLocal());
+            String expired = (TextUtils.isEmpty(coupon.getStartTimeLocal()) ? "" : coupon.getStartTimeLocal()) + (TextUtils.isEmpty(coupon.getEndTimeLocal()) ? " -" : " - " + coupon.getEndTimeLocal());
             tv_expired.setText(expired);
 
             //显示html文本（只有html样式,不带图片）

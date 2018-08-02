@@ -46,8 +46,6 @@ public class AccountActivity extends MenuActivity {
     TextView tv_email;
     @BindView(R.id.tv_country)
     TextView tv_country;
-    @BindView(R.id.tv_points)
-    TextView tv_points;
 
     @BindView(R.id.iv_avatar)
     ImageView iv_avatar;
@@ -67,7 +65,6 @@ public class AccountActivity extends MenuActivity {
         tv_mobile.setText(user.getMobile());
         tv_country.setText(user.getCountry().getName());
         tv_name.setText(user.getFullName());
-        tv_points.setText(user.getPoints()+"");
         Picasso.with(this).load(user.getAvatorPath()).placeholder(R.mipmap.icon_account).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_avatar);
 
         String userStr="user:"+ user.getId();
@@ -78,17 +75,6 @@ public class AccountActivity extends MenuActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        //从服务器重新查询用户信息,获取积分
-        //查询用户积分
-        UserModel.getInstance().getUserPoints(user.getId(), new OperationListener<User>() {
-            @Override
-            public void done(User obj, AppException exception) {
-                if(obj!=null) {
-                    tv_points.setText(obj.getPoints());
-                }
-            }
-        });
     }
 
     /**

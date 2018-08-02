@@ -66,6 +66,45 @@ public class Product {
     private String startTimeLocal;//生效时间-显示用户时区
     @Transient
     private String endTimeLocal;//过期时间-显示用户时区
+    @Transient
+    private CouponStyle couponStyle;//Coupon显示样式
+    /** Used to resolve relations */
+    @Generated(hash = 2040040024)
+    private transient DaoSession daoSession;
+    /** Used for active entity operations. */
+    @Generated(hash = 694336451)
+    private transient ProductDao myDao;
+
+    @Generated(hash = 597044329)
+    public Product(Long productId, int productTypeId, int productTemplateId, @NotNull String title, String shortDesc, String fullDesc, String agreement, String numPrefix,
+            float price, String currencyCode, String startTime, String endTime, boolean published, boolean deleted, int stockQuantity, List<SpecAttr> specAttr,
+            List<UserAttr> userAttr, Long merchantId) {
+        this.productId = productId;
+        this.productTypeId = productTypeId;
+        this.productTemplateId = productTemplateId;
+        this.title = title;
+        this.shortDesc = shortDesc;
+        this.fullDesc = fullDesc;
+        this.agreement = agreement;
+        this.numPrefix = numPrefix;
+        this.price = price;
+        this.currencyCode = currencyCode;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.published = published;
+        this.deleted = deleted;
+        this.stockQuantity = stockQuantity;
+        this.specAttr = specAttr;
+        this.userAttr = userAttr;
+        this.merchantId = merchantId;
+    }
+
+    @Generated(hash = 1890278724)
+    public Product() {
+    }
+
+    @Generated(hash = 129747413)
+    private transient Long merchant__resolvedKey;
 
     public String getStartTimeLocal() {
         if (!TextUtils.isEmpty(startTime)) {
@@ -99,180 +138,194 @@ public class Product {
     }
 
     public CouponStyle getCouponStyle() {
-        CouponStyle couponStyle = new CouponStyle();
-        //循环遍历当前优惠卷的产品规格属性
-        for (SpecAttr specAttr : this.getSpecAttr()) {
-            String value = specAttr.getValueRaw();//用户自已输入的值
-            if (specAttr.getSpecificationAttributeId() == 1) {
-                couponStyle.setBenefitOne(value);
-            } else if (specAttr.getSpecificationAttributeId() == 2) {
-                couponStyle.setBenefitPrepaidCash(value);
-            } else if (specAttr.getSpecificationAttributeId() == 3) {
-                couponStyle.setBenefitPrepaidService(value);
-            } else if (specAttr.getSpecificationAttributeId() == 4) {
-                couponStyle.setBenefitBuyNGetOne(value);
-            }else if (specAttr.getSpecificationAttributeId() == 5) {//如果是背景色
-                couponStyle.setBgColor(value);
-            } else if (specAttr.getSpecificationAttributeId() == 6) {//如果是底纹
-                couponStyle.setShadingUrl(TextUtils.isEmpty(specAttr.getFileUrl()) ? value : specAttr.getFileUrl());
-            } else if (specAttr.getSpecificationAttributeId() == 7) {//如果是自定义图片
-                couponStyle.setPictureUrl(TextUtils.isEmpty(specAttr.getFileUrl()) ? value : specAttr.getFileUrl());
-            } else if (specAttr.getSpecificationAttributeId() == 8) {//如果是商用家logo
-                couponStyle.setLogoUrl(TextUtils.isEmpty(specAttr.getFileUrl()) ? value : specAttr.getFileUrl());
-            } else if (specAttr.getSpecificationAttributeId() == 9) {//如果是商用会员卡级别
-                try {
-                    couponStyle.setCardLevel(Integer.parseInt(value));
-                }catch (Exception e){}
-            } else if (specAttr.getSpecificationAttributeId() == 10) {//如果是有效期（日）
-                couponStyle.setValidityDay(Integer.parseInt(value));
-            } else if (specAttr.getSpecificationAttributeId() == 11) {//如果是有效期（月）
-                couponStyle.setValidityMonth(Integer.parseInt(value));
-            } else if (specAttr.getSpecificationAttributeId() == 12) {//如果是有效期（年）
-                couponStyle.setValidityYear(Integer.parseInt(value));
-            } else {
-
+        if(couponStyle==null) {
+            couponStyle=new CouponStyle();
+            //循环遍历当前优惠卷的产品规格属性
+            for (SpecAttr item : this.specAttr) {
+                String value = item.getValueRaw();//用户自已输入的值
+                if (item.getSpecificationAttributeId() == 1) {
+                    couponStyle.setBenefitFree(value);
+                } else if (item.getSpecificationAttributeId() == 2) {
+                    couponStyle.setBenefitCash(value);
+                } else if (item.getSpecificationAttributeId() == 3) {
+                    couponStyle.setBenefitDiscount(value);
+                } else if (item.getSpecificationAttributeId() == 4) {
+                    couponStyle.setBenefitCustomized(value);
+                }else if (item.getSpecificationAttributeId() == 5) {//如果是背景色
+                    couponStyle.setBgColor(value);
+                } else if (item.getSpecificationAttributeId() == 6) {//如果是底纹
+                    couponStyle.setShadingUrl(TextUtils.isEmpty(item.getFileUrl()) ? value : item.getFileUrl());
+                } else if (item.getSpecificationAttributeId() == 7) {//如果是自定义图片
+                    couponStyle.setPictureUrl(TextUtils.isEmpty(item.getFileUrl()) ? value : item.getFileUrl());
+                } else if (item.getSpecificationAttributeId() == 8) {//如果是商用家logo
+                    couponStyle.setLogoUrl(TextUtils.isEmpty(item.getFileUrl()) ? value : item.getFileUrl());
+                } else if (item.getSpecificationAttributeId() == 9) {//如果是商用会员卡级别
+                    try {
+                        couponStyle.setCardLevel(Integer.parseInt(value));
+                    }catch (Exception e){}
+                } else if (item.getSpecificationAttributeId() == 10) {//如果是有效期（日）
+                    try {
+                        couponStyle.setValidityDay(Integer.parseInt(value));
+                    }catch (Exception e){}
+                } else if (item.getSpecificationAttributeId() == 11) {//如果是有效期（月）
+                    try {
+                        couponStyle.setValidityMonth(Integer.parseInt(value));
+                    }catch (Exception e){}
+                } else if (item.getSpecificationAttributeId() == 12) {//如果是有效期（年）
+                    try {
+                        couponStyle.setValidityYear(Integer.parseInt(value));
+                    }catch (Exception e){}
+                } else {
+                }
             }
         }
         return couponStyle;
     }
 
-    /** Used to resolve relations */
-    @Generated(hash = 2040040024)
-    private transient DaoSession daoSession;
-    /** Used for active entity operations. */
-    @Generated(hash = 694336451)
-    private transient ProductDao myDao;
-    @Generated(hash = 597044329)
-    public Product(Long productId, int productTypeId, int productTemplateId, @NotNull String title, String shortDesc, String fullDesc, String agreement, String numPrefix,
-            float price, String currencyCode, String startTime, String endTime, boolean published, boolean deleted, int stockQuantity, List<SpecAttr> specAttr,
-            List<UserAttr> userAttr, Long merchantId) {
-        this.productId = productId;
-        this.productTypeId = productTypeId;
-        this.productTemplateId = productTemplateId;
-        this.title = title;
-        this.shortDesc = shortDesc;
-        this.fullDesc = fullDesc;
-        this.agreement = agreement;
-        this.numPrefix = numPrefix;
-        this.price = price;
-        this.currencyCode = currencyCode;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.published = published;
-        this.deleted = deleted;
-        this.stockQuantity = stockQuantity;
-        this.specAttr = specAttr;
-        this.userAttr = userAttr;
-        this.merchantId = merchantId;
-    }
-
-    @Generated(hash = 1890278724)
-    public Product() {
-    }
     public Long getProductId() {
         return this.productId;
     }
+
     public void setProductId(Long productId) {
         this.productId = productId;
     }
+
     public int getProductTypeId() {
         return this.productTypeId;
     }
+
     public void setProductTypeId(int productTypeId) {
         this.productTypeId = productTypeId;
     }
+
     public int getProductTemplateId() {
         return this.productTemplateId;
     }
+
     public void setProductTemplateId(int productTemplateId) {
         this.productTemplateId = productTemplateId;
     }
+
     public String getTitle() {
         return this.title;
     }
+
     public void setTitle(String title) {
         this.title = title;
     }
+
     public String getShortDesc() {
         return this.shortDesc;
     }
+
     public void setShortDesc(String shortDesc) {
         this.shortDesc = shortDesc;
     }
+
     public String getFullDesc() {
         return this.fullDesc;
     }
+
     public void setFullDesc(String fullDesc) {
         this.fullDesc = fullDesc;
     }
+
     public String getAgreement() {
         return this.agreement;
     }
+
     public void setAgreement(String agreement) {
         this.agreement = agreement;
     }
+
     public String getNumPrefix() {
         return this.numPrefix;
     }
+
     public void setNumPrefix(String numPrefix) {
         this.numPrefix = numPrefix;
     }
+
     public float getPrice() {
         return this.price;
     }
+
     public void setPrice(float price) {
         this.price = price;
     }
+
     public String getCurrencyCode() {
         return this.currencyCode;
     }
+
     public void setCurrencyCode(String currencyCode) {
         this.currencyCode = currencyCode;
     }
+
     public String getStartTime() {
         return this.startTime;
     }
+
     public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
+
     public String getEndTime() {
         return this.endTime;
     }
+
     public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
+
     public boolean getPublished() {
         return this.published;
     }
+
     public void setPublished(boolean published) {
         this.published = published;
     }
+
     public boolean getDeleted() {
         return this.deleted;
     }
+
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
+
+    public int getStockQuantity() {
+        return this.stockQuantity;
+    }
+
+    public void setStockQuantity(int stockQuantity) {
+        this.stockQuantity = stockQuantity;
+    }
+
     public List<SpecAttr> getSpecAttr() {
         return this.specAttr;
     }
+
     public void setSpecAttr(List<SpecAttr> specAttr) {
         this.specAttr = specAttr;
     }
+
     public List<UserAttr> getUserAttr() {
         return this.userAttr;
     }
+
     public void setUserAttr(List<UserAttr> userAttr) {
         this.userAttr = userAttr;
     }
+
     public Long getMerchantId() {
         return this.merchantId;
     }
+
     public void setMerchantId(Long merchantId) {
         this.merchantId = merchantId;
     }
-    @Generated(hash = 129747413)
-    private transient Long merchant__resolvedKey;
+
     /** To-one relationship, resolved on first access. */
     @Generated(hash = 890615869)
     public Merchant getMerchant() {
@@ -291,6 +344,7 @@ public class Product {
         }
         return merchant;
     }
+
     /** called by internal mechanisms, do not call yourself. */
     @Generated(hash = 53631488)
     public void setMerchant(Merchant merchant) {
@@ -300,6 +354,7 @@ public class Product {
             merchant__resolvedKey = merchantId;
         }
     }
+
     /**
      * To-many relationship, resolved on first access (and after reset).
      * Changes to to-many relations are not persisted, make changes to the target entity.
@@ -321,11 +376,13 @@ public class Product {
         }
         return coupons;
     }
+
     /** Resets a to-many relationship, making the next get call to query for a fresh result. */
     @Generated(hash = 981296410)
     public synchronized void resetCoupons() {
         coupons = null;
     }
+
     /**
      * Convenient call for {@link org.greenrobot.greendao.AbstractDao#delete(Object)}.
      * Entity must attached to an entity context.
@@ -337,6 +394,7 @@ public class Product {
         }
         myDao.delete(this);
     }
+
     /**
      * Convenient call for {@link org.greenrobot.greendao.AbstractDao#refresh(Object)}.
      * Entity must attached to an entity context.
@@ -348,6 +406,7 @@ public class Product {
         }
         myDao.refresh(this);
     }
+
     /**
      * Convenient call for {@link org.greenrobot.greendao.AbstractDao#update(Object)}.
      * Entity must attached to an entity context.
@@ -359,19 +418,12 @@ public class Product {
         }
         myDao.update(this);
     }
+
     /** called by internal mechanisms, do not call yourself. */
     @Generated(hash = 1171535257)
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getProductDao() : null;
-    }
-
-    public int getStockQuantity() {
-        return this.stockQuantity;
-    }
-
-    public void setStockQuantity(int stockQuantity) {
-        this.stockQuantity = stockQuantity;
     }
 
 

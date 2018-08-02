@@ -1,10 +1,14 @@
 package com.campray.lesswalletandroid.ui;
 
 
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSnapHelper;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.view.View;
@@ -14,16 +18,28 @@ import android.widget.TextView;
 
 import com.campray.lesswalletandroid.LessWalletApplication;
 import com.campray.lesswalletandroid.R;
+import com.campray.lesswalletandroid.adapter.WiCardAdapter;
+import com.campray.lesswalletandroid.adapter.WiCouponAdapter;
+import com.campray.lesswalletandroid.adapter.base.BaseRecyclerAdapter;
+import com.campray.lesswalletandroid.adapter.base.BaseRecyclerHolder;
+import com.campray.lesswalletandroid.adapter.listener.OnRecyclerViewListener;
 import com.campray.lesswalletandroid.db.entity.Coupon;
+import com.campray.lesswalletandroid.db.entity.Merchant;
+import com.campray.lesswalletandroid.db.entity.Product;
 import com.campray.lesswalletandroid.db.entity.User;
 import com.campray.lesswalletandroid.event.RefreshEvent;
 import com.campray.lesswalletandroid.listener.OperationListener;
 import com.campray.lesswalletandroid.model.CouponModel;
+import com.campray.lesswalletandroid.model.ProductModel;
 import com.campray.lesswalletandroid.model.UserModel;
 import com.campray.lesswalletandroid.qrcode.encode.QRCodeEncoder;
 import com.campray.lesswalletandroid.ui.base.MenuActivity;
 import com.campray.lesswalletandroid.util.AppException;
+import com.campray.lesswalletandroid.util.ResourcesUtils;
+import com.campray.lesswalletandroid.view.CustomDialog;
+import com.campray.lesswalletandroid.view.RecyclerViewItemDecoration;
 import com.campray.lesswalletandroid.view.RoundImageView;
+import com.campray.lesswalletandroid.view.SpaceItemDecoration;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.squareup.picasso.MemoryPolicy;
@@ -32,6 +48,7 @@ import com.squareup.picasso.Picasso;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -43,119 +60,246 @@ import butterknife.OnClick;
  */
 
 public class CardActivity extends MenuActivity {
-    @BindView(R.id.rl_card_top)
-    RelativeLayout rl_card_top;
-    @BindView(R.id.iv_card_shading)
-    RoundImageView iv_card_shading;
-    @BindView(R.id.iv_card_img)
-    RoundImageView iv_card_img;
-    @BindView(R.id.iv_card_logo)
-    ImageView iv_card_logo;
-    @BindView(R.id.tv_benefit)
-    TextView tv_benefit;
+    @BindView(R.id.rc_card_list)
+    RecyclerView rc_card_list;
+
     @BindView(R.id.tv_title)
     TextView tv_title;
-    @BindView(R.id.tv_number)
-    TextView tv_number;
     @BindView(R.id.tv_merchant)
     TextView tv_merchant;
     @BindView(R.id.tv_points)
     TextView tv_points;
+    @BindView(R.id.tv_cash)
+    TextView tv_cash;
+    @BindView(R.id.tv_expired)
+    TextView tv_expired;
+    @BindView(R.id.tv_shortdesc)
+    TextView tv_shortdesc;
 
-    @BindView(R.id.iv_qrcode)
-    ImageView iv_qrcode;
+    private int typeId=3;
 
-
+    private WiCardAdapter adapter;
+    private LinearLayoutManager linearLayoutManager;
+    private LinearSnapHelper linearSnapHelper=new LinearSnapHelper();
+    private User user=LessWalletApplication.INSTANCE().getAccount();
+    //当前列表显示的最后一个对象的位置索引
+    private int lastPosition=0;
+    //当前列表加载的数据页数
+    private int lastPage=1;
+    private int pageSize=10;
     private long couponId=0;
-    private int typeId=0;
+    //当前列表居中显示的一个对象的位置索引
+    private int position=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card);
         typeId=this.getBundle().getInt("type_id");
-        showCard(typeId);
-
+        showCardList();
+        setListener();
+        //如果有网络，则查询最新的用户信息
+        UserModel.getInstance().updateUserFormServer(user.getId(), new OperationListener<User>() {
+            @Override
+            public void done(User obj, AppException exception) {user=obj;}
+        });
     }
     @Override
     public void onResume() {
         super.onResume();
+        queryData(1);
     }
 
     /**
-     * 显示会员卡内容
+     * 根据会员卡的类型适配显示不同的会员卡列表
      */
-    private void showCard(int typeId){
-        List<Coupon> list=CouponModel.getInstance().getAllCouponByType(typeId);
-        int index=0;
-        int maxLevel=0;
-        //找出最高级别的会员卡
-        for (int i=0;i<list.size();i++) {
-            Coupon card=list.get(i);
-            if (card.getCouponStyle() != null) {
-                int level=card.getCouponStyle().getCardLevel();
-                if(level>maxLevel){
-                    index=i;
-                    maxLevel=level;
-                }
-            }
-        }
-        if(list!=null&&list.size()>=1){
-            Coupon card=list.get(index);
-            couponId=card.getOrderId();
-            tv_title.setText(card.getProduct().getTitle());
-            tv_number.setText(card.getCid());
-            tv_merchant.setText(card.getProduct().getMerchant().getName());
-            tv_benefit.setText("");
-            User user=LessWalletApplication.INSTANCE().getAccount();
-            tv_points.setText(user.getPoints()+"");
-            if (card.getCouponStyle() != null) {
-                if (!TextUtils.isEmpty(card.getCouponStyle().getBgColor())) {
-                    int bgColor= Color.parseColor(card.getCouponStyle().getBgColor());
-                    GradientDrawable drawable = (GradientDrawable) rl_card_top.getBackground();
-                    drawable.setColor(bgColor);
-                }
-                if (!TextUtils.isEmpty(card.getCouponStyle().getShadingUrl())) {
-                    Picasso.with(this).load(card.getCouponStyle().getShadingUrl()).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_card_shading);
-                }
-                if (!TextUtils.isEmpty(card.getCouponStyle().getPictureUrl())) {
-                    //iv_card_img.setImageBitmap(BitmapFactory.decodeFile(card.getCouponStyle().getPictureUrl()));
-                    Picasso.with(this).load(card.getCouponStyle().getPictureUrl()).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_card_img);
-                }
-                if (!TextUtils.isEmpty(card.getCouponStyle().getLogoUrl())) {
-                    Picasso.with(this).load(card.getCouponStyle().getLogoUrl()).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_card_logo);
-                }
-            }
+    private void showCardList(){
+        adapter=new WiCardAdapter(this,R.layout.item_card,null);
+        rc_card_list.setAdapter(adapter);
+        linearLayoutManager=new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
+        rc_card_list.setLayoutManager(linearLayoutManager);
+        rc_card_list.addItemDecoration( new SpaceItemDecoration(15));
+        //使用让列表当前对象居中的布局辅助器
+        linearSnapHelper.attachToRecyclerView(rc_card_list);
+    }
 
-            try{
-                String couponStr="card:"+card.getOrderId();
-                Bitmap qrCodeBitmap= QRCodeEncoder.encodeAsBitmap(Base64.encodeToString(couponStr.getBytes("UTF-8"),Base64.DEFAULT), BarcodeFormat.QR_CODE,200);
-                iv_qrcode.setImageBitmap(qrCodeBitmap);
-            } catch (Exception e) {
-                toast("Failed to load QR Code.");
-            }
-            //查询用户积分
-            UserModel.getInstance().getUserPoints(user.getId(), new OperationListener<User>() {
-                @Override
-                public void done(User obj, AppException exception) {
-                    if(obj!=null) {
-                        tv_points.setText(obj.getPoints());
+    /**
+     * 设置相关事件
+     */
+    private void setListener(){
+        //设置RecyclerView滚动事件监听器
+        rc_card_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE){
+                    //获取当前居中显示的列表对象
+                    RelativeLayout layout_card=(RelativeLayout)linearSnapHelper.findSnapView(linearLayoutManager);
+                    if(layout_card.getTag()!=null){
+                        //获取当前居中显示的Coupon的ID
+                        long oid=(long)layout_card.getTag();
+                        position=adapter.findPosition(oid);
+                        Coupon coupon=adapter.getItem(position);
+                        showCardInfo(coupon);
+                    }
+
+                    int count=adapter.getItemCount();
+                    if(lastPosition+1==count){
+                        int showPage=(int)Math.ceil((lastPosition+1)/pageSize)+1;
+                        if(lastPage<showPage) {
+                            queryData(showPage);
+                        }
                     }
                 }
-            });
+            }
 
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                lastPosition=linearLayoutManager.findLastVisibleItemPosition();
+            }
+        });
+        //设置列表适配器中自定义的事件监听器
+        adapter.setOnRecyclerViewListener(new OnRecyclerViewListener() {
+            @Override
+            public void onItemClick(int position) {
+            }
+
+            @Override
+            public boolean onItemLongClick(int position) {
+                return true;
+            }
+        });
+
+    }
+
+    /**
+     * 显示会员卡信息区域
+     */
+    private void showCardInfo(Coupon coupon){
+        if(coupon!=null) {
+            couponId=coupon.getOrderId();
+            Product product=coupon.getProduct();
+            tv_title.setText(product.getTitle());
+            tv_shortdesc.setText(product.getShortDesc());
+            String expired = (TextUtils.isEmpty(coupon.getStartTimeLocal()) ? "" : coupon.getStartTimeLocal()) + (TextUtils.isEmpty(coupon.getEndTimeLocal()) ? " -" : " - " + coupon.getEndTimeLocal());
+            tv_expired.setText(expired);
+            Merchant merchant=product.getMerchant();
+            if(merchant!=null) {
+                tv_merchant.setText(merchant.getName());
+                Integer storeId = merchant.getStoreId();
+                tv_points.setText(user.getStorePoints().get(storeId) + "");
+                tv_cash.setText(user.getCashStr(storeId) + "");
+            }
+            else{
+                tv_merchant.setText("");
+                tv_points.setText("0");
+                tv_cash.setText("0");
+            }
         }
     }
 
     /**
-     * 点击Card的事件方法
-     * @param view
+     * 点击使用按钮
      */
-    @OnClick(R.id.ll_card_layout)
-    public void onCardClick(View view){
+    @OnClick(R.id.btn_use)
+    public void onClickUse(){
         Bundle bundle=new Bundle();
-        bundle.putLong("coupon_id", couponId);
+        bundle.putLong("coupon_id",couponId);
         startActivity(CardUseActivity.class,bundle,false);
+    }
+
+    /**
+     * 点击删除按钮
+     */
+    @OnClick(R.id.btn_discard)
+    public void onClickDel(){
+        //显示移除对话框
+        showDialog();
+    }
+
+
+    /**
+     * 获取新数据,并刷新列表
+     * @param page
+     * @return
+     */
+    private void queryData(final int page){
+        if(page>1) {
+            //adapter.addFooter();
+            rc_card_list.scrollToPosition(lastPosition+1);
+        }
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //new Handler().post(new Runnable() {
+                //同上面的new Handler().post()一样，都是在主线程运行，可以修改UI
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        List<Coupon> couponList= CouponModel.getInstance().getCouponsPageByType(typeId,page,pageSize);
+                        if(couponList!=null) {
+                            if(page==1){
+                                adapter.bindDatas(couponList);
+                                Coupon coupon=adapter.getItem(0);
+                                showCardInfo(coupon);
+                            }
+                            else{
+                                //adapter.removeFooter();
+                                adapter.appendDatas(couponList);
+                            }
+                            lastPage=page;
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+                });
+            }
+        }).start();
+    }
+
+    /**
+     * 显示移除对话框
+     */
+    private void showDialog(){
+        final CustomDialog.Builder normalDialog =new CustomDialog.Builder(this);
+        normalDialog.setIcon(R.mipmap.face_sad);
+        //normalDialog.setTitle("Title");
+        normalDialog.setMessage("Do you wish to discard this card?");
+        normalDialog.setPositiveButton("YES",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, int which) {
+                        List<Long> idList=new ArrayList<Long>();
+                        idList.add(couponId);
+                        //final int couponSize=idList.size();
+                        String idsStr=TextUtils.join(",",idList.toArray());
+                        CouponModel.getInstance().delCouponsFromServer(idsStr, new OperationListener<Coupon>() {
+                            @Override
+                            public void done(Coupon obj, AppException exception) {
+                                if(exception==null) {
+                                    adapter.remove(position);
+                                    rc_card_list.scrollToPosition(0);
+                                    dialog.cancel();
+                                    toast("This card has been discarded successfully.");
+                                }
+                                else{
+                                    toast("Failed to discard the card, Error Message: "+ ResourcesUtils.getString(CardActivity.this,exception.getErrorCode()));
+                                }
+                            }
+                        });
+
+                    }
+                });
+        normalDialog.setNegativeButton("NO",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        // 显示
+        normalDialog.show();
     }
 
 }

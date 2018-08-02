@@ -73,6 +73,18 @@ public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
     }
 
     /**
+     * 设置View对象的Tag属性值
+     * @param viewId
+     * @param obj
+     * @return
+     */
+    public BaseRecyclerHolder setTag(int viewId, Object obj) {
+        View view = getView(viewId);
+        view.setTag(obj);
+        return this;
+    }
+
+    /**
      * 设置View对象显示的背景色
      * @param viewId
      * @param color

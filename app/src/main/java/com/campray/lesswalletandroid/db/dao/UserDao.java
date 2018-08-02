@@ -12,9 +12,12 @@ import org.greenrobot.greendao.internal.DaoConfig;
 import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.database.DatabaseStatement;
 
+import com.campray.lesswalletandroid.db.converter.StoreCashConverter;
+import com.campray.lesswalletandroid.db.converter.StorePointConverter;
 import com.campray.lesswalletandroid.db.entity.Country;
 import com.campray.lesswalletandroid.db.entity.Currency;
 import com.campray.lesswalletandroid.db.entity.Language;
+import java.util.HashMap;
 
 import com.campray.lesswalletandroid.db.entity.User;
 
@@ -47,11 +50,14 @@ public class UserDao extends AbstractDao<User, Long> {
         public final static Property Remember = new Property(13, boolean.class, "remember", false, "REMEMBER");
         public final static Property AvatarUrl = new Property(14, String.class, "avatarUrl", false, "AVATAR_URL");
         public final static Property AvatorPath = new Property(15, String.class, "avatorPath", false, "AVATOR_PATH");
-        public final static Property Points = new Property(16, int.class, "points", false, "POINTS");
+        public final static Property StorePoints = new Property(16, String.class, "storePoints", false, "STORE_POINTS");
+        public final static Property StoreCash = new Property(17, String.class, "storeCash", false, "STORE_CASH");
     }
 
     private DaoSession daoSession;
 
+    private final StorePointConverter storePointsConverter = new StorePointConverter();
+    private final StoreCashConverter storeCashConverter = new StoreCashConverter();
 
     public UserDao(DaoConfig config) {
         super(config);
@@ -82,7 +88,8 @@ public class UserDao extends AbstractDao<User, Long> {
                 "\"REMEMBER\" INTEGER NOT NULL ," + // 13: remember
                 "\"AVATAR_URL\" TEXT," + // 14: avatarUrl
                 "\"AVATOR_PATH\" TEXT," + // 15: avatorPath
-                "\"POINTS\" INTEGER NOT NULL );"); // 16: points
+                "\"STORE_POINTS\" TEXT," + // 16: storePoints
+                "\"STORE_CASH\" TEXT);"); // 17: storeCash
     }
 
     /** Drops the underlying database table. */
@@ -158,7 +165,16 @@ public class UserDao extends AbstractDao<User, Long> {
         if (avatorPath != null) {
             stmt.bindString(16, avatorPath);
         }
-        stmt.bindLong(17, entity.getPoints());
+ 
+        HashMap storePoints = entity.getStorePoints();
+        if (storePoints != null) {
+            stmt.bindString(17, storePointsConverter.convertToDatabaseValue(storePoints));
+        }
+ 
+        HashMap storeCash = entity.getStoreCash();
+        if (storeCash != null) {
+            stmt.bindString(18, storeCashConverter.convertToDatabaseValue(storeCash));
+        }
     }
 
     @Override
@@ -228,7 +244,16 @@ public class UserDao extends AbstractDao<User, Long> {
         if (avatorPath != null) {
             stmt.bindString(16, avatorPath);
         }
-        stmt.bindLong(17, entity.getPoints());
+ 
+        HashMap storePoints = entity.getStorePoints();
+        if (storePoints != null) {
+            stmt.bindString(17, storePointsConverter.convertToDatabaseValue(storePoints));
+        }
+ 
+        HashMap storeCash = entity.getStoreCash();
+        if (storeCash != null) {
+            stmt.bindString(18, storeCashConverter.convertToDatabaseValue(storeCash));
+        }
     }
 
     @Override
@@ -261,7 +286,8 @@ public class UserDao extends AbstractDao<User, Long> {
             cursor.getShort(offset + 13) != 0, // remember
             cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14), // avatarUrl
             cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15), // avatorPath
-            cursor.getInt(offset + 16) // points
+            cursor.isNull(offset + 16) ? null : storePointsConverter.convertToEntityProperty(cursor.getString(offset + 16)), // storePoints
+            cursor.isNull(offset + 17) ? null : storeCashConverter.convertToEntityProperty(cursor.getString(offset + 17)) // storeCash
         );
         return entity;
     }
@@ -284,7 +310,8 @@ public class UserDao extends AbstractDao<User, Long> {
         entity.setRemember(cursor.getShort(offset + 13) != 0);
         entity.setAvatarUrl(cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14));
         entity.setAvatorPath(cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15));
-        entity.setPoints(cursor.getInt(offset + 16));
+        entity.setStorePoints(cursor.isNull(offset + 16) ? null : storePointsConverter.convertToEntityProperty(cursor.getString(offset + 16)));
+        entity.setStoreCash(cursor.isNull(offset + 17) ? null : storeCashConverter.convertToEntityProperty(cursor.getString(offset + 17)));
      }
     
     @Override

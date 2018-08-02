@@ -62,6 +62,7 @@
         <activity android:name=".ui.CouponPaymentActivity" />
         <activity android:name=".ui.CardActivity" />
         <activity android:name=".ui.CardPaymentActivity" />
+        <activity android:name=".ui.ProductDetailActivity" />
         <activity android:name=".ui.CardUseActivity" />
         <activity android:name=".ui.ProfileActivity" />
         <activity android:name=".ui.AccountActivity" />

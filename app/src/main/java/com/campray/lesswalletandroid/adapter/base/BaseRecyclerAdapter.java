@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.campray.lesswalletandroid.adapter.listener.OnRecyclerViewListener;
+import com.campray.lesswalletandroid.db.entity.Coupon;
 import com.campray.lesswalletandroid.ui.base.BaseActivity;
 
 import java.util.ArrayList;
@@ -142,6 +143,11 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
                 }
             }
         }
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return super.getItemId(position);
     }
 
     /**

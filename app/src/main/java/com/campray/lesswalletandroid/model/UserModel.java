@@ -221,23 +221,28 @@ public class UserModel extends BaseModel {
     }
 
     /**
-     * 从服务端查找用户积分
+     * 从服务端同步用户信息
      *  @param id
      * @param listener
      */
-    public void getUserPoints(long id, final OperationListener<User> listener) {
+    public void updateUserFormServer(long id, final OperationListener<User> listener) {
         this.searchUserById(id, new OperationListener<User>() {
             @Override
             public void done(User obj, AppException exception) {
                 if(obj!=null) {
                     try {
-                        User user = UserDaoService.getInstance(getContext()).getUserById(obj.getId());
-                        if (user.getPoints() != obj.getPoints()) {
-                            user.setPoints(obj.getPoints());
-                            UserDaoService.getInstance(getContext()).insertOrUpdateUser(user);
-                            LessWalletApplication.INSTANCE().setAccount(user);
-                        }
-                        listener.done(obj, null);
+                        User user=UserDaoService.getInstance(getContext()).getUserById(obj.getId());
+                        user.setEmail(obj.getEmail());
+                        user.setMobile(obj.getMobile());
+                        user.setAddress(obj.getAddress());
+                        user.setFirstName(obj.getFirstName());
+                        user.setLastName(obj.getLastName());
+                        user.setAvatarUrl(obj.getAvatarUrl());
+                        user.setStorePoints(obj.getStorePoints());
+                        user.setStoreCash(obj.getStoreCash());
+                        UserDaoService.getInstance(getContext()).insertOrUpdateUser(user);
+                        LessWalletApplication.INSTANCE().setAccount(user);
+                        listener.done(user, null);
                     } catch (Exception e) {
                         listener.done(null, new AppException("E_1000",e));
                     }

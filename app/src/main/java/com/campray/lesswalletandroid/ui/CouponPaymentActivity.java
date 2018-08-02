@@ -179,18 +179,18 @@ public class CouponPaymentActivity extends MenuActivity {
                 tv_validity.setText(getResources().getString(R.string.coupon_validity_nolimit) );
             }
 
-            if (!TextUtils.isEmpty(couponStyle.getBenefitOne())) {
-                tv_benefit.setText(R.string.coupon_benefit_onetime);
-                tv_benefit_value.setText(couponStyle.getBenefitOne());
-            } else if (!TextUtils.isEmpty(couponStyle.getBenefitPrepaidCash())) {
-                tv_benefit.setText(R.string.coupon_benefit_precash);
-                tv_benefit_value.setText(couponStyle.getBenefitPrepaidCash());
-            } else if (!TextUtils.isEmpty(couponStyle.getBenefitPrepaidService())) {
-                tv_benefit.setText(R.string.coupon_benefit_preservice);
-                tv_benefit_value.setText(couponStyle.getBenefitPrepaidService());
-            } else if (!TextUtils.isEmpty(couponStyle.getBenefitBuyNGetOne())) {
-                tv_benefit.setText(R.string.coupon_benefit_buyngetone);
-                tv_benefit_value.setText(couponStyle.getBenefitBuyNGetOne());
+            if (!TextUtils.isEmpty(couponStyle.getBenefitFree())) {
+                tv_benefit.setText( R.string.coupon_benefit_free);
+                tv_benefit_value.setText(couponStyle.getBenefitFree());
+            } else if (!TextUtils.isEmpty(couponStyle.getBenefitCash())) {
+                tv_benefit.setText( R.string.coupon_benefit_precash);
+                tv_benefit_value.setText( couponStyle.getBenefitCash());
+            } else if (!TextUtils.isEmpty(couponStyle.getBenefitDiscount())) {
+                tv_benefit.setText( R.string.coupon_benefit_discount);
+                tv_benefit_value.setText(couponStyle.getBenefitDiscount());
+            } else if (!TextUtils.isEmpty(couponStyle.getBenefitCustomized())) {
+                tv_benefit.setText( R.string.coupon_benefit_customized);
+                tv_benefit_value.setText(couponStyle.getBenefitCustomized());
             }
 
             gl_coupon_top.setBackgroundColor(Color.parseColor(couponStyle.getBgColor()));

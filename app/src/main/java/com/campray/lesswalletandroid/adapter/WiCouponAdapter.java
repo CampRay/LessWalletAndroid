@@ -101,7 +101,7 @@ public class WiCouponAdapter extends BaseRecyclerAdapter<Product> {
     public void bindView(final BaseRecyclerHolder holder, Product product, final int position) {
         if (product != null && product.getCoupons().size() > 0) {
             final Coupon coupon = product.getCoupons().get(0);
-            String expired = (TextUtils.isEmpty(coupon.getStartTimeLocal()) ? "" : coupon.getStartTimeLocal()) + (TextUtils.isEmpty(coupon.getEndTimeLocal()) ? "" : " - " + coupon.getEndTimeLocal());
+            String expired = (TextUtils.isEmpty(coupon.getStartTimeLocal()) ? "" : coupon.getStartTimeLocal()) + (TextUtils.isEmpty(coupon.getEndTimeLocal()) ? " -" : " - " + coupon.getEndTimeLocal());
             holder.setText(R.id.tv_title, product.getTitle());
             holder.setText(R.id.tv_shortdesc, product.getShortDesc());
             holder.setText(R.id.tv_merchant, product.getMerchant().getName());
@@ -125,18 +125,18 @@ public class WiCouponAdapter extends BaseRecyclerAdapter<Product> {
                     holder.setText(R.id.tv_validity, this.context.getResources().getString(R.string.coupon_validity_nolimit));
                 }
 
-                if (!TextUtils.isEmpty(couponStyle.getBenefitOne())) {
-                    holder.setText(R.id.tv_benefit, R.string.coupon_benefit_onetime);
-                    holder.setText(R.id.tv_benefit_value, couponStyle.getBenefitOne());
-                } else if (!TextUtils.isEmpty(couponStyle.getBenefitPrepaidCash())) {
+                if (!TextUtils.isEmpty(couponStyle.getBenefitFree())) {
+                    holder.setText(R.id.tv_benefit, R.string.coupon_benefit_free);
+                    holder.setText(R.id.tv_benefit_value, couponStyle.getBenefitFree());
+                } else if (!TextUtils.isEmpty(couponStyle.getBenefitCash())) {
                     holder.setText(R.id.tv_benefit, R.string.coupon_benefit_precash);
-                    holder.setText(R.id.tv_benefit_value, couponStyle.getBenefitPrepaidCash() + "/" + coupon.getCustomValues().get("2"));
-                } else if (!TextUtils.isEmpty(couponStyle.getBenefitPrepaidService())) {
-                    holder.setText(R.id.tv_benefit, R.string.coupon_benefit_preservice);
-                    holder.setText(R.id.tv_benefit_value, couponStyle.getBenefitPrepaidService() + "/" + coupon.getCustomValues().get("3"));
-                } else if (!TextUtils.isEmpty(couponStyle.getBenefitBuyNGetOne())) {
-                    holder.setText(R.id.tv_benefit, R.string.coupon_benefit_buyngetone);
-                    holder.setText(R.id.tv_benefit_value, couponStyle.getBenefitBuyNGetOne() + "/" + coupon.getCustomValues().get("4"));
+                    holder.setText(R.id.tv_benefit_value, couponStyle.getBenefitCash());
+                } else if (!TextUtils.isEmpty(couponStyle.getBenefitDiscount())) {
+                    holder.setText(R.id.tv_benefit, R.string.coupon_benefit_discount);
+                    holder.setText(R.id.tv_benefit_value, couponStyle.getBenefitDiscount());
+                } else if (!TextUtils.isEmpty(couponStyle.getBenefitCustomized())) {
+                    holder.setText(R.id.tv_benefit, R.string.coupon_benefit_customized);
+                    holder.setText(R.id.tv_benefit_value, couponStyle.getBenefitCustomized());
                 }
 
                 holder.setBackgroundColor(R.id.gl_coupon_top, couponStyle.getBgColor());
@@ -247,7 +247,6 @@ public class WiCouponAdapter extends BaseRecyclerAdapter<Product> {
                             @Override
                             public void done(Coupon obj, AppException exception) {
                                 if(exception==null) {
-                                    ProductModel.getInstance().deleteProductById(delProduct.getProductId());
                                     WiCouponAdapter.this.remove(position);
                                     dialog.cancel();
                                     toast("This coupon has been discarded successfully.");

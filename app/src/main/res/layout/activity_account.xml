@@ -133,27 +133,6 @@
                     android:textColor="#273788"
                     android:textSize="12sp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_column="0"
-                    android:layout_columnWeight="1"
-                    android:layout_row="2"
-                    android:paddingLeft="5dp"
-                    android:text="@string/account_points"
-                    android:textColor="#000000" />
-
-                <TextView
-                    android:id="@+id/tv_points"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_column="1"
-                    android:layout_columnWeight="7"
-                    android:layout_gravity="top"
-                    android:layout_row="2"
-                    android:textColor="#273788"
-                    android:textSize="12sp" />
-
 
             </GridLayout>
 

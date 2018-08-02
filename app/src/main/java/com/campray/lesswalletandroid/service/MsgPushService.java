@@ -97,7 +97,7 @@ public class MsgPushService extends Service {
                                                         showNotification(LessWalletApplication.INSTANCE(), history.getId().intValue(), title, text);
                                                         break;
                                                     case 150://积分增加消息
-                                                        UserModel.getInstance().getUserPoints(user.getId(), new OperationListener<User>() {
+                                                        UserModel.getInstance().updateUserFormServer(user.getId(), new OperationListener<User>() {
                                                             @Override
                                                             public void done(User obj, AppException exception) {}
                                                         });
@@ -106,7 +106,7 @@ public class MsgPushService extends Service {
                                                         showNotification(LessWalletApplication.INSTANCE(), history.getId().intValue(), title, text);
                                                         break;
                                                     case 151://积分减少消息
-                                                        UserModel.getInstance().getUserPoints(user.getId(), new OperationListener<User>() {
+                                                        UserModel.getInstance().updateUserFormServer(user.getId(), new OperationListener<User>() {
                                                             @Override
                                                             public void done(User obj, AppException exception) {}
                                                         });
@@ -133,19 +133,25 @@ public class MsgPushService extends Service {
                                                         showNotification(LessWalletApplication.INSTANCE(), history.getId().intValue(), title, text);
                                                         break;
                                                     case 154://金额增加消息
-                                                        CouponModel.getInstance().getCouponFromServer(Long.parseLong(strArr[1]), new OperationListener<Coupon>() {
-                                                            @Override
-                                                            public void done(Coupon obj, AppException exception) {EventBus.getDefault().post(new RefreshEvent(obj.getOrderId()));}
+                                                        UserModel.getInstance().updateUserFormServer(user.getId(), new OperationListener<User>() {
+                                                            public void done(User obj, AppException exception) {}
                                                         });
+//                                                        CouponModel.getInstance().getCouponFromServer(Long.parseLong(strArr[1]), new OperationListener<Coupon>() {
+//                                                            @Override
+//                                                            public void done(Coupon obj, AppException exception) {EventBus.getDefault().post(new RefreshEvent(obj.getOrderId()));}
+//                                                        });
                                                         title = getResources().getString(ResourcesUtils.getStringId(getApplicationContext(), "notification_user_cash_add"));
                                                         text = String.format(getResources().getString(ResourcesUtils.getStringId(getApplicationContext(), "notification_user_cash_add_text")),fmt+strArr[2].replace("-",""));
                                                         showNotification(LessWalletApplication.INSTANCE(), history.getId().intValue(), title, text);
                                                         break;
                                                     case 155://金额减少消息
-                                                        CouponModel.getInstance().getCouponFromServer(Long.parseLong(strArr[1]), new OperationListener<Coupon>() {
-                                                            @Override
-                                                            public void done(Coupon obj, AppException exception) {EventBus.getDefault().post(new RefreshEvent(obj.getOrderId()));}
+                                                        UserModel.getInstance().updateUserFormServer(user.getId(), new OperationListener<User>() {
+                                                            public void done(User obj, AppException exception) {}
                                                         });
+//                                                        CouponModel.getInstance().getCouponFromServer(Long.parseLong(strArr[1]), new OperationListener<Coupon>() {
+//                                                            @Override
+//                                                            public void done(Coupon obj, AppException exception) {EventBus.getDefault().post(new RefreshEvent(obj.getOrderId()));}
+//                                                        });
                                                         title = getResources().getString(ResourcesUtils.getStringId(getApplicationContext(), "notification_user_cash_redeemed"));
                                                         text = String.format(getResources().getString(ResourcesUtils.getStringId(getApplicationContext(), "notification_user_cash_redeemed_text")),fmt+strArr[2].replace("-",""));
                                                         showNotification(LessWalletApplication.INSTANCE(), history.getId().intValue(), title, text);

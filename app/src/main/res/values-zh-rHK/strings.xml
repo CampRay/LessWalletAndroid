@@ -1,0 +1,256 @@
+<resources>
+    <string name="app_name">LessWallet</string>
+
+    <!-- Strings related to login -->
+    <string name="login_username_hint">請輸入用戶名...</string>
+    <string name="login_password_hint">請輸入密碼...</string>
+    <string name="login_repassword_hint">請再次輸入密碼...</string>
+    <string name="login_remember">下次自動登入</string>
+    <string name="login">登錄</string>
+    <string name="logout">登出</string>
+    <string name="register_txt1">還沒有帳號？</string>
+    <string name="register_txt2">立即注冊 &gt;</string>
+    <string name="reg_mobile_hint">手機號碼</string>
+    <string name="reg_firstname_hint">名</string>
+    <string name="reg_lastname_hint">姓</string>
+    <string name="reg_password_hint">密碼</string>
+    <string name="reg_repassword_hint">重輸密碼</string>
+    <string name="reg_password_short">密码字符长度太少 (最少7个字符)</string>
+    <string name="reg_password_leter">密码字符必须由字母和数字组成</string>
+    <string name="reg_email_hint">電子郵箱</string>
+    <string name="reg_address_hint">家庭地址</string>
+    <string name="reg_country_hint">請選擇你所在的國家</string>
+    <string name="register">注冊</string>
+
+    <string name="account_title">我的資料</string>
+    <string name="account_mobile">電話號碼</string>
+    <string name="account_email">電子郵箱</string>
+    <string name="account_country">注冊國籍</string>
+    <string name="account_points">積分總數</string>
+    <string name="account_scan">掃一掃上面的二維碼，加我爲好友</string>
+    <string name="merchant_scan">掃一掃上面的二維碼，收藏此商家</string>
+    <string name="account_setting">個人配置</string>
+
+    <string name="collect_title">二維碼收款</string>
+    <string name="collect_scan">LessWallet掃一掃，向我付錢</string>
+    <string name="collect_set">設置收款額</string>
+    <string name="collect_export">導出二維碼</string>
+    <string name="collect_amount">收款金額</string>
+    <string name="collect_currency_hint">請選擇貨幣種類</string>
+    <string name="collect_export_success">導出QRCode圖片成功</string>
+    <string name="collect_export_failed">導出QRCode圖片失敗</string>
+
+    <string name="error_invalid_email">電子郵箱地址無效</string>
+    <string name="error_invalid_password">您輸入的密碼長度太短，請輸入6位以上的字符（字母和數字）</string>
+    <string name="error_incorrect_password">無效的密碼</string>
+    <string name="error_empty_amount">收款金額不能爲空</string>
+    <string name="error_format_amount">收款金額必須爲最多包涵兩位小數的數字</string>
+    <string name="error_field_required">此爲必填項</string>
+
+
+    <string name="dialog_camera_permission">掃碼需要攝像頭權限</string>
+    <string name="dialog_camera_permission_setting">當前App需要使用攝像頭的權限,需要打開設置頁面開通權限嗎?</string>
+    <string name="dialog_permission_title">權限申請</string>
+    <string name="button_ok">確定</string>
+    <string name="button_confirm">確定</string>
+    <string name="button_cancel">取消</string>
+    <string name="button_give">送出</string>
+    <string name="button_detail">詳細說明</string>
+
+    <string name="scan_title">二維碼掃描</string>
+    <string name="scan_select_image">選擇二維碼圖片</string>
+    <string name="scan_text">將二維碼放入框內, 即可自動掃描</string>
+    <string name="scan_process">正在掃描...</string>
+
+
+    <string name="friend_list">好友列表</string>
+    <string name="friends_username_hint">移動電話/電子郵箱</string>
+    <string name="friends_search_btn">查找</string>
+    <string name="friends_search_error1">請輸入移動電話或電子郵箱</string>
+    <string name="friend_title">好友信息</string>
+    <string name="friend_title_add">查找結果</string>
+    <string name="friend_add">添加爲好友</string>
+    <string name="friend_add_success">添加好友成功</string>
+    <string name="friend_select_hint">請選擇您的好友</string>
+    <string name="coupon_sent_to">送給:</string>
+    <string name="coupon_sent_success">已經成功送出</string>
+    <string name="coupon_publish_merchant">發布商:</string>
+    <string name="coupon_publish_date">發布日期:</string>
+    <string name="coupon_publish_price">發布價格:</string>
+    <string name="coupon_short_desc">簡要說明:</string>
+    <string name="coupon_benefit">用戶權益:</string>
+    <string name="coupon_benefit_free">免費</string>
+    <string name="coupon_benefit_precash">代金</string>
+    <string name="coupon_benefit_discount">折扣</string>
+    <string name="coupon_benefit_customized"></string>
+    <string name="coupon_level">卡的級別:</string>
+    <string name="coupon_validity">有效期:</string>
+    <string name="coupon_expiry_date">有效期限:</string>
+    <string name="coupon_validity_day">天</string>
+    <string name="coupon_validity_month">月</string>
+    <string name="coupon_validity_year">年</string>
+    <string name="coupon_validity_nolimit">無限制</string>
+    <string name="coupon_description">詳細說明:</string>
+    <string name="coupon_free">免費</string>
+    <string name="coupon_stock_quantity">庫存數量:</string>
+    <string name="coupon_prepaid_cash">預付金額:</string>
+    <string name="coupon_prepaid_service">預付服務:</string>
+    <string name="coupon_one_redeemed">使用並銷毀</string>
+    <string name="coupon_cash_add">余額充值</string>
+    <string name="coupon_cash_deduct">余額扣減</string>
+    <string name="coupon_service_add">添加服務次數</string>
+    <string name="coupon_service_deduct">扣減服務次數</string>
+    <string name="coupon_buy_add">添加購買次數</string>
+    <string name="coupon_buy_deduct">扣減購買次數</string>
+
+    <string name="card_firstname">名:</string>
+    <string name="card_lastname">姓:</string>
+    <string name="card_phone">手機號碼:</string>
+    <string name="card_points">當前會員積分:</string>
+    <string name="card_expired_time">有效期限:</string>
+    <string name="card_point_add">增加積分</string>
+    <string name="card_point_deduct">扣減積分</string>
+    <string name="card_point_amount">積分數</string>
+    <string name="card_btn_add">添加</string>
+    <string name="card_btn_deduct">減少</string>
+
+    <string name="text_point_amount_add">輸入要添加的積分數量</string>
+    <string name="text_point_amount_deduct">輸入要扣減的積分數量</string>
+    <string name="text_cash_amount_add">輸入要充值的金額</string>
+    <string name="text_cash_amount_deduct">輸入要扣減的金額</string>
+    <string name="text_service_time_add">輸入要增加的服務次數</string>
+    <string name="text_service_time_deduct">輸入要扣減的服務次數</string>
+    <string name="text_buy_time_add">輸入要增加的已購買次數</string>
+    <string name="text_buy_time_deduct">輸入要扣減的已購買次數</string>
+
+    <string name="text_operate_failed">操作失敗，錯誤原因是:</string>
+    <string name="text_coupon_is_deleded">此優惠卷已經被使用並銷毀</string>
+    <string name="text_coupon_redeemed_success">此優惠卷已確認使用，並被成功注銷</string>
+    <string name="text_coupon_add_points_success">爲用戶添加積分成功</string>
+    <string name="text_coupon_deduct_points_success">扣減用戶積分成功</string>
+    <string name="text_coupon_add_cash_success">爲優惠卷充值預付金額成功</string>
+    <string name="text_coupon_deduct_cash_success">扣減優惠卷預付金額成功</string>
+    <string name="text_coupon_add_service_success">爲優惠卷增加服務次數成功</string>
+    <string name="text_coupon_deduct_service_success">扣減優惠卷服務次數成功</string>
+    <string name="text_coupon_add_buy_success">爲優惠卷增加已購次數成功</string>
+    <string name="text_coupon_deduct_buy_success">扣減優惠卷已購次數成功</string>
+
+    <string name="notification_coupon_received">收到一張優惠卷</string>
+    <string name="notification_coupon_received_text">您的好友送給您一張優惠卷</string>
+    <string name="notification_coupon_sent">送出一張優惠卷</string>
+    <string name="notification_coupon_sent_text">您送給好友一張優惠卷</string>
+
+    <string name="notification_user_coupon_received">收到一張優惠卷</string>
+    <string name="notification_user_coupon_received_text">您收到一張商家贈送的優惠卷</string>
+    <string name="notification_user_card_received">收到一張會員卡</string>
+    <string name="notification_user_card_received_text">您收到一張商家贈送的會員卡</string>
+    <string name="notification_user_point_add">會員積分增長</string>
+    <string name="notification_user_point_add_text">商家贈送給您%s會員積分</string>
+    <string name="notification_user_point_redeemed">會員積分減少</string>
+    <string name="notification_user_point_redeemed_text">商家扣除了您%s會員積分</string>
+    <string name="notification_user_service_add">預付服務次數增加</string>
+    <string name="notification_user_service_add_text">商家給您的預付服務優惠卷添加了%s次服務</string>
+    <string name="notification_user_service_redeemed">預付服務次數減少</string>
+    <string name="notification_user_service_redeemed_text">商家扣減了您的預付服務優惠卷%s次服務</string>
+    <string name="notification_user_coupon_used">優惠卷被注銷</string>
+    <string name="notification_user_coupon_used_text">您有一張一次性優惠卷被使用，已被商家銷毀</string>
+    <string name="notification_user_cash_add">預付優惠卷金額增加</string>
+    <string name="notification_user_cash_add_text">商家給您的預付現金優惠卷充值%s</string>
+    <string name="notification_user_cash_redeemed">預付優惠卷金額減少</string>
+    <string name="notification_user_cash_redeemed_text">商家扣除了您的預付現金優惠卷%s</string>
+    <string name="notification_user_buy_redeemed">優惠卷購買次數減少</string>
+    <string name="notification_user_buy_redeemed_text">您的買N得一優惠卷的購買次數增加%s次</string>
+    <string name="notification_user_buy_added">優惠卷購買次數增加</string>
+    <string name="notification_user_buy_added_text">您的買N得一優惠卷的購買次數減少%s次</string>
+
+    <string name="notification_merchant_coupon_sent">贈送優惠卷成功</string>
+    <string name="notification_merchant_coupon_sent_text">您成功地贈送給用戶一張優惠卷</string>
+    <string name="notification_merchant_card_sent">贈送會員卡成功</string>
+    <string name="notification_merchant_card_sent_text">您成功地贈送給用戶一張會員卡</string>
+
+    <string name="notification_merchant_coupon_redeemed">注銷優惠卷成功</string>
+    <string name="notification_merchant_coupon_redeemed_text">您成功地使用並銷毀用戶的一張優惠卷</string>
+
+    <string name="notification_merchant_point_redeemed">扣減會員積分成功</string>
+    <string name="notification_merchant_point_redeemed_text">您成功地扣減掉用戶%s會員積分</string>
+    <string name="notification_merchant_point_added">贈送會員積分成功</string>
+    <string name="notification_merchant_point_added_text">您成功地贈送給用戶%s會員積分</string>
+
+    <string name="notification_merchant_cash_redeemed">扣減預付金額成功</string>
+    <string name="notification_merchant_cash_redeemed_text">您成功地扣減掉用戶優惠卷預付金額%s</string>
+    <string name="notification_merchant_cash_added">充值預付金額成功</string>
+    <string name="notification_merchant_cash_added_text">您成功地給用戶優惠卷預付金額充值%s</string>
+
+    <string name="notification_merchant_service_redeemed">扣減服務次數成功</string>
+    <string name="notification_merchant_service_redeemed_text">您成功地扣減掉用戶優惠卷的服務次數%s次</string>
+    <string name="notification_merchant_service_added">增加服務次數成功</string>
+    <string name="notification_merchant_service_added_text">您成功地給用戶優惠卷服務次數增加%s次</string>
+
+    <string name="notification_merchant_buy_deduct">扣減購買次數成功</string>
+    <string name="notification_merchant_buy_deducted_text">您成功地扣減掉用戶買N得一優惠卷的購買次數%s次</string>
+    <string name="notification_merchant_buy_added">增加購買次數成功</string>
+    <string name="notification_merchant_buy_added_text">您成功地給用戶買N得一優惠卷的購買次數增加%s次</string>
+
+    <!--錯誤碼-->
+    <string name="E_0000">錯誤原因</string>
+    <string name="E_1000">程序運行異常</string>
+    <string name="E_1001">沒有網絡連接</string>
+    <string name="E_1002">遠程服務訪問失敗，無效的訪問口令</string>
+    <string name="E_1003">遠程服務連接請求異常</string>
+    <string name="E_1004">無效的響應數據</string>
+    <string name="E_1005">數據庫異常</string>
+    <string name="E_2000">登錄失敗，帳號或密碼錯誤</string>
+    <string name="E_2001">您的帳號還沒有被激活</string>
+    <string name="E_2002">您的帳號已被刪除</string>
+    <string name="E_2003">您的帳號已被鎖定</string>
+    <string name="E_2004">該帳號已被使用</string>
+    <string name="E_2005">請填寫用戶名</string>
+    <string name="E_2006">請填寫電子郵箱地址</string>
+    <string name="E_2007">請填寫密碼</string>
+    <string name="E_2008">請填寫確認密碼</string>
+    <string name="E_2009">兩次輸入的密碼不一致，請重新輸入</string>
+    <string name="E_2010">用戶注冊失敗</string>
+    <string name="E_2011">查詢字符串不能爲空</string>
+    <string name="E_2012">名不能爲空</string>
+    <string name="E_2013">姓不能爲空</string>
+    <string name="E_2014">手機號碼不能爲空</string>
+    <string name="E_2015">用戶不存在</string>
+    <string name="E_2050">帳戶積分不足</string>
+    <string name="E_2051">沒有權限執行此操作</string>
+
+    <string name="E_3000">獲取電子卷失敗</string>
+    <string name="E_3001">刪除電子卷失敗</string>
+    <string name="E_3002">電子卷不存在</string>
+    <string name="E_3003">電子卷余額不足</string>
+    <string name="E_3004">電子卷沒有此權益或功能</string>
+
+    <string name="E_3020">不是當前商家發布的電子卷</string>
+    <string name="E_3021">當前電子卷庫存數量不足</string>
+    <string name="E_3022">當前會員卡庫存數量不足</string>
+    <string name="E_3023">這是一個過期的電子卷</string>
+
+
+    <string name="qrcode_hint">請將二維碼置于取景框內掃描 </string>
+    <string name="msg_camera_framework_bug">很遺憾，Android 相機出現問題。你可能需要重啓設備。</string>
+
+    <string name="preferences_scanning_title">掃碼設置</string>
+    <string name="preferences_play_beep_title">播放提示音</string>
+    <string name="preferences_vibrate_title">振動</string>
+    <string name="preferences_front_light_title">閃光燈</string>
+    <string name="preferences_front_light_summary">設置閃光燈模式</string>
+    <string name="preferences_front_light_auto">自動</string>
+    <string name="preferences_front_light_off">關</string>
+    <string name="preferences_front_light_on">開</string>
+    <string name="preferences_auto_focus_title">自動對焦</string>
+    <string name="preferences_scanning_success_summary">掃描成功</string>
+    <string name="preferences_invert_scan_summary">掃描黑色背景上的白色條碼。僅適用于部分設備。</string>
+    <string name="preferences_invert_scan_title">反色</string>
+    <string name="preferences_disable_continuous_focus_summary">使用標准對焦模式</string>
+    <string name="preferences_disable_continuous_focus_title">不持續對焦</string>
+    <string name="preferences_disable_exposure_title">不曝光</string>
+    <string name="preferences_disable_metering_title">不使用距離測量</string>
+    <string name="preferences_disable_barcode_scene_mode_title">不進行條形碼場景匹配</string>
+    <string name="empty"></string>
+
+
+</resources>

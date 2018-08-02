@@ -47,8 +47,6 @@ public class Coupon {
     private String endTime;//过期时间
     @NotNull
     private boolean deleted=false;//是否已使用
-    @Convert(columnType = String.class,converter = BenefitAttrConverter.class)
-    private HashMap<String,String> customValues;//是否已使用
     @Transient
     private List<UserAttrValue> userAttrValues; //用户选择或输入的属性的值
 
@@ -65,9 +63,8 @@ public class Coupon {
     @Generated(hash = 533881652)
     private transient CouponDao myDao;
 
-    @Generated(hash = 1197477488)
-    public Coupon(Long orderId, Long productId, String cid, @NotNull Long userId, float orderTotal, int paymentStatus, @NotNull String startTime, String endTime, boolean deleted,
-            HashMap<String, String> customValues) {
+    @Generated(hash = 1712201155)
+    public Coupon(Long orderId, Long productId, String cid, @NotNull Long userId, float orderTotal, int paymentStatus, @NotNull String startTime, String endTime, boolean deleted) {
         this.orderId = orderId;
         this.productId = productId;
         this.cid = cid;
@@ -77,7 +74,6 @@ public class Coupon {
         this.startTime = startTime;
         this.endTime = endTime;
         this.deleted = deleted;
-        this.customValues = customValues;
     }
 
     @Generated(hash = 75265961)
@@ -114,18 +110,18 @@ public class Coupon {
             if(couponStyle==null) {
                 couponStyle = new CouponStyle();
                 //循环遍历当前优惠卷的产品规格属性
-                for (SpecAttr specAttr : this.getProduct().getSpecAttr()) {
+                for (SpecAttr specAttr : this.product.getSpecAttr()) {
                     //String selectValue = specAttr.getColorSquaresRgb();//用户通过下接选项选择的值
                     String value = specAttr.getValueRaw();//用户自已输入的值
                     //String value = (TextUtils.isEmpty(selectValue) && TextUtils.isEmpty(customValue)) ? specAttr.getSpecificationAttributeName() : (TextUtils.isEmpty(selectValue) ? customValue : selectValue);
                     if (specAttr.getSpecificationAttributeId() == 1) {
-                        couponStyle.setBenefitOne(value);
+                        couponStyle.setBenefitFree(value);
                     } else if (specAttr.getSpecificationAttributeId() == 2) {
-                        couponStyle.setBenefitPrepaidCash(value);
+                        couponStyle.setBenefitCash(value);
                     } else if (specAttr.getSpecificationAttributeId() == 3) {
-                        couponStyle.setBenefitPrepaidService(value);
+                        couponStyle.setBenefitDiscount(value);
                     } else if (specAttr.getSpecificationAttributeId() == 4) {
-                        couponStyle.setBenefitBuyNGetOne(value);
+                        couponStyle.setBenefitCustomized(value);
                     }else if (specAttr.getSpecificationAttributeId() == 5) {//如果是背景色
                         couponStyle.setBgColor(value);
                     } else if (specAttr.getSpecificationAttributeId() == 6) {//如果是底纹
@@ -186,6 +182,14 @@ public class Coupon {
         this.cid = cid;
     }
 
+    public Long getUserId() {
+        return this.userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
     public float getOrderTotal() {
         return this.orderTotal;
     }
@@ -224,14 +228,6 @@ public class Coupon {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
-    }
-
-    public HashMap<String, String> getCustomValues() {
-        return this.customValues;
-    }
-
-    public void setCustomValues(HashMap<String, String> customValues) {
-        this.customValues = customValues;
     }
 
     /** To-one relationship, resolved on first access. */
@@ -304,14 +300,6 @@ public class Coupon {
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getCouponDao() : null;
-    }
-
-    public Long getUserId() {
-        return this.userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
     }
 
     

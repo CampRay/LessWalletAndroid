@@ -7,6 +7,7 @@ import com.campray.lesswalletandroid.db.entity.Coupon;
 import com.campray.lesswalletandroid.db.entity.CouponStyle;
 import com.campray.lesswalletandroid.db.entity.Product;
 import com.campray.lesswalletandroid.db.entity.SpecAttr;
+import com.campray.lesswalletandroid.db.service.CountryDaoService;
 import com.campray.lesswalletandroid.db.service.CouponDaoService;
 import com.campray.lesswalletandroid.db.service.ProductDaoService;
 import com.campray.lesswalletandroid.listener.ApiHandleListener;
@@ -249,6 +250,7 @@ public class CouponModel extends BaseModel {
         JsonObject jObj=new JsonObject();
         jObj.addProperty("device",this.getDeviceId());
         jObj.addProperty("orderIds",ids);
+        jObj.addProperty("isvendor",false);
         this.httpPostAPI(CouponModel.URL_API_DELCOUPONS, jObj,new ApiHandleListener<JsonObject>() {
             @Override
             public void done(JsonObject obj, AppException exception) {
@@ -258,6 +260,11 @@ public class CouponModel extends BaseModel {
                         JsonArray jArr = obj.get("Data").getAsJsonArray();
                         for(JsonElement item:jArr){
                             int deletedCouponId=item.getAsInt();
+                            Coupon coupon=getCouponById(deletedCouponId);
+                            Product product=coupon.getProduct();
+                            if(product.getCoupons().size()<=1){
+                                ProductModel.getInstance().deleteProduct(product);
+                            }
                             deleteCouponById(deletedCouponId);
                         }
 

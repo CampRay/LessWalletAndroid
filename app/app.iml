@@ -91,6 +91,7 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/builds" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/check-manifest" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/classes" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/classes-jar" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental-classes" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental-runtime-classes" />
@@ -111,6 +112,7 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/tmp" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/transforms" />
       <excludeFolder url="file://$MODULE_DIR$/build/outputs" />
+      <excludeFolder url="file://$MODULE_DIR$/build/reports" />
       <excludeFolder url="file://$MODULE_DIR$/build/tmp" />
     </content>
     <orderEntry type="jdk" jdkName="Android API 27 Platform" jdkType="Android SDK" />
@@ -121,7 +123,7 @@
     <orderEntry type="library" name="com.android.support:support-fragment-26.0.0" level="project" />
     <orderEntry type="library" name="com.android.support:support-vector-drawable-26.0.0" level="project" />
     <orderEntry type="library" scope="TEST" name="com.squareup:javawriter:2.1.1@jar" level="project" />
-    <orderEntry type="library" name="com.braintreepayments.api:core-2.14.1" level="project" />
+    <orderEntry type="library" name="com.braintreepayments.api:core-2.14.2" level="project" />
     <orderEntry type="library" name="com.google.code.gson:gson:2.3@jar" level="project" />
     <orderEntry type="library" name="com.android.support:support-core-utils-26.0.0" level="project" />
     <orderEntry type="library" name="org.greenrobot:greendao:3.2.2@jar" level="project" />
@@ -130,6 +132,7 @@
     <orderEntry type="library" scope="TEST" name="org.hamcrest:hamcrest-core:1.3@jar" level="project" />
     <orderEntry type="library" name="com.jakewharton:butterknife-annotations:8.8.1@jar" level="project" />
     <orderEntry type="library" scope="TEST" name="com.android.support.test.espresso:espresso-core-2.2.2" level="project" />
+    <orderEntry type="library" name="com.paypal.android.sdk:data-collector:2.14.2@jar" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-tasks-11.4.0" level="project" />
     <orderEntry type="library" scope="TEST" name="com.android.support.test:rules-0.5" level="project" />
     <orderEntry type="library" scope="TEST" name="org.hamcrest:hamcrest-integration:1.3@jar" level="project" />
@@ -154,7 +157,6 @@
     <orderEntry type="library" name="com.koushikdutta.async:androidasync-2.2.1" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-basement-11.4.0" level="project" />
     <orderEntry type="library" name="com.android.support:appcompat-v7-26.0.0" level="project" />
-    <orderEntry type="library" name="com.paypal.android.sdk:data-collector:2.14.1@jar" level="project" />
     <orderEntry type="library" name="com.android.support:support-core-ui-26.0.0" level="project" />
     <orderEntry type="library" name="com.android.support:support-compat-26.0.0" level="project" />
     <orderEntry type="library" name="com.jakewharton:butterknife-8.8.1" level="project" />
@@ -164,8 +166,8 @@
     <orderEntry type="library" name="com.youth.banner:banner-1.4.10" level="project" />
     <orderEntry type="library" scope="TEST" name="com.android.support.test:runner-0.5" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-maps-11.4.0" level="project" />
-    <orderEntry type="library" name="com.braintreepayments.api:braintree-2.14.1" level="project" />
-    <orderEntry type="library" name="com.paypal.android.sdk:paypal-one-touch-2.14.1" level="project" />
+    <orderEntry type="library" name="com.paypal.android.sdk:paypal-one-touch-2.14.2" level="project" />
+    <orderEntry type="library" name="com.braintreepayments.api:braintree-2.14.2" level="project" />
     <orderEntry type="library" name="com.braintreepayments.api:drop-in-3.1.0" level="project" />
     <orderEntry type="library" name="com.android.support:design-26.0.0" level="project" />
     <orderEntry type="library" name="com.android.support:transition-26.0.0" level="project" />

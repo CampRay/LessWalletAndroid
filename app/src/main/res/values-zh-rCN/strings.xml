@@ -15,6 +15,8 @@
     <string name="reg_lastname_hint">姓</string>
     <string name="reg_password_hint">密码</string>
     <string name="reg_repassword_hint">重输密码</string>
+    <string name="reg_password_short">密码字符长度太少 (最少7个字符)</string>
+    <string name="reg_password_leter">密码字符必须由字母和数字组成</string>
     <string name="reg_email_hint">电子邮箱</string>
     <string name="reg_address_hint">家庭地址</string>
     <string name="reg_country_hint">请选择你所在的国家</string>
@@ -35,7 +37,6 @@
     <string name="collect_export">导出二维码</string>
     <string name="collect_amount">收款金额</string>
     <string name="collect_currency_hint">请选择货币种类</string>
-    <string name="collect_amount_error">请选择货币种类</string>
     <string name="collect_export_success">导出QRCode图片成功</string>
     <string name="collect_export_failed">导出QRCode图片失败</string>
 
@@ -78,11 +79,13 @@
     <string name="coupon_publish_price">发布价格:</string>
     <string name="coupon_short_desc">简要说明:</string>
     <string name="coupon_benefit">用户权益:</string>
-    <string name="coupon_benefit_onetime">一次性</string>
-    <string name="coupon_benefit_precash">预付现金</string>
-    <string name="coupon_benefit_preservice">预付服务</string>
-    <string name="coupon_benefit_buyngetone">买N得一</string>
+    <string name="coupon_benefit_free">免费</string>
+    <string name="coupon_benefit_precash">代金</string>
+    <string name="coupon_benefit_discount">折扣</string>
+    <string name="coupon_benefit_customized"></string>
+    <string name="coupon_level">卡的级别:</string>
     <string name="coupon_validity">有效期:</string>
+    <string name="coupon_expiry_date">有效期限:</string>
     <string name="coupon_validity_day">天</string>
     <string name="coupon_validity_month">月</string>
     <string name="coupon_validity_year">年</string>
