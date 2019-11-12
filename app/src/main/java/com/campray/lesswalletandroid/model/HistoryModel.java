@@ -46,11 +46,7 @@ public class HistoryModel extends BaseModel {
      * @param listener
      */
     public void getAllHistorysFromServer(final OperationListener<List<History>> listener) {
-
-        //封装登录请求参数
-        JsonObject jObj=new JsonObject();
-        jObj.addProperty("device",this.getDeviceId());
-        this.httpPostAPI(HistoryModel.URL_API_GETALLHISTORIES, jObj,new ApiHandleListener<JsonObject>() {
+        this.httpPostAPI(HistoryModel.URL_API_GETALLHISTORIES, null,new ApiHandleListener<JsonObject>() {
             @Override
             public void done(JsonObject obj, AppException exception) {
                 if (exception == null) {
@@ -90,7 +86,6 @@ public class HistoryModel extends BaseModel {
     public List<History> getAllUnreadedHistories(final OperationListener<List<History>> listener) {
         //封装登录请求参数
         JsonObject jObj=new JsonObject();
-        jObj.addProperty("device",this.getDeviceId());
         jObj.addProperty("isvendor",false);
         this.httpPostAPI(HistoryModel.URL_API_MSGSYNC, jObj,new ApiHandleListener<JsonObject>() {
             @Override
@@ -144,7 +139,6 @@ public class HistoryModel extends BaseModel {
     public void delHistory(final long id,final OperationListener<History> listener) {
         //封装登录请求参数
         JsonObject jObj=new JsonObject();
-        jObj.addProperty("device",this.getDeviceId());
         jObj.addProperty("ids",id+"");
         this.httpPostAPI(HistoryModel.URL_API_DEL_HISTORIES, jObj,new ApiHandleListener<JsonObject>() {
             @Override

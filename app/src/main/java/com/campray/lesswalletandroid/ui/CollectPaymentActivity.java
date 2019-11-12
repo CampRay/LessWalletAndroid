@@ -66,8 +66,10 @@ public class CollectPaymentActivity extends MenuActivity {
         if(currencyList==null) {
             currencyList.add(new Currency(1L,"HK Dollar","HKD","1","HK$",1,false));
         }
-        for (Currency bean : currencyList) {
-            displayDataList.add(bean.getName());
+        else {
+            for (Currency bean : currencyList) {
+                displayDataList.add(bean.getName());
+            }
         }
     }
 

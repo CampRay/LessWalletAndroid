@@ -41,15 +41,19 @@ public class ProductDao extends AbstractDao<Product, Long> {
         public final static Property Agreement = new Property(6, String.class, "agreement", false, "AGREEMENT");
         public final static Property NumPrefix = new Property(7, String.class, "numPrefix", false, "NUM_PREFIX");
         public final static Property Price = new Property(8, float.class, "price", false, "PRICE");
-        public final static Property CurrencyCode = new Property(9, String.class, "currencyCode", false, "CURRENCY_CODE");
-        public final static Property StartTime = new Property(10, String.class, "startTime", false, "START_TIME");
-        public final static Property EndTime = new Property(11, String.class, "endTime", false, "END_TIME");
-        public final static Property Published = new Property(12, boolean.class, "published", false, "PUBLISHED");
-        public final static Property Deleted = new Property(13, boolean.class, "deleted", false, "DELETED");
-        public final static Property StockQuantity = new Property(14, int.class, "stockQuantity", false, "STOCK_QUANTITY");
-        public final static Property SpecAttr = new Property(15, String.class, "specAttr", false, "SPEC_ATTR");
-        public final static Property UserAttr = new Property(16, String.class, "userAttr", false, "USER_ATTR");
-        public final static Property MerchantId = new Property(17, Long.class, "merchantId", false, "MERCHANT_ID");
+        public final static Property UsePoint = new Property(9, boolean.class, "usePoint", false, "USE_POINT");
+        public final static Property Points = new Property(10, int.class, "points", false, "POINTS");
+        public final static Property AllowedQuantities = new Property(11, String.class, "allowedQuantities", false, "ALLOWED_QUANTITIES");
+        public final static Property CanBeForwarded = new Property(12, boolean.class, "canBeForwarded", false, "CAN_BE_FORWARDED");
+        public final static Property CurrencyCode = new Property(13, String.class, "currencyCode", false, "CURRENCY_CODE");
+        public final static Property StartTime = new Property(14, String.class, "startTime", false, "START_TIME");
+        public final static Property EndTime = new Property(15, String.class, "endTime", false, "END_TIME");
+        public final static Property Published = new Property(16, boolean.class, "published", false, "PUBLISHED");
+        public final static Property Deleted = new Property(17, boolean.class, "deleted", false, "DELETED");
+        public final static Property StockQuantity = new Property(18, int.class, "stockQuantity", false, "STOCK_QUANTITY");
+        public final static Property SpecAttr = new Property(19, String.class, "specAttr", false, "SPEC_ATTR");
+        public final static Property UserAttr = new Property(20, String.class, "userAttr", false, "USER_ATTR");
+        public final static Property MerchantId = new Property(21, Long.class, "merchantId", false, "MERCHANT_ID");
     }
 
     private DaoSession daoSession;
@@ -79,15 +83,19 @@ public class ProductDao extends AbstractDao<Product, Long> {
                 "\"AGREEMENT\" TEXT," + // 6: agreement
                 "\"NUM_PREFIX\" TEXT," + // 7: numPrefix
                 "\"PRICE\" REAL NOT NULL ," + // 8: price
-                "\"CURRENCY_CODE\" TEXT," + // 9: currencyCode
-                "\"START_TIME\" TEXT," + // 10: startTime
-                "\"END_TIME\" TEXT," + // 11: endTime
-                "\"PUBLISHED\" INTEGER NOT NULL ," + // 12: published
-                "\"DELETED\" INTEGER NOT NULL ," + // 13: deleted
-                "\"STOCK_QUANTITY\" INTEGER NOT NULL ," + // 14: stockQuantity
-                "\"SPEC_ATTR\" TEXT," + // 15: specAttr
-                "\"USER_ATTR\" TEXT," + // 16: userAttr
-                "\"MERCHANT_ID\" INTEGER);"); // 17: merchantId
+                "\"USE_POINT\" INTEGER NOT NULL ," + // 9: usePoint
+                "\"POINTS\" INTEGER NOT NULL ," + // 10: points
+                "\"ALLOWED_QUANTITIES\" TEXT," + // 11: allowedQuantities
+                "\"CAN_BE_FORWARDED\" INTEGER NOT NULL ," + // 12: canBeForwarded
+                "\"CURRENCY_CODE\" TEXT," + // 13: currencyCode
+                "\"START_TIME\" TEXT," + // 14: startTime
+                "\"END_TIME\" TEXT," + // 15: endTime
+                "\"PUBLISHED\" INTEGER NOT NULL ," + // 16: published
+                "\"DELETED\" INTEGER NOT NULL ," + // 17: deleted
+                "\"STOCK_QUANTITY\" INTEGER NOT NULL ," + // 18: stockQuantity
+                "\"SPEC_ATTR\" TEXT," + // 19: specAttr
+                "\"USER_ATTR\" TEXT," + // 20: userAttr
+                "\"MERCHANT_ID\" INTEGER);"); // 21: merchantId
     }
 
     /** Drops the underlying database table. */
@@ -128,38 +136,46 @@ public class ProductDao extends AbstractDao<Product, Long> {
             stmt.bindString(8, numPrefix);
         }
         stmt.bindDouble(9, entity.getPrice());
+        stmt.bindLong(10, entity.getUsePoint() ? 1L: 0L);
+        stmt.bindLong(11, entity.getPoints());
+ 
+        String allowedQuantities = entity.getAllowedQuantities();
+        if (allowedQuantities != null) {
+            stmt.bindString(12, allowedQuantities);
+        }
+        stmt.bindLong(13, entity.getCanBeForwarded() ? 1L: 0L);
  
         String currencyCode = entity.getCurrencyCode();
         if (currencyCode != null) {
-            stmt.bindString(10, currencyCode);
+            stmt.bindString(14, currencyCode);
         }
  
         String startTime = entity.getStartTime();
         if (startTime != null) {
-            stmt.bindString(11, startTime);
+            stmt.bindString(15, startTime);
         }
  
         String endTime = entity.getEndTime();
         if (endTime != null) {
-            stmt.bindString(12, endTime);
+            stmt.bindString(16, endTime);
         }
-        stmt.bindLong(13, entity.getPublished() ? 1L: 0L);
-        stmt.bindLong(14, entity.getDeleted() ? 1L: 0L);
-        stmt.bindLong(15, entity.getStockQuantity());
+        stmt.bindLong(17, entity.getPublished() ? 1L: 0L);
+        stmt.bindLong(18, entity.getDeleted() ? 1L: 0L);
+        stmt.bindLong(19, entity.getStockQuantity());
  
         List specAttr = entity.getSpecAttr();
         if (specAttr != null) {
-            stmt.bindString(16, specAttrConverter.convertToDatabaseValue(specAttr));
+            stmt.bindString(20, specAttrConverter.convertToDatabaseValue(specAttr));
         }
  
         List userAttr = entity.getUserAttr();
         if (userAttr != null) {
-            stmt.bindString(17, userAttrConverter.convertToDatabaseValue(userAttr));
+            stmt.bindString(21, userAttrConverter.convertToDatabaseValue(userAttr));
         }
  
         Long merchantId = entity.getMerchantId();
         if (merchantId != null) {
-            stmt.bindLong(18, merchantId);
+            stmt.bindLong(22, merchantId);
         }
     }
 
@@ -195,38 +211,46 @@ public class ProductDao extends AbstractDao<Product, Long> {
             stmt.bindString(8, numPrefix);
         }
         stmt.bindDouble(9, entity.getPrice());
+        stmt.bindLong(10, entity.getUsePoint() ? 1L: 0L);
+        stmt.bindLong(11, entity.getPoints());
+ 
+        String allowedQuantities = entity.getAllowedQuantities();
+        if (allowedQuantities != null) {
+            stmt.bindString(12, allowedQuantities);
+        }
+        stmt.bindLong(13, entity.getCanBeForwarded() ? 1L: 0L);
  
         String currencyCode = entity.getCurrencyCode();
         if (currencyCode != null) {
-            stmt.bindString(10, currencyCode);
+            stmt.bindString(14, currencyCode);
         }
  
         String startTime = entity.getStartTime();
         if (startTime != null) {
-            stmt.bindString(11, startTime);
+            stmt.bindString(15, startTime);
         }
  
         String endTime = entity.getEndTime();
         if (endTime != null) {
-            stmt.bindString(12, endTime);
+            stmt.bindString(16, endTime);
         }
-        stmt.bindLong(13, entity.getPublished() ? 1L: 0L);
-        stmt.bindLong(14, entity.getDeleted() ? 1L: 0L);
-        stmt.bindLong(15, entity.getStockQuantity());
+        stmt.bindLong(17, entity.getPublished() ? 1L: 0L);
+        stmt.bindLong(18, entity.getDeleted() ? 1L: 0L);
+        stmt.bindLong(19, entity.getStockQuantity());
  
         List specAttr = entity.getSpecAttr();
         if (specAttr != null) {
-            stmt.bindString(16, specAttrConverter.convertToDatabaseValue(specAttr));
+            stmt.bindString(20, specAttrConverter.convertToDatabaseValue(specAttr));
         }
  
         List userAttr = entity.getUserAttr();
         if (userAttr != null) {
-            stmt.bindString(17, userAttrConverter.convertToDatabaseValue(userAttr));
+            stmt.bindString(21, userAttrConverter.convertToDatabaseValue(userAttr));
         }
  
         Long merchantId = entity.getMerchantId();
         if (merchantId != null) {
-            stmt.bindLong(18, merchantId);
+            stmt.bindLong(22, merchantId);
         }
     }
 
@@ -253,15 +277,19 @@ public class ProductDao extends AbstractDao<Product, Long> {
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // agreement
             cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // numPrefix
             cursor.getFloat(offset + 8), // price
-            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // currencyCode
-            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // startTime
-            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // endTime
-            cursor.getShort(offset + 12) != 0, // published
-            cursor.getShort(offset + 13) != 0, // deleted
-            cursor.getInt(offset + 14), // stockQuantity
-            cursor.isNull(offset + 15) ? null : specAttrConverter.convertToEntityProperty(cursor.getString(offset + 15)), // specAttr
-            cursor.isNull(offset + 16) ? null : userAttrConverter.convertToEntityProperty(cursor.getString(offset + 16)), // userAttr
-            cursor.isNull(offset + 17) ? null : cursor.getLong(offset + 17) // merchantId
+            cursor.getShort(offset + 9) != 0, // usePoint
+            cursor.getInt(offset + 10), // points
+            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // allowedQuantities
+            cursor.getShort(offset + 12) != 0, // canBeForwarded
+            cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13), // currencyCode
+            cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14), // startTime
+            cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15), // endTime
+            cursor.getShort(offset + 16) != 0, // published
+            cursor.getShort(offset + 17) != 0, // deleted
+            cursor.getInt(offset + 18), // stockQuantity
+            cursor.isNull(offset + 19) ? null : specAttrConverter.convertToEntityProperty(cursor.getString(offset + 19)), // specAttr
+            cursor.isNull(offset + 20) ? null : userAttrConverter.convertToEntityProperty(cursor.getString(offset + 20)), // userAttr
+            cursor.isNull(offset + 21) ? null : cursor.getLong(offset + 21) // merchantId
         );
         return entity;
     }
@@ -277,15 +305,19 @@ public class ProductDao extends AbstractDao<Product, Long> {
         entity.setAgreement(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
         entity.setNumPrefix(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
         entity.setPrice(cursor.getFloat(offset + 8));
-        entity.setCurrencyCode(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
-        entity.setStartTime(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
-        entity.setEndTime(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
-        entity.setPublished(cursor.getShort(offset + 12) != 0);
-        entity.setDeleted(cursor.getShort(offset + 13) != 0);
-        entity.setStockQuantity(cursor.getInt(offset + 14));
-        entity.setSpecAttr(cursor.isNull(offset + 15) ? null : specAttrConverter.convertToEntityProperty(cursor.getString(offset + 15)));
-        entity.setUserAttr(cursor.isNull(offset + 16) ? null : userAttrConverter.convertToEntityProperty(cursor.getString(offset + 16)));
-        entity.setMerchantId(cursor.isNull(offset + 17) ? null : cursor.getLong(offset + 17));
+        entity.setUsePoint(cursor.getShort(offset + 9) != 0);
+        entity.setPoints(cursor.getInt(offset + 10));
+        entity.setAllowedQuantities(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
+        entity.setCanBeForwarded(cursor.getShort(offset + 12) != 0);
+        entity.setCurrencyCode(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
+        entity.setStartTime(cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14));
+        entity.setEndTime(cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15));
+        entity.setPublished(cursor.getShort(offset + 16) != 0);
+        entity.setDeleted(cursor.getShort(offset + 17) != 0);
+        entity.setStockQuantity(cursor.getInt(offset + 18));
+        entity.setSpecAttr(cursor.isNull(offset + 19) ? null : specAttrConverter.convertToEntityProperty(cursor.getString(offset + 19)));
+        entity.setUserAttr(cursor.isNull(offset + 20) ? null : userAttrConverter.convertToEntityProperty(cursor.getString(offset + 20)));
+        entity.setMerchantId(cursor.isNull(offset + 21) ? null : cursor.getLong(offset + 21));
      }
     
     @Override

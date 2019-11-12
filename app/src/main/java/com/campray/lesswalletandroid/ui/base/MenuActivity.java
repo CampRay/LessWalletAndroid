@@ -153,7 +153,7 @@ public class MenuActivity extends BaseActivity implements EasyPermissions.Permis
                     try {
                         //String text=EncryptionUtil.desECBDecrypt(result,"lesswalletCampRay@201404");
                         String text=new String(Base64.decode(result,Base64.DEFAULT),"UTF-8");
-                        Toast.makeText(this, "解析结果:" + text, Toast.LENGTH_LONG).show();
+                        //Toast.makeText(this, "解析结果:" + text, Toast.LENGTH_LONG).show();
                         String[] strArr=text.split(":");
                         if(strArr.length>0) {
                             String model=strArr[0];

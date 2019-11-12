@@ -130,17 +130,18 @@
 
                     <TextView
                         android:id="@+id/tv_benefit"
-                        android:layout_width="135dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="5dp"
                         android:textColor="@color/colorAccent"
                         android:textSize="12sp"
-                        tools:text="@string/coupon_benefit_buyngetone" />
+                        tools:text="@string/coupon_benefit_customized" />
 
                     <TextView
                         android:id="@+id/tv_benefit_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:paddingLeft="5dp"
                         android:textColor="@color/colorAccent"
                         android:textSize="12sp"
                         tools:text="10" />
@@ -188,6 +189,54 @@
                     android:paddingRight="10dp"
                     android:textColor="#313131"
                     android:textSize="10sp" />
+
+                <LinearLayout
+                    android:id="@+id/ll_quantity"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:paddingTop="5dp"
+                    android:visibility="visible">
+
+                    <TextView
+                        android:layout_width="@dimen/x100"
+                        android:layout_height="wrap_content"
+                        android:layout_column="0"
+                        android:layout_columnWeight="1"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="5dp"
+                        android:layout_row="1"
+                        android:text="@string/coupon_purchase_quantity"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="12sp" />
+
+                    <EditText
+                        android:id="@+id/et_quantity"
+                        android:layout_width="50dp"
+                        android:layout_height="@dimen/x22"
+                        android:background="@drawable/input_bg"
+                        android:inputType="number"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="5dp"
+                        android:text="1"
+                        android:textColor="#000000"
+                        android:textSize="12sp" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff">
+
+                        <Spinner
+                            android:id="@+id/sp_quantity"
+                            android:layout_width="@dimen/x80"
+                            android:layout_height="@dimen/x22"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="5dp"
+                            android:visibility="gone" />
+                    </LinearLayout>
+                </LinearLayout>
 
             </LinearLayout>
 

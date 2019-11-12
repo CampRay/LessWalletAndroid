@@ -199,8 +199,12 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
      * @param position
      */
     public void remove(int position) {
-        lists.remove(position);
-        notifyDataSetChanged();
+        if(lists!=null) {
+            try {
+                lists.remove(position);
+                notifyDataSetChanged();
+            }catch (Exception e){}
+        }
     }
 
     /**
@@ -209,7 +213,10 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
      * @return
      */
     public T getItem(int position) {
-        return lists.get(position);
+        if(lists.size()>0) {
+            return lists.get(position);
+        }
+        return null;
     }
 
     /**

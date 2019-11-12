@@ -236,8 +236,8 @@
                 android:layout_columnWeight="3.5"
                 android:layout_gravity="left|center_vertical"
                 android:layout_row="0"
-                tools:text="CampRay"
-                android:textColor="#000000" />
+                android:textColor="#000000"
+                tools:text="CampRay" />
 
             <ImageView
                 android:id="@+id/iv_love"

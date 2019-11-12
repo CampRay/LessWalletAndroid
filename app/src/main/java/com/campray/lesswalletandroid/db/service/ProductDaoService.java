@@ -4,17 +4,15 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.campray.lesswalletandroid.LessWalletApplication;
-import com.campray.lesswalletandroid.db.dao.CountryDao;
-import com.campray.lesswalletandroid.db.dao.CouponDao;
 import com.campray.lesswalletandroid.db.dao.ProductDao;
 import com.campray.lesswalletandroid.db.dao.DaoMaster;
 import com.campray.lesswalletandroid.db.dao.DaoSession;
-import com.campray.lesswalletandroid.db.dao.UserDao;
-import com.campray.lesswalletandroid.db.entity.Product;
 import com.campray.lesswalletandroid.db.entity.Product;
 import com.campray.lesswalletandroid.db.entity.User;
 
 import org.greenrobot.greendao.query.Query;
+import org.greenrobot.greendao.query.QueryBuilder;
+import org.greenrobot.greendao.query.WhereCondition;
 
 import java.util.List;
 
@@ -120,7 +118,15 @@ public class ProductDaoService {
      */
     public List<Product> getPageProductByType(int typeId,int pageNum,int pageSize){
         ProductDao dao =openReadableDb().getProductDao();
-        return dao.queryBuilder().where(ProductDao.Properties.ProductTypeId.eq(typeId)).offset((pageNum-1)*pageSize).limit(pageSize).build().list();
+//        Query query = dao.queryRawCreate(
+//                ", COUPON G WHERE T.PRODUCT_TYPE_ID=? AND T._ID=G.PRODUCT_ID", typeId+"");
+
+//        Query query = dao.queryBuilder().where(
+//                new StringCondition("_ID IN " +
+//                        "(SELECT PRODUCT_ID FROM COUPON WHERE DELETED = 0)").build();
+        return dao.queryBuilder().where(ProductDao.Properties.ProductTypeId.eq(typeId),
+                new WhereCondition.StringCondition("T._id IN " +"(SELECT C.PRODUCT_ID FROM COUPON C WHERE C.PRODUCT_ID = T._id)"))
+                .offset((pageNum-1)*pageSize).limit(pageSize).build().list();
     }
 
 

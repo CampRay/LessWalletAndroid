@@ -1,6 +1,9 @@
 package com.campray.lesswalletandroid.model;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.text.TextUtils;
 
@@ -14,6 +17,8 @@ import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
+import java.util.concurrent.Future;
+
 import static com.campray.lesswalletandroid.LessWalletApplication.INSTANCE;
 
 /**
@@ -24,15 +29,21 @@ import static com.campray.lesswalletandroid.LessWalletApplication.INSTANCE;
  */
 public abstract class BaseModel {
     public String deviceId=null;
-    public static final String HOST="http://192.168.2.3:15536";
+    public static final String HOST="http://192.168.1.4:15536";
+//    public static final String HOST="http://192.168.2.3:8096";
 //    public static final String HOST="http://47.106.94.90:8888";
     public static final String URL_API_LOGIN=HOST+"/Plugins/API/Login";
     public static final String URL_API_REGISTER=HOST+"/Plugins/API/Register";
     public static final String URL_API_GETPRODUCT=HOST+"/Plugins/API/GetProduct";
+    public static final String URL_API_GET_PRICE_STOCK=HOST+"/Plugins/API/GetProductPriceAndStock";
+    public static final String URL_API_EDIT_USER=HOST+"Plugins/API/EditUser";
+
     public static final String URL_API_CREATEORDER=HOST+"/Plugins/API/CreateOrder";
     public static final String URL_API_GETCOUPON=HOST+"/Plugins/API/GetCoupon";
     public static final String URL_API_GETALLCOUPONS=HOST+"/Plugins/API/GetAllCoupons";
     public static final String URL_API_DELCOUPONS=HOST+"/Plugins/API/DeleteCoupons";
+    public static final String URL_API_RESTORE_COUPONS=HOST+"/Plugins/API/RestoreCoupons";
+
     public static final String URL_API_GETALLCOUNTRIES=HOST+"/Plugins/API/GetAllCountries";
     public static final String URL_API_GETALLLANGUAGES=HOST+"/Plugins/API/GetAllLanguages";
     public static final String URL_API_GETALLCURRENCIES=HOST+"/Plugins/API/GetAllCurrencyes";
@@ -46,6 +57,11 @@ public abstract class BaseModel {
     public static final String URL_API_ADD_FRIEND=HOST+"/Plugins/API/AddFriend";
     public static final String URL_API_DEL_FRIEND=HOST+"/Plugins/API/DelFriend";
     public static final String URL_API_SENT_COUPON=HOST+"/Plugins/API/SentCoupon";
+
+    public static final String URL_API_GET_ALL_ATTENTION=HOST+"/Plugins/API/GetAllAttention";
+    public static final String URL_API_ADD_ATTENTION=HOST+"/Plugins/API/AddAttention";
+    public static final String URL_API_DEL_ATTENTION=HOST+"/Plugins/API/DelAttention";
+
 
     public static final String URL_API_MSGSYNC=HOST+"/Plugins/API/MsgSync";
     public static final String URL_API_DEL_HISTORIES=HOST+"/Plugins/API/DelLogs";
@@ -82,6 +98,7 @@ public abstract class BaseModel {
             }
             Ion.with(getContext()).load(url)
                 .addHeader("Authorization",token)
+                .addHeader("Device",getDeviceId())
                 .setJsonObjectBody(json)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
@@ -95,6 +112,20 @@ public abstract class BaseModel {
                     }
                 });
         }
+    }
+
+    /**
+     * 获取网络http请求的图片（同步方法，不用开启异步线程）
+     * @param path
+     * @return Drawable
+     */
+    public Drawable httpRequestImage(String path){
+        try {
+            Future<Bitmap> bitmapFuture = Ion.with(getContext()).load(path).asBitmap();
+            Bitmap bitmap = bitmapFuture.get();
+            return new BitmapDrawable(getContext().getResources(),bitmap);
+        } catch (Exception e) {}
+        return null;
     }
 
 }

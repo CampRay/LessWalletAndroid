@@ -11,11 +11,13 @@ import com.campray.lesswalletandroid.LessWalletApplication;
 import com.campray.lesswalletandroid.R;
 import com.campray.lesswalletandroid.db.entity.Coupon;
 import com.campray.lesswalletandroid.db.entity.Friend;
+import com.campray.lesswalletandroid.db.entity.Merchant;
 import com.campray.lesswalletandroid.db.entity.User;
 import com.campray.lesswalletandroid.event.LoginedEvent;
 import com.campray.lesswalletandroid.listener.OperationListener;
 import com.campray.lesswalletandroid.model.CouponModel;
 import com.campray.lesswalletandroid.model.FriendModel;
+import com.campray.lesswalletandroid.model.MerchantModel;
 import com.campray.lesswalletandroid.model.UserModel;
 import com.campray.lesswalletandroid.ui.base.BaseActivity;
 import com.campray.lesswalletandroid.util.AppException;
@@ -65,21 +67,27 @@ public class LoginActivity extends BaseActivity {
             public void done(User user, AppException exe) {
             if (exe == null) {
                 LessWalletApplication.INSTANCE().setAccount(user);
-//                //获取当前用户在此App登录次数
-//                int loginNum=Util.getIntValue(LoginActivity.this,user.getUserName());
-//                //如果用户是第一次登录，则需从服务器获取所有的卡卷数据
-//                if(loginNum==0){
-                    CouponModel.getInstance().getAllCouponsFromServer(new OperationListener<List<Coupon>>(){
-                        @Override
-                        public void done(List<Coupon> obj, AppException exception) {}
-                    });
-                    FriendModel.getInstance().getAllFriends(new OperationListener<List<Friend>>() {
-                        @Override
-                        public void done(List<Friend> obj, AppException exception) {}
-                    });
-//                }
-//                loginNum++;
-//                Util.putIntValue(LoginActivity.this,user.getUserName(),loginNum);
+                CouponModel.getInstance().getAllCouponsFromServer(new OperationListener<List<Coupon>>(){
+                    @Override
+                    public void done(List<Coupon> obj, AppException exception) {}
+                });
+                FriendModel.getInstance().getAllFriends(new OperationListener<List<Friend>>() {
+                    @Override
+                    public void done(List<Friend> obj, AppException exception) {}
+                });
+                //查询关注的商户
+                MerchantModel.getInstance().getAllAttentionFromServer(new OperationListener<List<Merchant>>() {
+                    @Override
+                    public void done(List<Merchant> obj, AppException exception) {
+                        if(obj!=null) {
+                            List<Long> attentions=LessWalletApplication.INSTANCE().getAttentions();
+                            attentions.clear();
+                            for (Merchant item : obj) {
+                                attentions.add(item.getId());
+                            }
+                        }
+                    }
+                });
                 startActivity(MainActivity.class, null, true);
             } else {
                 toast(exe.toString(getApplicationContext()));

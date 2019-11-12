@@ -75,6 +75,23 @@
                     android:textColor="#454545" />
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/ll_uservalues"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#ffffff"
+                android:orientation="horizontal"
+                android:padding="5dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/tv_uservalues"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#454545" />
+
+            </LinearLayout>
+
             <ImageView
                 android:id="@+id/iv_qrcode"
                 android:layout_width="match_parent"
@@ -85,6 +102,7 @@
                 tools:src="@mipmap/ic_launcher" />
 
             <LinearLayout
+                android:id="@+id/ll_benefit"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
@@ -112,6 +130,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_validty"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"

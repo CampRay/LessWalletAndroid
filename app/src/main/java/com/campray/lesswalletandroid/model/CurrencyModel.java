@@ -1,5 +1,7 @@
 package com.campray.lesswalletandroid.model;
 
+import android.text.TextUtils;
+
 import com.campray.lesswalletandroid.db.entity.Currency;
 import com.campray.lesswalletandroid.db.service.CurrencyDaoService;
 import com.campray.lesswalletandroid.listener.ApiHandleListener;
@@ -45,15 +47,16 @@ public class CurrencyModel extends BaseModel {
                                 JsonArray jArr = obj.get("Data").getAsJsonArray();
                                 Gson gson = new Gson();
                                 List<Currency> currencyList = gson.fromJson(jArr, new TypeToken<List<Currency>>() {}.getType());
-                                for(Currency currency:currencyList){
+                                if(currencyList!=null) {
+                                    for (Currency currency : currencyList) {
 //                                for(JsonElement item:jArr){
 //                                    Currency currency = gson.fromJson(item, Currency.class);
-                                    try {
-                                        long row = CurrencyDaoService.getInstance(getContext()).insertOrUpdateCurrency(currency);
-                                    }
-                                    catch (Exception exe){
-                                        listener.done(null, new AppException("E_1005"));
-                                        break;
+                                        try {
+                                            long row = CurrencyDaoService.getInstance(getContext()).insertOrUpdateCurrency(currency);
+                                        } catch (Exception exe) {
+                                            listener.done(null, new AppException("E_1005"));
+                                            break;
+                                        }
                                     }
                                 }
                             }
@@ -130,6 +133,18 @@ public class CurrencyModel extends BaseModel {
      */
     public Currency getDefaultCurrency(){
         return CurrencyDaoService.getInstance(getContext()).getDefaultCurrency();
+    }
+
+    /**
+     * 获取默认的货币显示字符
+     * @return
+     */
+    public String getCurrencyFormatting(){
+        Currency currency= getDefaultCurrency();
+        if(!TextUtils.isEmpty(currency.getCustomFormatting())){
+            return currency.getCustomFormatting().replace("0.00","%.2f");
+        }
+        return "%s";
     }
 
 }

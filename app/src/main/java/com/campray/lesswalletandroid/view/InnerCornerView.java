@@ -56,6 +56,7 @@ public class InnerCornerView extends View {
 
     public void setCornerColor(int cornerColor) {
         this.cornerColor = cornerColor;
+        requestLayout();
     }
 
     /**

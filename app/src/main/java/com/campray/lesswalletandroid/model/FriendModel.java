@@ -3,6 +3,7 @@ package com.campray.lesswalletandroid.model;
 import android.net.Uri;
 import android.text.TextUtils;
 
+import com.campray.lesswalletandroid.LessWalletApplication;
 import com.campray.lesswalletandroid.db.entity.Friend;
 import com.campray.lesswalletandroid.db.entity.Language;
 import com.campray.lesswalletandroid.db.service.FriendDaoService;
@@ -16,6 +17,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import org.w3c.dom.Text;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -51,7 +55,6 @@ public class FriendModel extends BaseModel {
 
         //封装登录请求参数
         JsonObject jObj=new JsonObject();
-        jObj.addProperty("device",this.getDeviceId());
         jObj.addProperty("search",searchStr);
         this.httpPostAPI(FriendModel.URL_API_SEARCH_USER, jObj,new ApiHandleListener<JsonObject>() {
             @Override
@@ -91,9 +94,7 @@ public class FriendModel extends BaseModel {
      */
     public List<Friend> getAllFriends(final OperationListener<List<Friend>> listener) {
         //封装登录请求参数
-        JsonObject jObj=new JsonObject();
-        jObj.addProperty("device",this.getDeviceId());
-        this.httpPostAPI(FriendModel.URL_API_GET_FRIENDS, jObj,new ApiHandleListener<JsonObject>() {
+        this.httpPostAPI(FriendModel.URL_API_GET_FRIENDS, null,new ApiHandleListener<JsonObject>() {
             @Override
             public void done(JsonObject obj, AppException exception) {
                 if (exception == null) {
@@ -114,16 +115,20 @@ public class FriendModel extends BaseModel {
                                     fList.add(friend);
                                     //保存图片到本地
                                     final String avatarUrl = friend.getAvatarUrl();
-                                    new Thread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Uri uri = ImageUtil.saveImageToUri(avatarUrl);
-                                            if (uri != null) {
-                                                friend.setAvatorPath(uri.toString());
-                                                FriendDaoService.getInstance(getContext()).insertOrUpdateFriend(friend);
+                                    if(!TextUtils.isEmpty(avatarUrl)) {
+                                        new Thread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                File folder= LessWalletApplication.INSTANCE().getPrivateDir();
+                                                File picFile=new File(folder,"avatar_"+friend.getId());
+                                                Uri uri = ImageUtil.saveImageToUri(avatarUrl,picFile);
+                                                if (uri != null) {
+                                                    friend.setAvatorPath(uri.toString());
+                                                    FriendDaoService.getInstance(getContext()).insertOrUpdateFriend(friend);
+                                                }
                                             }
-                                        }
-                                    }).start();
+                                        }).start();
+                                    }
                                 }
                                 listener.done(fList, null);
                             }
@@ -183,7 +188,6 @@ public class FriendModel extends BaseModel {
     public void addFriend(String username,final OperationListener<Friend> listener) {
         //封装登录请求参数
         JsonObject jObj=new JsonObject();
-        jObj.addProperty("device",this.getDeviceId());
         jObj.addProperty("username",username);
         this.httpPostAPI(FriendModel.URL_API_ADD_FRIEND, jObj,new ApiHandleListener<JsonObject>() {
             @Override
@@ -205,7 +209,9 @@ public class FriendModel extends BaseModel {
                                         new Thread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                Uri uri = ImageUtil.saveImageToUri(avatarUrl);
+                                                File folder= LessWalletApplication.INSTANCE().getPrivateDir();
+                                                File picFile=new File(folder,"avatar_"+friend.getId());
+                                                Uri uri = ImageUtil.saveImageToUri(avatarUrl,picFile);
                                                 if (uri != null) {
                                                     friend.setAvatorPath(uri.toString());
                                                     FriendDaoService.getInstance(getContext()).insertOrUpdateFriend(friend);
@@ -244,7 +250,6 @@ public class FriendModel extends BaseModel {
     public void delFriend(String username,final OperationListener<Friend> listener) {
         //封装登录请求参数
         JsonObject jObj=new JsonObject();
-        jObj.addProperty("device",this.getDeviceId());
         jObj.addProperty("username",username);
         this.httpPostAPI(FriendModel.URL_API_DEL_FRIEND, jObj,new ApiHandleListener<JsonObject>() {
             @Override

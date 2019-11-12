@@ -47,13 +47,14 @@ public class SliderModel extends BaseModel {
                                 JsonArray jArr = obj.get("Data").getAsJsonArray();
                                 Gson gson = new Gson();
                                 List<Slider> sliderList = gson.fromJson(jArr, new TypeToken<List<Slider>>() {}.getType());
-                                for(Slider slider:sliderList){
-                                    try {
-                                        SliderDaoService.getInstance(getContext()).insertOrUpdateSlider(slider);
-                                    }
-                                    catch (Exception exe){
-                                        listener.done(null, new AppException("E_1005"));
-                                        break;
+                                if(sliderList!=null) {
+                                    for (Slider slider : sliderList) {
+                                        try {
+                                            SliderDaoService.getInstance(getContext()).insertOrUpdateSlider(slider);
+                                        } catch (Exception exe) {
+                                            listener.done(null, new AppException("E_1005"));
+                                            break;
+                                        }
                                     }
                                 }
                             }

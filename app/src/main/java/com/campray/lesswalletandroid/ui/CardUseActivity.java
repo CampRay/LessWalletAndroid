@@ -1,6 +1,9 @@
 package com.campray.lesswalletandroid.ui;
 
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.TextUtils;
@@ -10,16 +13,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.campray.lesswalletandroid.LessWalletApplication;
 import com.campray.lesswalletandroid.R;
 import com.campray.lesswalletandroid.db.entity.Coupon;
 import com.campray.lesswalletandroid.db.entity.CouponStyle;
 import com.campray.lesswalletandroid.event.RefreshEvent;
+import com.campray.lesswalletandroid.model.BaseModel;
 import com.campray.lesswalletandroid.model.CouponModel;
+import com.campray.lesswalletandroid.model.ProductModel;
 import com.campray.lesswalletandroid.qrcode.encode.QRCodeEncoder;
 import com.campray.lesswalletandroid.ui.base.MenuActivity;
+import com.campray.lesswalletandroid.util.ImageUtil;
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.WriterException;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -85,7 +89,7 @@ public class CardUseActivity extends MenuActivity {
     }
 
     private void loadData(long couponId){
-        Coupon coupon=CouponModel.getInstance().getCouponById(couponId);
+        final Coupon coupon=CouponModel.getInstance().getCouponById(couponId);
         if(coupon!=null) {
             CouponStyle couponStyle = coupon.getCouponStyle();
             if (couponStyle != null) {
@@ -129,9 +133,30 @@ public class CardUseActivity extends MenuActivity {
             tv_expired.setText(expired);
 
             //显示html文本（只有html样式,不带图片）
-            if (!TextUtils.isEmpty(coupon.getProduct().getAgreement())) {
-                tv_desc.setText(Html.fromHtml(coupon.getProduct().getFullDesc()));
+            if (!TextUtils.isEmpty(coupon.getProduct().getFullDesc())) {
+                final Html.ImageGetter imageGetter = new Html.ImageGetter() {
+                    public Drawable getDrawable(String source) {
+                        if(!source.startsWith("http:")){
+                            source= BaseModel.HOST+source;
+                        }
+//                        Bitmap bitmap=ImageUtil.GetImageInputStream(source);
+//                        Drawable drawable = new BitmapDrawable(getResources(),bitmap);
+                        Drawable drawable = ProductModel.getInstance().httpRequestImage(source);
+                        if(drawable!=null) {
+                            drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+                        }
+                        return drawable;
+                    }
+                };
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    tv_desc.setText(Html.fromHtml(coupon.getProduct().getFullDesc(),Html.FROM_HTML_MODE_COMPACT,imageGetter,null));
+                }
+                else{
+                    tv_desc.setText(Html.fromHtml(coupon.getProduct().getFullDesc()));
+                }
             }
+
             try {
                 String couponStr = "card:" + coupon.getOrderId();
                 Bitmap qrCodeBitmap = QRCodeEncoder.encodeAsBitmap(Base64.encodeToString(couponStr.getBytes("UTF-8"), Base64.DEFAULT), BarcodeFormat.QR_CODE, 200);
@@ -145,6 +170,15 @@ public class CardUseActivity extends MenuActivity {
             finish();
         }
 
+    }
+
+    /**
+     * 注册消息接收事件，接收EventBus通過EventBus.getDefault().post(T)方法发出的事件通知，onMessageEvent(T)方法就会自动接收并处理些事件通知
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(RefreshEvent event){
+        finish();
     }
 
 }

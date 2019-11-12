@@ -154,20 +154,16 @@ public class ImageUtil {
     /**
      * 保存图片文件到外部存储
      * @param bmp
+     * @param filename 文件名
      * @param suffixName 后缀名
      * @return
      */
-    public static File saveImage(Bitmap bmp,String suffixName) {
+    public static File saveImage(Bitmap bmp,String filename,String suffixName) {
         //如果外部存储状态不是mounted，无法读写
         if(!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
             return null;
         }
-        File appDir = new File(Environment.getExternalStorageDirectory(), "images");
-        if (!appDir.exists()) {
-            appDir.mkdir();
-        }
-        String fileName = System.currentTimeMillis() + "."+suffixName;
-        File file = new File(appDir, fileName);
+        File file = new File(filename);
         try {
             FileOutputStream fos = new FileOutputStream(file);
             if("png".equalsIgnoreCase(suffixName)) {
@@ -189,21 +185,49 @@ public class ImageUtil {
 
     /**
      * 保存图片文件到外部存储
-     * @param inputStream
+     * @param bmp
+     * @param file 图片文件
      * @param suffixName 后缀名
      * @return
      */
-    public static File saveImage(InputStream inputStream,String suffixName) {
+    public static File saveImage(Bitmap bmp,File file,String suffixName) {
         //如果外部存储状态不是mounted，无法读写
         if(!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
             return null;
         }
-        File appDir = new File(Environment.getExternalStorageDirectory(), "images");
-        if (!appDir.exists()) {
-            appDir.mkdir();
+
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            if("png".equalsIgnoreCase(suffixName)) {
+                bmp.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            }
+            else{
+                bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            }
+            fos.flush();
+            fos.close();
+            return file;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        String fileName = System.currentTimeMillis() + "."+suffixName;
-        File file = new File(appDir, fileName);
+        return null;
+    }
+
+    /**
+     * 保存图片文件到指定文件路径
+     * @param inputStream
+     * @param filename
+     * @return
+     */
+    public static File saveImage(InputStream inputStream,String filename) {
+        //如果外部存储状态不是mounted，无法读写
+        if(!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+            return null;
+        }
+
+        File file = new File(filename);
         try {
             FileOutputStream fos = new FileOutputStream(file);
             byte[] buffer = new byte[1024];
@@ -224,26 +248,44 @@ public class ImageUtil {
     }
 
     /**
-     * 保存图片文件到外部存储
-     * @param bmp
+     * 保存图片文件到指定文件路径
+     * @param inputStream
+     * @param file
      * @return
      */
-    public static Uri saveImageToUri(Bitmap bmp,String suffixName) {
-        File file=saveImage(bmp,suffixName);
-        if(file!=null&&file.exists()){
-            return Uri.fromFile(file);
+    public static File saveImage(InputStream inputStream,File file) {
+        //如果外部存储状态不是mounted，无法读写
+        if(!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+            return null;
+        }
+
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            byte[] buffer = new byte[1024];
+            int len = 0;
+            while ((len = inputStream.read(buffer)) != -1) {
+                fos.write(buffer, 0, len);
+            }
+            inputStream.close();
+            fos.flush();
+            fos.close();
+            return file;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return null;
     }
 
+
     /**
      * 保存网络图片文件到外部存储
      * @param imageurl
+     * @param picfile
      * @return Uri
      */
-    public static Uri saveImageToUri(String imageurl) {
-        String[] strArr = imageurl.split("\\.");
-        String suffixName=strArr[strArr.length - 1];
+    public static Uri saveImageToUri(String imageurl,File picfile) {
         URL url = null;
         try {
             url = new URL(imageurl);
@@ -253,7 +295,7 @@ public class ImageUtil {
             connection.setDoInput(true);
             connection.setUseCaches(false); //设置不使用缓存
             if (connection.getResponseCode() == 200) {
-                File file = saveImage(connection.getInputStream(), suffixName);
+                File file = saveImage(connection.getInputStream(),picfile);
                 if (file != null && file.exists()) {
                     return Uri.fromFile(file);
                 }
@@ -301,9 +343,7 @@ public class ImageUtil {
     public static Uri saveBmp2Gallery(Bitmap bmp, String picName) {
         String fileName = null;
         //系统相册目录
-        String galleryPath= Environment.getExternalStorageDirectory()
-                + File.separator + Environment.DIRECTORY_DCIM
-                +File.separator+"Camera"+File.separator;
+        File galleryPath= Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         // 声明文件对象
         File file = null;
         // 声明输出流

@@ -2,6 +2,7 @@ package com.campray.lesswalletandroid;
 
 import android.app.Application;
 import android.content.SharedPreferences;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 
 import com.campray.lesswalletandroid.db.entity.User;
@@ -11,6 +12,8 @@ import com.campray.lesswalletandroid.util.Util;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -20,6 +23,7 @@ import java.io.FileReader;
  */
 public class LessWalletApplication extends Application{
     private User account;//当前登录用户
+    private List<Long> attentions=new ArrayList<Long>();
 
     private static LessWalletApplication INSTANCE;
     public static LessWalletApplication INSTANCE(){
@@ -80,4 +84,41 @@ public class LessWalletApplication extends Application{
         }
     }
 
+    public List<Long> getAttentions() {
+        return attentions;
+    }
+
+    public void setAttentions(List<Long> attentions) {
+        this.attentions = attentions;
+    }
+
+    /**
+     *  获取应用自身的数据目录( mnt/sdcard/Android/data/< package name >/files/ )
+     *  并添加.nomedia文件目录（图片文件不会被手机相册扫描到）
+     * （有扩展存储空间时获取扩展空间的应用目录，没有就获取手机内存的应用目录）
+     * @return
+     */
+    public File getPrivateDir(){
+        //有扩展存储空间
+        if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            return LessWalletApplication.INSTANCE().getExternalFilesDir(".nomedia");
+        }
+        else{
+            //获取内部存储空间的目录
+            File file=LessWalletApplication.INSTANCE().getFilesDir();
+            File nomediaFile=new File(file,".nomedia");
+            if(!nomediaFile.exists()){
+                nomediaFile.mkdir();
+            }
+            return nomediaFile;
+        }
+    }
+
+    /**
+     *  获取手机公开的图片目录( mnt/sdcard/Pictures/ )
+     * @return
+     */
+    public File getPublicPicDir(){
+        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+    }
 }

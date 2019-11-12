@@ -1,4 +1,4 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.application'  //安装插件
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -17,8 +17,8 @@ android {
         }
     }
 }
-apply plugin: 'com.android.application'
-apply plugin: 'org.greenrobot.greendao' // apply plugin
+
+apply plugin: 'org.greenrobot.greendao' // 使用插件
 greendao {
     schemaVersion 1
     daoPackage 'com.campray.lesswalletandroid.db.dao'  //自动生成的 DAOs, DaoMaster, and DaoSession类的包名
@@ -47,10 +47,6 @@ dependencies {
     compile 'com.google.zxing:core:3.3.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.youth.banner:banner:1.4.10'
-    compile 'com.braintreepayments.api:braintree:2.+'
-    //compile 'com.braintreepayments.api:drop-in:3.+'
-    compile('com.braintreepayments.api:drop-in:3.1.0') {
-        exclude group: 'com.braintreepayments.api', module: 'braintree'
-    }
-    compile 'com.google.android.gms:play-services-wallet:11.4.0'
+    compile 'com.braintreepayments.api:drop-in:3.+'
+    compile 'com.google.android.gms:play-services-wallet:15.0.1'
 }

@@ -45,15 +45,16 @@ public class LanguageModel extends BaseModel {
                                 JsonArray jArr = obj.get("Data").getAsJsonArray();
                                 Gson gson = new Gson();
                                 List<Language> languageList = gson.fromJson(jArr, new TypeToken<List<Language>>() {}.getType());
-                                for(Language language:languageList){
+                                if(languageList!=null) {
+                                    for (Language language : languageList) {
 //                                for(JsonElement item:jArr){
 //                                    Language language = gson.fromJson(item, Language.class);
-                                    try {
-                                        long row = LanguageDaoService.getInstance(getContext()).insertOrUpdateLanguage(language);
-                                    }
-                                    catch (Exception exe){
-                                        listener.done(null, new AppException("E_1005"));
-                                        break;
+                                        try {
+                                            long row = LanguageDaoService.getInstance(getContext()).insertOrUpdateLanguage(language);
+                                        } catch (Exception exe) {
+                                            listener.done(null, new AppException("E_1005"));
+                                            break;
+                                        }
                                     }
                                 }
                             }

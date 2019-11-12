@@ -16,7 +16,6 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.campray.lesswalletandroid.LessWalletApplication;
-import com.campray.lesswalletandroid.R;
 import com.campray.lesswalletandroid.db.entity.Coupon;
 import com.campray.lesswalletandroid.db.entity.History;
 import com.campray.lesswalletandroid.db.entity.User;
@@ -29,8 +28,8 @@ import com.campray.lesswalletandroid.model.UserModel;
 import com.campray.lesswalletandroid.ui.MainActivity;
 import com.campray.lesswalletandroid.util.AppException;
 import com.campray.lesswalletandroid.util.ResourcesUtils;
-import com.campray.lesswalletandroid.util.Util;
 
+import com.campray.lesswalletandroid.R;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
@@ -114,32 +113,30 @@ public class MsgPushService extends Service {
                                                         text = String.format(getResources().getString(ResourcesUtils.getStringId(getApplicationContext(), "notification_user_point_redeemed_text")),strArr[1].replace("-",""));
                                                         showNotification(LessWalletApplication.INSTANCE(), history.getId().intValue(), title, text);
                                                         break;
-                                                    case 152://服务次数增加消息
+                                                    case 152://收到商家送的电子卷的消息
+                                                        //从服务端下载Coupon
                                                         CouponModel.getInstance().getCouponFromServer(Long.parseLong(strArr[1]), new OperationListener<Coupon>() {
                                                             @Override
-                                                            public void done(Coupon obj, AppException exception) {EventBus.getDefault().post(new RefreshEvent(obj.getOrderId()));}
+                                                            public void done(Coupon obj, AppException exception) {
+                                                                if(exception==null){EventBus.getDefault().post(new RefreshEvent());}
+                                                            }
                                                         });
-                                                        title = getResources().getString(ResourcesUtils.getStringId(getApplicationContext(), "notification_user_service_add"));
-                                                        text = String.format(getResources().getString(ResourcesUtils.getStringId(getApplicationContext(), "notification_user_service_add_text")),strArr[2].replace("-",""));
+                                                        title = getResources().getString(ResourcesUtils.getStringId(getApplicationContext(), "notification_user_ticket_received"));
+                                                        text = getResources().getString(ResourcesUtils.getStringId(getApplicationContext(), "notification_user_ticket_received_text"));
                                                         showNotification(LessWalletApplication.INSTANCE(), history.getId().intValue(), title, text);
                                                         break;
-                                                    case 153://服务次数减少消息
-                                                        CouponModel.getInstance().getCouponFromServer(Long.parseLong(strArr[1]), new OperationListener<Coupon>() {
-                                                            @Override
-                                                            public void done(Coupon obj, AppException exception) {EventBus.getDefault().post(new RefreshEvent(obj.getOrderId()));}
-                                                        });
-                                                        title = getResources().getString(ResourcesUtils.getStringId(getApplicationContext(), "notification_user_service_redeemed"));
-                                                        text = String.format(getResources().getString(ResourcesUtils.getStringId(getApplicationContext(), "notification_user_service_redeemed_text")),strArr[2].replace("-",""));
+                                                    case 153://电子卷被使用掉的消息
+                                                        //从服务端下载Coupon
+                                                        CouponModel.getInstance().deleteCouponById(Long.parseLong(strArr[1]));
+                                                        EventBus.getDefault().post(new RefreshEvent());
+                                                        title = getResources().getString(ResourcesUtils.getStringId(getApplicationContext(), "notification_user_ticket_used"));
+                                                        text = getResources().getString(ResourcesUtils.getStringId(getApplicationContext(), "notification_user_ticket_used_text"));
                                                         showNotification(LessWalletApplication.INSTANCE(), history.getId().intValue(), title, text);
                                                         break;
                                                     case 154://金额增加消息
                                                         UserModel.getInstance().updateUserFormServer(user.getId(), new OperationListener<User>() {
                                                             public void done(User obj, AppException exception) {}
                                                         });
-//                                                        CouponModel.getInstance().getCouponFromServer(Long.parseLong(strArr[1]), new OperationListener<Coupon>() {
-//                                                            @Override
-//                                                            public void done(Coupon obj, AppException exception) {EventBus.getDefault().post(new RefreshEvent(obj.getOrderId()));}
-//                                                        });
                                                         title = getResources().getString(ResourcesUtils.getStringId(getApplicationContext(), "notification_user_cash_add"));
                                                         text = String.format(getResources().getString(ResourcesUtils.getStringId(getApplicationContext(), "notification_user_cash_add_text")),fmt+strArr[2].replace("-",""));
                                                         showNotification(LessWalletApplication.INSTANCE(), history.getId().intValue(), title, text);
@@ -148,10 +145,6 @@ public class MsgPushService extends Service {
                                                         UserModel.getInstance().updateUserFormServer(user.getId(), new OperationListener<User>() {
                                                             public void done(User obj, AppException exception) {}
                                                         });
-//                                                        CouponModel.getInstance().getCouponFromServer(Long.parseLong(strArr[1]), new OperationListener<Coupon>() {
-//                                                            @Override
-//                                                            public void done(Coupon obj, AppException exception) {EventBus.getDefault().post(new RefreshEvent(obj.getOrderId()));}
-//                                                        });
                                                         title = getResources().getString(ResourcesUtils.getStringId(getApplicationContext(), "notification_user_cash_redeemed"));
                                                         text = String.format(getResources().getString(ResourcesUtils.getStringId(getApplicationContext(), "notification_user_cash_redeemed_text")),fmt+strArr[2].replace("-",""));
                                                         showNotification(LessWalletApplication.INSTANCE(), history.getId().intValue(), title, text);

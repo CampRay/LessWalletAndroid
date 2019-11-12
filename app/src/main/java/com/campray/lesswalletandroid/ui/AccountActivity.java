@@ -106,6 +106,9 @@ public class AccountActivity extends MenuActivity {
                     case R.id.item_setting:
                         startActivity(SettingsActivity.class,null,false);
                         break;
+                    case R.id.item_password:
+                        startActivity(PasswordActivity.class,null,false);
+                        break;
                     case R.id.item_logout:
                         UserModel.getInstance().logout();
                         startActivity(LoginActivity.class,null,true);

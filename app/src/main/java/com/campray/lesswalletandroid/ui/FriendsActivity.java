@@ -105,7 +105,7 @@ public class FriendsActivity extends MenuActivity {
      */
     @OnClick(R.id.iv_left)
     public void onBackClick(View view){
-        startActivity(ProfileActivity.class,null,true);
+        finish();
     }
 
     /**

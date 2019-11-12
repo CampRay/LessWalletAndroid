@@ -1,28 +1,25 @@
 package com.campray.lesswalletandroid.ui;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.braintreepayments.api.dropin.DropInActivity;
 import com.braintreepayments.api.dropin.DropInRequest;
 import com.braintreepayments.api.dropin.DropInResult;
-import com.braintreepayments.api.models.BraintreePaymentResult;
 import com.braintreepayments.api.models.GooglePaymentRequest;
-import com.braintreepayments.api.models.IdealResult;
 import com.braintreepayments.api.models.PaymentMethodNonce;
 import com.campray.lesswalletandroid.LessWalletApplication;
 import com.campray.lesswalletandroid.R;
@@ -88,6 +85,11 @@ public class CouponPaymentActivity extends MenuActivity {
     LinearLayout rl_coupon_layout;
     @BindView(R.id.ll_desc)
     LinearLayout ll_desc;
+    @BindView(R.id.et_quantity)
+    EditText et_quantity;
+    @BindView(R.id.sp_quantity)
+    Spinner sp_quantity;
+
 
     @BindView(R.id.gl_dialog)
     GridLayout gl_dialog;
@@ -210,22 +212,35 @@ public class CouponPaymentActivity extends MenuActivity {
                 iv_coupon_logo.setVisibility(View.GONE);
             }
         }
-        if(product.getPrice()>0){
-            tv_price.setText(product.getPriceStr());
+        if(product.getUsePoint()){
+            tv_price.setText(product.getPoints()+getResources().getString(R.string.coupon_point));
         }
-        else{
-            tv_price.setText(getResources().getString(R.string.coupon_free));
+        else {
+            if (product.getPrice() > 0) {
+                tv_price.setText(product.getPriceStr());
+            } else {
+                tv_price.setText(getResources().getString(R.string.coupon_free));
+            }
         }
+
+        if(!TextUtils.isEmpty(product.getAllowedQuantities())){
+            ArrayAdapter<String> quantityAdapter = new ArrayAdapter<String>(this,R.layout.item_spinner_text_small,product.getAllowedQuantities().split(","));
+            quantityAdapter.setDropDownViewResource(R.layout.item_spinner_text);
+            sp_quantity.setAdapter(quantityAdapter);
+            sp_quantity.setVisibility(View.VISIBLE);
+            et_quantity.setVisibility(View.GONE);
+        }
+
 
         tv_title.setText(product.getTitle());
         tv_shortdesc.setText(product.getShortDesc());
         tv_merchant.setText(product.getMerchant().getName());
-        String timeStr = (TextUtils.isEmpty(product.getStartTimeLocal())?"":product.getStartTimeLocal()) + (TextUtils.isEmpty(product.getEndTimeLocal()) ? "" : " - " + product.getEndTimeLocal());
+        String timeStr = (TextUtils.isEmpty(product.getStartTimeLocal())?"":product.getStartTimeLocal()) + (TextUtils.isEmpty(product.getEndTimeLocal()) ? " -" : " - " + product.getEndTimeLocal());
         tv_expired.setText(timeStr);
         tv_number.setText(product.getStockQuantity()+"");
         gl_dialog.setVisibility(View.VISIBLE);
 
-        rl_coupon_layout.setOnClickListener(new View.OnClickListener(){
+        gl_coupon_top.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 if(ll_desc.getVisibility()==View.GONE) {
@@ -246,28 +261,39 @@ public class CouponPaymentActivity extends MenuActivity {
     @OnClick(R.id.btn_yes)
     public void onClickButtonYes(){
         btn_yes.setEnabled(false);
+        int quantity=1;
+        if(TextUtils.isEmpty(curProduct.getAllowedQuantities())) {
+            quantity= Integer.parseInt(et_quantity.getText().toString());
+        }
+        else{
+            quantity= Integer.parseInt(sp_quantity.getSelectedItem().toString());
+        }
+
+        float total=curProduct.getPrice()*quantity;
         if(curProduct.getPrice()>0) {
-            Cart card=Cart.newBuilder()
+            GooglePaymentRequest googlePaymentRequest = new GooglePaymentRequest()
+                    .transactionInfo(TransactionInfo.newBuilder()
+                            .setTotalPrice(curProduct.getPrice()+"")
+                            .setTotalPriceStatus(WalletConstants.TOTAL_PRICE_STATUS_FINAL)
+                            .setCurrencyCode(curProduct.getCurrencyCode())
+                            .build()).billingAddressRequired(true);
+            //Android Pay
+            Cart cart = Cart.newBuilder()
                     .setCurrencyCode(curProduct.getCurrencyCode())
-                    .setTotalPrice(curProduct.getPrice()+"")
+                    .setTotalPrice(total+"")
                     .addLineItem(LineItem.newBuilder()
                             .setCurrencyCode(curProduct.getCurrencyCode())
                             .setDescription(curProduct.getTitle())
-                            .setQuantity("1")
+                            .setQuantity(quantity+"")
                             .setUnitPrice(curProduct.getPrice()+"")
-                            .setTotalPrice(curProduct.getPrice()+"")
+                            .setTotalPrice(total+"")
                             .build())
                     .build();
 
-            DropInRequest dropInRequest = new DropInRequest()
-            .amount(curProduct.getPrice()+"")
-            .clientToken(clientToken)
-            .collectDeviceData(false)
-            .requestThreeDSecureVerification(false)
-            .androidPayCart(card)
-            .androidPayShippingAddressRequired(false)
-            .androidPayPhoneNumberRequired(false);
-
+            DropInRequest dropInRequest = new DropInRequest().clientToken(clientToken).amount(total+"")
+                    .googlePaymentRequest(googlePaymentRequest)
+                    .requestThreeDSecureVerification(false)
+                    .androidPayCart(cart).androidPayShippingAddressRequired(false).androidPayPhoneNumberRequired(false);
             startActivityForResult(dropInRequest.getIntent(this), DROP_IN_REQUEST);
 //            Intent intent=new Intent(this, PaymentMethodsActivity.class);
 //            intent.putExtra("productId",curProduct.getProductId());
@@ -275,7 +301,7 @@ public class CouponPaymentActivity extends MenuActivity {
 //            startActivityForResult(intent, DROP_IN_REQUEST);
             btn_yes.setEnabled(true);
         }else{
-            CouponModel.getInstance().confirmCoupon(curProduct.getProductId(), new OperationListener<Coupon>() {
+            CouponModel.getInstance().confirmCoupon(curProduct.getProductId(),quantity,null, new OperationListener<Coupon>() {
                 @Override
                 public void done(Coupon coupon, AppException exception) {
                     if (exception == null) {
@@ -284,7 +310,13 @@ public class CouponPaymentActivity extends MenuActivity {
                         finish();
                     } else {
                         btn_yes.setEnabled(true);
-                        toast("获取优惠卷失败，错误原因: " + getResources().getString(ResourcesUtils.getStringId(getApplicationContext(), exception.getErrorCode())));
+                        String errcode=exception.getErrorCode();
+                        if(errcode.startsWith("E_")) {
+                            toast("获取优惠卷失败，错误原因: " + getResources().getString(ResourcesUtils.getStringId(getApplicationContext(), errcode)));
+                        }
+                        else{
+                            toast("获取优惠卷失败，错误原因: " + errcode);
+                        }
                     }
                 }
             });
@@ -300,13 +332,15 @@ public class CouponPaymentActivity extends MenuActivity {
         Product productBean = coupon.getProduct();
         List<SpecAttr> specAttrBeanList = productBean.getSpecAttr();
         for (SpecAttr specAttrBean : specAttrBeanList) {
+            File folder= LessWalletApplication.INSTANCE().getPrivateDir();
+            File picFile=new File(folder,"p_"+productBean.getProductId()+"_"+specAttrBean.getSpecificationAttributeId());
             if (specAttrBean.getSpecificationAttributeId() == 6) {//如果是底纹
                 if (TextUtils.isEmpty(specAttrBean.getFileUrl())) {
                     shadingUrl=specAttrBean.getValueRaw();
                     String[] strArr = shadingUrl.split("\\.");
                     //保存图片到手机存储空间
                     iv_coupon_shading.setDrawingCacheEnabled(true);
-                    File shadingFile = ImageUtil.saveImage(iv_coupon_shading.getDrawingCache(), strArr[strArr.length - 1]);
+                    File shadingFile = ImageUtil.saveImage(iv_coupon_shading.getDrawingCache(),picFile, strArr[strArr.length - 1]);
                     specAttrBean.setFileUrl(Uri.fromFile(shadingFile).toString());
                     iv_coupon_shading.setDrawingCacheEnabled(false);
                     iv_coupon_shading.destroyDrawingCache();
@@ -317,7 +351,7 @@ public class CouponPaymentActivity extends MenuActivity {
                     customPicUrl=specAttrBean.getValueRaw();
                     String[] strArr = customPicUrl.split("\\.");
                     iv_coupon_img.setDrawingCacheEnabled(true);
-                    File imageFile = ImageUtil.saveImage(iv_coupon_img.getDrawingCache(), strArr[strArr.length - 1]);
+                    File imageFile = ImageUtil.saveImage(iv_coupon_img.getDrawingCache(),picFile, strArr[strArr.length - 1]);
                     specAttrBean.setFileUrl(Uri.fromFile(imageFile).toString());
                     iv_coupon_img.setDrawingCacheEnabled(false);
                     iv_coupon_img.destroyDrawingCache();
@@ -328,7 +362,7 @@ public class CouponPaymentActivity extends MenuActivity {
                     logoUrl=specAttrBean.getValueRaw();
                     String[] strArr = logoUrl.split("\\.");
                     iv_coupon_logo.setDrawingCacheEnabled(true);
-                    File logoFile = ImageUtil.saveImage(iv_coupon_logo.getDrawingCache(), strArr[strArr.length - 1]);
+                    File logoFile = ImageUtil.saveImage(iv_coupon_logo.getDrawingCache(),picFile, strArr[strArr.length - 1]);
                     specAttrBean.setFileUrl(Uri.fromFile(logoFile).toString());
                     iv_coupon_logo.setDrawingCacheEnabled(false);
                     iv_coupon_logo.destroyDrawingCache();
@@ -365,7 +399,7 @@ public class CouponPaymentActivity extends MenuActivity {
 //                long productId=data.getLongExtra("productId",0);
                 if(productId>0) {
                     //支付Coupon
-                    CouponModel.getInstance().paypalCoupon(productId, paymentMethodNonce.getNonce(), new OperationListener<Coupon>() {
+                    CouponModel.getInstance().paypalCoupon(productId, paymentMethodNonce.getNonce(),1,null, new OperationListener<Coupon>() {
                         @Override
                         public void done(Coupon coupon, AppException exception) {
                             if (exception == null) {

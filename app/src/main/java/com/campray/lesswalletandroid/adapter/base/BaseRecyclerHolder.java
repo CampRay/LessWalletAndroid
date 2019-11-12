@@ -56,7 +56,9 @@ public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
      */
     public BaseRecyclerHolder setText(int viewId, String text) {
         TextView view = getView(viewId);
-        view.setText(text);
+        if(view!=null) {
+            view.setText(text);
+        }
         return this;
     }
 
@@ -68,7 +70,9 @@ public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
      */
     public BaseRecyclerHolder setText(int viewId, int resid) {
         TextView view = getView(viewId);
-        view.setText(resid);
+        if(view!=null) {
+            view.setText(resid);
+        }
         return this;
     }
 
@@ -80,7 +84,9 @@ public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
      */
     public BaseRecyclerHolder setTag(int viewId, Object obj) {
         View view = getView(viewId);
-        view.setTag(obj);
+        if(view!=null) {
+            view.setTag(obj);
+        }
         return this;
     }
 
@@ -92,7 +98,9 @@ public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
      */
     public BaseRecyclerHolder setBackgroundColor(int viewId, String color) {
         View view = getView(viewId);
-        view.setBackgroundColor(Color.parseColor(color));
+        if(view!=null) {
+            view.setBackgroundColor(Color.parseColor(color));
+        }
         return this;
     }
 
@@ -104,7 +112,9 @@ public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
      */
     public BaseRecyclerHolder setBackgroundColor(int viewId, int color) {
         View view = getView(viewId);
-        view.setBackgroundColor(color);
+        if(view!=null) {
+            view.setBackgroundColor(color);
+        }
         return this;
     }
 
@@ -116,7 +126,9 @@ public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
      */
     public BaseRecyclerHolder setBackgroundResource(int viewId, int drawableId) {
         View view = getView(viewId);
-        view.setBackgroundResource(drawableId);
+        if(view!=null) {
+            view.setBackgroundResource(drawableId);
+        }
         return this;
     }
 
@@ -127,8 +139,10 @@ public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
      * @return
      */
     public BaseRecyclerHolder setEnabled(int viewId,boolean enable){
-        View v = getView(viewId);
-        v.setEnabled(enable);
+        View view = getView(viewId);
+        if(view!=null) {
+            view.setEnabled(enable);
+        }
         return this;
     }
 
@@ -139,8 +153,10 @@ public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
      * @return
      */
     public BaseRecyclerHolder setOnClickListener(int viewId, View.OnClickListener listener){
-        View v = getView(viewId);
-        v.setOnClickListener(listener);
+        View view = getView(viewId);
+        if(view!=null) {
+            view.setOnClickListener(listener);
+        }
         return this;
     }
 
@@ -152,7 +168,9 @@ public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
      */
     public BaseRecyclerHolder setVisible(int viewId,int visibility) {
         View view = getView(viewId);
-        view.setVisibility(visibility);
+        if(view!=null) {
+            view.setVisibility(visibility);
+        }
         return this;
     }
     /**
@@ -162,11 +180,12 @@ public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
      */
     public BaseRecyclerHolder setVisibleToggle(int viewId) {
         View view = getView(viewId);
-        if(view.isShown()) {
-            view.setVisibility(View.GONE);
-        }
-        else{
-            view.setVisibility(View.VISIBLE);
+        if(view!=null) {
+            if (view.isShown()) {
+                view.setVisibility(View.GONE);
+            } else {
+                view.setVisibility(View.VISIBLE);
+            }
         }
         return this;
     }
@@ -179,7 +198,9 @@ public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
      */
     public BaseRecyclerHolder setImageResource(int viewId, int drawableId) {
         ImageView view = getView(viewId);
-        view.setImageResource(drawableId);
+        if(view!=null) {
+            view.setImageResource(drawableId);
+        }
         return this;
     }
 
@@ -191,7 +212,9 @@ public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
      */
     public BaseRecyclerHolder setImageBitmap(int viewId, Bitmap bm) {
         ImageView view = getView(viewId);
-        view.setImageBitmap(bm);
+        if(view!=null) {
+            view.setImageBitmap(bm);
+        }
         return this;
     }
 
@@ -204,7 +227,9 @@ public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
      */
     public BaseRecyclerHolder setImageView(int viewId,String url, int defaultRes) {
         ImageView iv = getView(viewId);
-        Picasso.with(LessWalletApplication.INSTANCE()).load(url).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv);
+        if(iv!=null) {
+            Picasso.with(LessWalletApplication.INSTANCE()).load(url).memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE).into(iv);
+        }
         //iv.setImageBitmap(BitmapFactory.decodeFile(url));
         return this;
     }
@@ -216,7 +241,9 @@ public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
      */
     public void setOnclickListener(int viewId,View.OnClickListener listener){
         View view = getView(viewId);
-        view.setOnClickListener(listener);
+        if(view!=null) {
+            view.setOnClickListener(listener);
+        }
     }
 
     /**
@@ -226,6 +253,8 @@ public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
      */
     public void setOnTouchListener(int viewId,View.OnTouchListener listener){
         View view = getView(viewId);
-        view.setOnTouchListener(listener);
+        if(view!=null) {
+            view.setOnTouchListener(listener);
+        }
     }
 }

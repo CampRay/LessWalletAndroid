@@ -13,6 +13,7 @@ import android.text.TextUtils;
 import android.util.Base64;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -62,6 +63,9 @@ import butterknife.OnClick;
 public class CardActivity extends MenuActivity {
     @BindView(R.id.rc_card_list)
     RecyclerView rc_card_list;
+    @BindView(R.id.ll_cardinfo)
+    LinearLayout ll_cardinfo;
+
 
     @BindView(R.id.tv_title)
     TextView tv_title;
@@ -251,6 +255,9 @@ public class CardActivity extends MenuActivity {
                             }
                             lastPage=page;
                             adapter.notifyDataSetChanged();
+                        }
+                        if(adapter.getItemCount()==0){
+                            ll_cardinfo.setVisibility(View.GONE);
                         }
                     }
                 });

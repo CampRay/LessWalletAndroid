@@ -51,10 +51,12 @@ public class MainActivity extends MenuActivity {
         List<Slider> list=SliderModel.getInstance().getAllSliders();
         List<String> images=new ArrayList<String>();
         List<String> titles=new ArrayList<String>();
-        for (Slider slider:list) {
-            if(!TextUtils.isEmpty(slider.getPicUrl())) {
-                images.add(slider.getPicUrl());
-                titles.add(slider.getText());
+        if(list!=null) {
+            for (Slider slider : list) {
+                if (!TextUtils.isEmpty(slider.getPicUrl())) {
+                    images.add(slider.getPicUrl());
+                    titles.add(slider.getText());
+                }
             }
         }
         banner.setImages(images);
@@ -86,6 +88,17 @@ public class MainActivity extends MenuActivity {
         Bundle bundle=new Bundle();
         bundle.putInt("type_id", 3);
         startActivity(CardActivity.class,bundle,true);
+    }
+
+    /**
+     * 点击Ticket按钮的事件方法
+     * @param view
+     */
+    @OnClick(R.id.iv_ticket)
+    public void onTicketClick(View view){
+        Bundle bundle=new Bundle();
+        bundle.putInt("type_id", 2);
+        startActivity(CouponActivity.class,bundle,true);
     }
 
     /**

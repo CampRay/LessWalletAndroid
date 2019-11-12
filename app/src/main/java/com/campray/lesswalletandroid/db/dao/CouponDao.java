@@ -14,7 +14,9 @@ import org.greenrobot.greendao.database.DatabaseStatement;
 import org.greenrobot.greendao.query.Query;
 import org.greenrobot.greendao.query.QueryBuilder;
 
+import com.campray.lesswalletandroid.db.converter.UserValuesConverter;
 import com.campray.lesswalletandroid.db.entity.Product;
+import java.util.List;
 
 import com.campray.lesswalletandroid.db.entity.Coupon;
 
@@ -36,14 +38,19 @@ public class CouponDao extends AbstractDao<Coupon, Long> {
         public final static Property Cid = new Property(2, String.class, "cid", false, "CID");
         public final static Property UserId = new Property(3, Long.class, "userId", false, "USER_ID");
         public final static Property OrderTotal = new Property(4, float.class, "orderTotal", false, "ORDER_TOTAL");
-        public final static Property PaymentStatus = new Property(5, int.class, "paymentStatus", false, "PAYMENT_STATUS");
-        public final static Property StartTime = new Property(6, String.class, "startTime", false, "START_TIME");
-        public final static Property EndTime = new Property(7, String.class, "endTime", false, "END_TIME");
-        public final static Property Deleted = new Property(8, boolean.class, "deleted", false, "DELETED");
+        public final static Property Price = new Property(5, float.class, "price", false, "PRICE");
+        public final static Property Quantity = new Property(6, int.class, "quantity", false, "QUANTITY");
+        public final static Property PaymentStatus = new Property(7, int.class, "paymentStatus", false, "PAYMENT_STATUS");
+        public final static Property StartTime = new Property(8, String.class, "startTime", false, "START_TIME");
+        public final static Property EndTime = new Property(9, String.class, "endTime", false, "END_TIME");
+        public final static Property Deleted = new Property(10, boolean.class, "deleted", false, "DELETED");
+        public final static Property UserValues = new Property(11, String.class, "userValues", false, "USER_VALUES");
+        public final static Property UserValuesInfo = new Property(12, String.class, "userValuesInfo", false, "USER_VALUES_INFO");
     }
 
     private DaoSession daoSession;
 
+    private final UserValuesConverter userValuesConverter = new UserValuesConverter();
     private Query<Coupon> product_CouponsQuery;
 
     public CouponDao(DaoConfig config) {
@@ -64,10 +71,14 @@ public class CouponDao extends AbstractDao<Coupon, Long> {
                 "\"CID\" TEXT," + // 2: cid
                 "\"USER_ID\" INTEGER NOT NULL ," + // 3: userId
                 "\"ORDER_TOTAL\" REAL NOT NULL ," + // 4: orderTotal
-                "\"PAYMENT_STATUS\" INTEGER NOT NULL ," + // 5: paymentStatus
-                "\"START_TIME\" TEXT NOT NULL ," + // 6: startTime
-                "\"END_TIME\" TEXT," + // 7: endTime
-                "\"DELETED\" INTEGER NOT NULL );"); // 8: deleted
+                "\"PRICE\" REAL NOT NULL ," + // 5: price
+                "\"QUANTITY\" INTEGER NOT NULL ," + // 6: quantity
+                "\"PAYMENT_STATUS\" INTEGER NOT NULL ," + // 7: paymentStatus
+                "\"START_TIME\" TEXT NOT NULL ," + // 8: startTime
+                "\"END_TIME\" TEXT," + // 9: endTime
+                "\"DELETED\" INTEGER NOT NULL ," + // 10: deleted
+                "\"USER_VALUES\" TEXT," + // 11: userValues
+                "\"USER_VALUES_INFO\" TEXT);"); // 12: userValuesInfo
     }
 
     /** Drops the underlying database table. */
@@ -96,14 +107,26 @@ public class CouponDao extends AbstractDao<Coupon, Long> {
         }
         stmt.bindLong(4, entity.getUserId());
         stmt.bindDouble(5, entity.getOrderTotal());
-        stmt.bindLong(6, entity.getPaymentStatus());
-        stmt.bindString(7, entity.getStartTime());
+        stmt.bindDouble(6, entity.getPrice());
+        stmt.bindLong(7, entity.getQuantity());
+        stmt.bindLong(8, entity.getPaymentStatus());
+        stmt.bindString(9, entity.getStartTime());
  
         String endTime = entity.getEndTime();
         if (endTime != null) {
-            stmt.bindString(8, endTime);
+            stmt.bindString(10, endTime);
         }
-        stmt.bindLong(9, entity.getDeleted() ? 1L: 0L);
+        stmt.bindLong(11, entity.getDeleted() ? 1L: 0L);
+ 
+        List userValues = entity.getUserValues();
+        if (userValues != null) {
+            stmt.bindString(12, userValuesConverter.convertToDatabaseValue(userValues));
+        }
+ 
+        String userValuesInfo = entity.getUserValuesInfo();
+        if (userValuesInfo != null) {
+            stmt.bindString(13, userValuesInfo);
+        }
     }
 
     @Override
@@ -126,14 +149,26 @@ public class CouponDao extends AbstractDao<Coupon, Long> {
         }
         stmt.bindLong(4, entity.getUserId());
         stmt.bindDouble(5, entity.getOrderTotal());
-        stmt.bindLong(6, entity.getPaymentStatus());
-        stmt.bindString(7, entity.getStartTime());
+        stmt.bindDouble(6, entity.getPrice());
+        stmt.bindLong(7, entity.getQuantity());
+        stmt.bindLong(8, entity.getPaymentStatus());
+        stmt.bindString(9, entity.getStartTime());
  
         String endTime = entity.getEndTime();
         if (endTime != null) {
-            stmt.bindString(8, endTime);
+            stmt.bindString(10, endTime);
         }
-        stmt.bindLong(9, entity.getDeleted() ? 1L: 0L);
+        stmt.bindLong(11, entity.getDeleted() ? 1L: 0L);
+ 
+        List userValues = entity.getUserValues();
+        if (userValues != null) {
+            stmt.bindString(12, userValuesConverter.convertToDatabaseValue(userValues));
+        }
+ 
+        String userValuesInfo = entity.getUserValuesInfo();
+        if (userValuesInfo != null) {
+            stmt.bindString(13, userValuesInfo);
+        }
     }
 
     @Override
@@ -155,10 +190,14 @@ public class CouponDao extends AbstractDao<Coupon, Long> {
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // cid
             cursor.getLong(offset + 3), // userId
             cursor.getFloat(offset + 4), // orderTotal
-            cursor.getInt(offset + 5), // paymentStatus
-            cursor.getString(offset + 6), // startTime
-            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // endTime
-            cursor.getShort(offset + 8) != 0 // deleted
+            cursor.getFloat(offset + 5), // price
+            cursor.getInt(offset + 6), // quantity
+            cursor.getInt(offset + 7), // paymentStatus
+            cursor.getString(offset + 8), // startTime
+            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // endTime
+            cursor.getShort(offset + 10) != 0, // deleted
+            cursor.isNull(offset + 11) ? null : userValuesConverter.convertToEntityProperty(cursor.getString(offset + 11)), // userValues
+            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12) // userValuesInfo
         );
         return entity;
     }
@@ -170,10 +209,14 @@ public class CouponDao extends AbstractDao<Coupon, Long> {
         entity.setCid(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setUserId(cursor.getLong(offset + 3));
         entity.setOrderTotal(cursor.getFloat(offset + 4));
-        entity.setPaymentStatus(cursor.getInt(offset + 5));
-        entity.setStartTime(cursor.getString(offset + 6));
-        entity.setEndTime(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
-        entity.setDeleted(cursor.getShort(offset + 8) != 0);
+        entity.setPrice(cursor.getFloat(offset + 5));
+        entity.setQuantity(cursor.getInt(offset + 6));
+        entity.setPaymentStatus(cursor.getInt(offset + 7));
+        entity.setStartTime(cursor.getString(offset + 8));
+        entity.setEndTime(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
+        entity.setDeleted(cursor.getShort(offset + 10) != 0);
+        entity.setUserValues(cursor.isNull(offset + 11) ? null : userValuesConverter.convertToEntityProperty(cursor.getString(offset + 11)));
+        entity.setUserValuesInfo(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
      }
     
     @Override

@@ -58,7 +58,8 @@ public class WiCardAdapter extends BaseRecyclerAdapter<Coupon> {
         int index = this.getCount();
         int position = -1;
         while(index-- > 0) {
-            if((getItem(index)).getOrderId()==targetId) {
+            Coupon itme=getItem(index);
+            if(itme!=null&&itme.getOrderId()==targetId) {
                 position = index;
                 break;
             }
@@ -190,23 +191,23 @@ public class WiCardAdapter extends BaseRecyclerAdapter<Coupon> {
                     public void onClick(final DialogInterface dialog, int which) {
                         List<Long> idList=new ArrayList<Long>();
                         final Coupon delCoupon=WiCardAdapter.this.getItem(position);
-                        idList.add(delCoupon.getOrderId());
-                        String idsStr=TextUtils.join(",",idList.toArray());
-                        CouponModel.getInstance().delCouponsFromServer(idsStr, new OperationListener<Coupon>() {
-                            @Override
-                            public void done(Coupon obj, AppException exception) {
-                                if(exception==null) {
-                                    ProductModel.getInstance().deleteProductById(delCoupon.getProductId());
-                                    WiCardAdapter.this.remove(position);
-                                    dialog.cancel();
-                                    toast("This card has been discarded successfully.");
+                        if(delCoupon!=null) {
+                            idList.add(delCoupon.getOrderId());
+                            String idsStr = TextUtils.join(",", idList.toArray());
+                            CouponModel.getInstance().delCouponsFromServer(idsStr, new OperationListener<Coupon>() {
+                                @Override
+                                public void done(Coupon obj, AppException exception) {
+                                    if (exception == null) {
+                                        ProductModel.getInstance().deleteProductById(delCoupon.getProductId());
+                                        WiCardAdapter.this.remove(position);
+                                        dialog.cancel();
+                                        toast("This card has been discarded successfully.");
+                                    } else {
+                                        toast("Failed to discard the card, Error Message: " + ResourcesUtils.getString(WiCardAdapter.this.context, exception.getErrorCode()));
+                                    }
                                 }
-                                else{
-                                    toast("Failed to discard the card, Error Message: "+ ResourcesUtils.getString(WiCardAdapter.this.context,exception.getErrorCode()));
-                                }
-                            }
-                        });
-
+                            });
+                        }
                     }
                 });
         normalDialog.setNegativeButton("NO",

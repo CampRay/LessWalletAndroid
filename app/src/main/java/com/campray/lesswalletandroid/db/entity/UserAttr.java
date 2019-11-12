@@ -14,7 +14,7 @@ public class UserAttr {
     private String TextPrompt;  //自定义的显示文本
     private boolean IsRequired; //是否必填项
     //DropdownList = 1, RadioList = 2, Checkboxes = 3,TextBox = 4, MultilineTextbox = 10,Datepicker = 20,FileUpload = 30,ColorSquares = 40,ImageSquares = 45,ReadonlyCheckboxes = 50,
-    private int AttributeControlType; //页面显示的表单控件类型
+    private int AttributeControlTypeId; //页面显示的表单控件类型
     private String DefaultValue;   //默认显示值
     private boolean HasCondition; //是否有设定表单控件的页面显示条件
     private List<UserAttrValue> Values; //用户属性的预设值集合
@@ -59,12 +59,12 @@ public class UserAttr {
         IsRequired = required;
     }
 
-    public int getAttributeControlType() {
-        return AttributeControlType;
+    public int getAttributeControlTypeId() {
+        return AttributeControlTypeId;
     }
 
-    public void setAttributeControlType(int attributeControlType) {
-        AttributeControlType = attributeControlType;
+    public void setAttributeControlTypeId(int attributeControlTypeId) {
+        AttributeControlTypeId = attributeControlTypeId;
     }
 
     public String getDefaultValue() {

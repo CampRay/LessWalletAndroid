@@ -155,7 +155,7 @@
                     android:paddingRight="10dp"
                     android:scrollHorizontally="false"
                     android:singleLine="false"
-                    android:text=" TextViewTextViewTextView TextView TextView TextView TextView TextView TextView TextView TextView TextView TextView 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充 TextView 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充TextView 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充TextView 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充TextView TextView TextView TextView TextView TextView TextView TextView TextView TextView TextView TextView TextView TextView TextView TextView TextView TextView TextView TextView TextView TextView 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充 TextView 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充TextView 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充TextView 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充 文字填充TextView TextView TextView TextView TextView TextView TextView TextView TextView TextView TextView"
+                    android:text=" "
                     android:textColor="#454545"
                     android:textSize="10sp" />
 

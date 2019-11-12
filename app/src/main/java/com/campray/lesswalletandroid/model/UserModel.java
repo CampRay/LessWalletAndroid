@@ -14,6 +14,7 @@ import com.campray.lesswalletandroid.listener.ApiHandleListener;
 import com.campray.lesswalletandroid.listener.OperationListener;
 import com.campray.lesswalletandroid.util.AppException;
 import com.campray.lesswalletandroid.util.EncryptionUtil;
+import com.campray.lesswalletandroid.util.NetWorkUtils;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -52,22 +53,40 @@ public class UserModel extends BaseModel {
             listener.done(null, new AppException("E_2007"));
             return;
         }
-        //如果用户在本机数据库存在
-        User localUser=UserDaoService.getInstance(getContext()).getUserByNameOrEmail(username);
-        if(localUser!=null){
-            if(EncryptionUtil.getHash2(password,"MD5").equals(localUser.getPassword())) {
-                listener.done(localUser, null);
+        //如果没有网络连接则在本地数据库查询
+        if(!NetWorkUtils.isNetworkConnected(LessWalletApplication.INSTANCE())) {
+            //如果用户在本机数据库存在
+            User localUser = UserDaoService.getInstance(getContext()).getUserByNameOrEmail(username);
+            if (localUser != null) {
+                if (EncryptionUtil.getHash2(password, "MD5").equals(localUser.getPassword())) {
+                    listener.done(localUser, null);
+                } else {
+                    listener.done(null, new AppException("E_2000"));
+                }
+                return;
+            }
+        }
+
+        Locale locale = Locale.getDefault();
+        String lang = locale.getLanguage();
+        String country=locale.getCountry();
+        if(TextUtils.isEmpty(country)){
+            Language language=LanguageModel.getInstance().getLanguageByCode(locale.getLanguage());
+            if(language==null){
+                lang="en-US";
             }
             else{
-                listener.done(null, new AppException("E_2000"));
+                lang=language.getLanguageCulture();
             }
-            return;
+        }
+        else{
+            lang = lang + "-" + locale.getCountry();
         }
         //封装登录请求参数
         JsonObject jObj=new JsonObject();
-        jObj.addProperty("device",this.getDeviceId());
         jObj.addProperty("uname",username);
         jObj.addProperty("pwd",password);
+        jObj.addProperty("language",lang);
         this.httpPostAPI(UserModel.URL_API_LOGIN, jObj,new ApiHandleListener<JsonObject>() {
             @Override
             public void done(JsonObject obj, AppException exception) {
@@ -126,7 +145,6 @@ public class UserModel extends BaseModel {
      */
     public void register(String username,String email, final String password,String firstname,String lastname,String address,String countryCode, final OperationListener<User> listener) {
         JsonObject jObj = new JsonObject();
-        jObj.addProperty("device", this.getDeviceId());
         jObj.addProperty("uname", username);
         jObj.addProperty("email", email);
         jObj.addProperty("pwd", password);
@@ -190,7 +208,6 @@ public class UserModel extends BaseModel {
 
         //封装登录请求参数
         JsonObject jObj=new JsonObject();
-        jObj.addProperty("device",this.getDeviceId());
         jObj.addProperty("id",id);
         this.httpPostAPI(UserModel.URL_API_GET_USER_BYID, jObj,new ApiHandleListener<JsonObject>() {
             @Override
@@ -255,6 +272,48 @@ public class UserModel extends BaseModel {
     }
 
     /**
+     * 修改用户密码或资料
+     * @param email
+     * @param password
+     * @param listener
+     */
+    public void editUser(final String email,final String password, final OperationListener<User> listener) {
+        JsonObject jObj = new JsonObject();
+        jObj.addProperty("email", email);
+        jObj.addProperty("pwd", password);
+        this.httpPostAPI(UserModel.URL_API_EDIT_USER, jObj,new ApiHandleListener<JsonObject>() {
+            @Override
+            public void done(JsonObject obj, AppException exception) {
+                if (exception == null) {
+                    try {
+                        //如果返回结果没有异常
+                        if (obj.get("Errors").isJsonNull()) {
+                            User user=LessWalletApplication.INSTANCE().getAccount();
+                            if(!TextUtils.isEmpty(password)) {
+                                user.setPassword(EncryptionUtil.getHash2(password, "MD5"));
+                            }
+                            if(!TextUtils.isEmpty(email)) {
+                                user.setEmail(email);
+                            }
+                            UserDaoService.getInstance(getContext()).insertOrUpdateUser(user);
+                            LessWalletApplication.INSTANCE().setAccount(user);
+                            listener.done(user, null);
+
+                        } else {
+                            listener.done(null, new AppException("E_2010",obj.get("Errors").getAsString()));
+                        }
+                    }
+                    catch (Exception e){
+                        listener.done(null, new AppException("E_1004"));
+                    }
+                } else {
+                    listener.done(null, exception);
+                }
+            }
+        });
+    }
+
+    /**
      * 退出登录
      */
     public void logout() {
@@ -276,7 +335,6 @@ public class UserModel extends BaseModel {
     public void getPaypalClientToken(final OperationListener<String> listener) {
         //封装登录请求参数
         JsonObject jObj=new JsonObject();
-        jObj.addProperty("device",this.getDeviceId());
         this.httpPostAPI(UserModel.URL_API_GETCLIENTTOKEN, jObj,new ApiHandleListener<JsonObject>() {
             @Override
             public void done(JsonObject obj, AppException exception) {

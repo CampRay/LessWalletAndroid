@@ -1,5 +1,6 @@
 package com.campray.lesswalletandroid.model;
 
+import com.campray.lesswalletandroid.LessWalletApplication;
 import com.campray.lesswalletandroid.db.entity.Merchant;
 import com.campray.lesswalletandroid.db.service.MerchantDaoService;
 import com.campray.lesswalletandroid.listener.ApiHandleListener;
@@ -30,20 +31,15 @@ public class MerchantModel extends BaseModel {
     private MerchantModel() {
     }
 
-    private void saveMerchant(){
-
-    }
-
     /**
      * 根据商家ID从服务器获取所有国家信息数据
-     * @param min
+     * @param mid
      * @param listener
      */
-    public void getMerchantFromServer(final long min,final OperationListener<Merchant> listener) {
+    public void getMerchantFromServer(final long mid,final OperationListener<Merchant> listener) {
         //封装请求参数
         JsonObject jObj=new JsonObject();
-        jObj.addProperty("id",min);
-        jObj.addProperty("device",this.getDeviceId());
+        jObj.addProperty("id",mid);
         this.httpPostAPI(MerchantModel.URL_API_GETMERCHANT, jObj,new ApiHandleListener<JsonObject>() {
             @Override
             public void done(JsonObject obj, AppException exception) {
@@ -81,6 +77,120 @@ public class MerchantModel extends BaseModel {
             }
         });
     }
+
+
+    /**
+     * 查询所有用户关注的商户
+     * @param listener
+     */
+    public void getAllAttentionFromServer(final OperationListener<List<Merchant>> listener) {
+        this.httpPostAPI(MerchantModel.URL_API_GET_ALL_ATTENTION, null,new ApiHandleListener<JsonObject>() {
+            @Override
+            public void done(JsonObject obj, AppException exception) {
+                if (exception == null) {
+                    try {
+                        //如果返回结果没有异常
+                        if (obj.get("Errors").isJsonNull()) {
+                            if (obj.get("Data").isJsonArray()) {
+                                JsonArray jArr = obj.get("Data").getAsJsonArray();
+                                Gson gson = new Gson();
+                                List<Merchant> MerchantList = gson.fromJson(jArr, new TypeToken<List<Merchant>>() {}.getType());
+                                for(Merchant merchant:MerchantList){
+                                    try {
+                                        //保存数据
+                                        MerchantDaoService.getInstance(getContext()).insertOrUpdateMerchant(merchant);
+                                    }
+                                    catch (Exception exe){
+                                        listener.done(null, new AppException("E_1005"));
+                                        break;
+                                    }
+                                }
+                                listener.done(MerchantList, null);
+                            }
+                            listener.done(null, null);
+                        } else {
+                            listener.done(null, new AppException(obj.get("Errors").getAsString()));
+                        }
+                    }
+                    catch (Exception e){
+                        listener.done(null, new AppException("E_1004"));
+                    }
+                } else {
+                    listener.done(null, exception);
+                }
+            }
+        });
+    }
+
+    /**
+     * 添加关注商户
+     * @param mid 商户ID
+     * @param listener
+     */
+    public void addAttention(final long mid,final OperationListener<Merchant> listener) {
+        //封装登录请求参数
+        JsonObject jObj=new JsonObject();
+        jObj.addProperty("vendorId",mid);
+        this.httpPostAPI(FriendModel.URL_API_ADD_ATTENTION, jObj,new ApiHandleListener<JsonObject>() {
+            @Override
+            public void done(JsonObject obj, AppException exception) {
+                if (exception == null) {
+                    try {
+                        //如果返回结果没有异常
+                        if (obj.get("Errors").isJsonNull()) {
+                            List<Long> attentions= LessWalletApplication.INSTANCE().getAttentions();
+                            if(!attentions.contains(mid)){
+                                attentions.add(mid);
+                            }
+                        } else {
+                            listener.done(null, new AppException(obj.get("Errors").getAsString()));
+                        }
+                    }
+                    catch (Exception e){
+                        listener.done(null, new AppException("E_1004"));
+                    }
+                } else {
+                    listener.done(null, exception);
+                }
+            }
+        });
+    }
+
+    /**
+     * 删除关注商户
+     * @param mid
+     * @param listener
+     */
+    public void delAttention(final long mid,final OperationListener<Merchant> listener) {
+        //封装登录请求参数
+        JsonObject jObj=new JsonObject();
+        jObj.addProperty("vendorId",mid);
+        this.httpPostAPI(FriendModel.URL_API_DEL_ATTENTION, jObj,new ApiHandleListener<JsonObject>() {
+            @Override
+            public void done(JsonObject obj, AppException exception) {
+                if (exception == null) {
+                    try {
+                        //如果返回结果没有异常
+                        if (obj.get("Errors").isJsonNull()) {
+                            List<Long> attentions= LessWalletApplication.INSTANCE().getAttentions();
+                            if(attentions.contains(mid)){
+                                attentions.remove(mid);
+                            }
+                            listener.done(null, null);
+                        } else {
+                            listener.done(null, new AppException(obj.get("Errors").getAsString()));
+                        }
+                    }
+                    catch (Exception e){
+                        listener.done(null, new AppException("E_1004"));
+                    }
+                } else {
+                    listener.done(null, exception);
+                }
+            }
+        });
+    }
+
 
     /**
      * 查询所有商家数据对象

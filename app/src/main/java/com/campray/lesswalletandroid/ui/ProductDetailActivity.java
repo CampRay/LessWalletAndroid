@@ -1,5 +1,9 @@
 package com.campray.lesswalletandroid.ui;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.TextUtils;
@@ -12,8 +16,10 @@ import android.widget.TextView;
 import com.campray.lesswalletandroid.R;
 import com.campray.lesswalletandroid.db.entity.CouponStyle;
 import com.campray.lesswalletandroid.db.entity.Product;
+import com.campray.lesswalletandroid.model.BaseModel;
 import com.campray.lesswalletandroid.model.ProductModel;
 import com.campray.lesswalletandroid.ui.base.MenuActivity;
+import com.campray.lesswalletandroid.util.ImageUtil;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -54,10 +60,7 @@ public class ProductDetailActivity extends MenuActivity {
         setContentView(R.layout.activity_product_detail);
         tv_navi_title.setText("Coupon Information");
         long productId=this.getIntent().getLongExtra("id",0);
-        String cash=this.getIntent().getStringExtra("cash");
-        String service=this.getIntent().getStringExtra("service");
-        String buy=this.getIntent().getStringExtra("buy");
-        loadData(productId,cash,service,buy);
+        loadData(productId);
     }
 
     /**
@@ -69,8 +72,8 @@ public class ProductDetailActivity extends MenuActivity {
         this.finish();
     }
 
-    private void loadData(long productId,String cash,String service,String buy){
-        Product product= ProductModel.getInstance().getProductById(productId);
+    private void loadData(long productId){
+        final Product product= ProductModel.getInstance().getProductById(productId);
         CouponStyle couponStyle=product.getCouponStyle();
         if (couponStyle != null) {
             if (!TextUtils.isEmpty(couponStyle.getBenefitFree())) {
@@ -106,8 +109,26 @@ public class ProductDetailActivity extends MenuActivity {
         tv_expired.setText(expired);
 
         //显示html文本（只有html样式,不带图片）
-        if(!TextUtils.isEmpty(product.getFullDesc())) {
-            tv_desc.setText(Html.fromHtml(product.getFullDesc()));
+        if (!TextUtils.isEmpty(product.getFullDesc())) {
+            Html.ImageGetter imageGetter = new Html.ImageGetter() {
+                public Drawable getDrawable(String source) {
+                    if(!source.startsWith("http:")){
+                        source= BaseModel.HOST+source;
+                    }
+                    Drawable drawable =ProductModel.getInstance().httpRequestImage(source);
+                    if(drawable!=null) {
+                        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+                    }
+                    return drawable;
+                }
+            };
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                tv_desc.setText(Html.fromHtml(product.getFullDesc(),Html.FROM_HTML_MODE_COMPACT,imageGetter,null));
+            }
+            else{
+                tv_desc.setText(Html.fromHtml(product.getFullDesc()));
+            }
         }
 
     }

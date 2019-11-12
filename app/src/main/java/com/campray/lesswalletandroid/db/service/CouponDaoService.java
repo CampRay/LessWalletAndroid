@@ -13,6 +13,9 @@ import com.campray.lesswalletandroid.db.entity.Merchant;
 import com.campray.lesswalletandroid.db.entity.Product;
 import com.campray.lesswalletandroid.db.entity.User;
 
+import org.greenrobot.greendao.query.QueryBuilder;
+import org.greenrobot.greendao.query.WhereCondition;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -104,8 +107,10 @@ public class CouponDaoService {
         ProductDao productDao=openReadableDb().getProductDao();
         List<Product> productList=productDao.queryBuilder().where(ProductDao.Properties.ProductTypeId.eq(typeId)).build().list();
         List<Long> idList=new ArrayList<Long>();
-        for (Product product:productList) {
-            idList.add(product.getProductId());
+        if(productList!=null) {
+            for (Product product : productList) {
+                idList.add(product.getProductId());
+            }
         }
         return dao.queryBuilder().where(CouponDao.Properties.ProductId.in(idList)).orderDesc(CouponDao.Properties.OrderId).build().list();
     }
@@ -118,14 +123,21 @@ public class CouponDaoService {
      * @return
      */
     public List<Coupon> getPageCouponByType(int typeId,int pageNum,int pageSize){
-        ProductDao productDao=openReadableDb().getProductDao();
-        List<Product> productList=productDao.queryBuilder().where(ProductDao.Properties.ProductTypeId.eq(typeId)).build().listLazy();
-        List<Long> idList=new ArrayList<Long>();
-        for (Product product:productList) {
-            idList.add(product.getProductId());
-        }
+//        ProductDao productDao=openReadableDb().getProductDao();
+//        List<Product> productList=productDao.queryBuilder().where(ProductDao.Properties.ProductTypeId.eq(typeId)).build().listLazy();
+//        List<Long> idList=new ArrayList<Long>();
+//        if(productList!=null) {
+//            for (Product product : productList) {
+//                idList.add(product.getProductId());
+//            }
+//        }
+//        CouponDao dao =openReadableDb().getCouponDao();
+//        return dao.queryBuilder().where(CouponDao.Properties.ProductId.in(idList)).orderDesc(CouponDao.Properties.OrderId).offset((pageNum-1)*pageSize).limit(pageSize).build().list();
+
         CouponDao dao =openReadableDb().getCouponDao();
-        return dao.queryBuilder().where(CouponDao.Properties.ProductId.in(idList)).orderDesc(CouponDao.Properties.OrderId).offset((pageNum-1)*pageSize).limit(pageSize).build().list();
+        return dao.queryBuilder().where(new WhereCondition.StringCondition("T.PRODUCT_ID IN " +"(SELECT P._id FROM PRODUCT P WHERE P._id = T.PRODUCT_ID and P.PRODUCT_TYPE_ID="+typeId+")"))
+                .offset((pageNum-1)*pageSize).limit(pageSize).build().list();
+        //return dao.queryDeep("T0.PRODUCT_TYPE_ID=? limit 5 offset 0",new String[]{typeId+"",pageSize+"",((pageNum-1)*pageSize)+""});
     }
 
 

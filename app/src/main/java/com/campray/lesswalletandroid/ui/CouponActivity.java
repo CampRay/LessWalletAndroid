@@ -8,15 +8,13 @@ import android.support.v7.widget.RecyclerView;
 
 import com.campray.lesswalletandroid.R;
 import com.campray.lesswalletandroid.adapter.WiCouponAdapter;
+import com.campray.lesswalletandroid.adapter.WiTicketAdapter;
 import com.campray.lesswalletandroid.adapter.base.BaseRecyclerAdapter;
 import com.campray.lesswalletandroid.adapter.listener.OnRecyclerViewListener;
-import com.campray.lesswalletandroid.db.entity.Coupon;
 import com.campray.lesswalletandroid.db.entity.Product;
 import com.campray.lesswalletandroid.event.RefreshEvent;
-import com.campray.lesswalletandroid.model.CouponModel;
 import com.campray.lesswalletandroid.model.ProductModel;
 import com.campray.lesswalletandroid.ui.base.MenuActivity;
-
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -61,7 +59,13 @@ public class CouponActivity extends MenuActivity {
      * 根据电子卷的类型适配显示不同的电子卷列表
      */
     private void showCouponList(final int typeId){
-        adapter=new WiCouponAdapter(this,R.layout.item_coupon,null);
+        if(typeId==2) {
+            adapter = new WiTicketAdapter(this, R.layout.item_ticket, null);
+        }
+        else{
+            adapter = new WiCouponAdapter(this, R.layout.item_coupon, null);
+        }
+
         rc_coupon_list.setAdapter(adapter);
         linearLayoutManager=new LinearLayoutManager(this);
         rc_coupon_list.setLayoutManager(linearLayoutManager);

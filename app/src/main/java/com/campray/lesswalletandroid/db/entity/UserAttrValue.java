@@ -7,6 +7,7 @@ package com.campray.lesswalletandroid.db.entity;
 public class UserAttrValue {
     private long Id;
     private String Name;//属性值
+    private boolean IsPreSelected; //是否预选项
 
     public long getId() {
         return Id;
@@ -22,5 +23,13 @@ public class UserAttrValue {
 
     public void setName(String name) {
         Name = name;
+    }
+
+    public boolean isPreSelected() {
+        return IsPreSelected;
+    }
+
+    public void setPreSelected(boolean preSelected) {
+        IsPreSelected = preSelected;
     }
 }

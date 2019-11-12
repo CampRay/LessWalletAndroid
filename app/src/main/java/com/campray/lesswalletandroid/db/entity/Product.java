@@ -21,6 +21,7 @@ import com.campray.lesswalletandroid.db.dao.ProductDao;
 import com.campray.lesswalletandroid.model.CurrencyModel;
 import com.campray.lesswalletandroid.util.TimeUtil;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.TimeZone;
 import com.campray.lesswalletandroid.db.dao.CouponDao;
@@ -43,7 +44,11 @@ public class Product {
     private String fullDesc; //快速描述
     private String agreement;  //法律条款或协议
     private String numPrefix;//卡卷编号前缀
-    private float price; //商品价格
+    private float price=0; //商品价格
+    private boolean usePoint=false; //是否仅积分购买
+    private int points=0; //购买所需积分
+    private String allowedQuantities;//一次购买最少需要购入的卡卷数量,“,”分隔
+    private boolean canBeForwarded=false; //允许转送
     private String currencyCode ;//商品货币Code
     private String startTime;//生效时间
     private String endTime;//过期时间
@@ -61,50 +66,6 @@ public class Product {
     private Merchant merchant;//关联的商家数据对象
     @ToMany(referencedJoinProperty = "productId")
     private List<Coupon> coupons;//对应用户的订单记录
-
-    @Transient
-    private String startTimeLocal;//生效时间-显示用户时区
-    @Transient
-    private String endTimeLocal;//过期时间-显示用户时区
-    @Transient
-    private CouponStyle couponStyle;//Coupon显示样式
-    /** Used to resolve relations */
-    @Generated(hash = 2040040024)
-    private transient DaoSession daoSession;
-    /** Used for active entity operations. */
-    @Generated(hash = 694336451)
-    private transient ProductDao myDao;
-
-    @Generated(hash = 597044329)
-    public Product(Long productId, int productTypeId, int productTemplateId, @NotNull String title, String shortDesc, String fullDesc, String agreement, String numPrefix,
-            float price, String currencyCode, String startTime, String endTime, boolean published, boolean deleted, int stockQuantity, List<SpecAttr> specAttr,
-            List<UserAttr> userAttr, Long merchantId) {
-        this.productId = productId;
-        this.productTypeId = productTypeId;
-        this.productTemplateId = productTemplateId;
-        this.title = title;
-        this.shortDesc = shortDesc;
-        this.fullDesc = fullDesc;
-        this.agreement = agreement;
-        this.numPrefix = numPrefix;
-        this.price = price;
-        this.currencyCode = currencyCode;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.published = published;
-        this.deleted = deleted;
-        this.stockQuantity = stockQuantity;
-        this.specAttr = specAttr;
-        this.userAttr = userAttr;
-        this.merchantId = merchantId;
-    }
-
-    @Generated(hash = 1890278724)
-    public Product() {
-    }
-
-    @Generated(hash = 129747413)
-    private transient Long merchant__resolvedKey;
 
     public String getStartTimeLocal() {
         if (!TextUtils.isEmpty(startTime)) {
@@ -182,6 +143,16 @@ public class Product {
         return couponStyle;
     }
 
+    public HashMap<Long,UserAttr> getUserAttrMap(){
+        HashMap<Long, UserAttr> map = new HashMap<Long, UserAttr>();
+        if(userAttr!=null) {
+            for (UserAttr item : userAttr) {
+                map.put(item.getProductAttributeId(), item);
+            }
+        }
+        return map;
+    }
+
     public Long getProductId() {
         return this.productId;
     }
@@ -252,6 +223,30 @@ public class Product {
 
     public void setPrice(float price) {
         this.price = price;
+    }
+
+    public boolean getUsePoint() {
+        return this.usePoint;
+    }
+
+    public void setUsePoint(boolean usePoint) {
+        this.usePoint = usePoint;
+    }
+
+    public int getPoints() {
+        return this.points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
+    public String getAllowedQuantities() {
+        return this.allowedQuantities;
+    }
+
+    public void setAllowedQuantities(String allowedQuantities) {
+        this.allowedQuantities = allowedQuantities;
     }
 
     public String getCurrencyCode() {
@@ -425,6 +420,65 @@ public class Product {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getProductDao() : null;
     }
+
+    public boolean getCanBeForwarded() {
+        return this.canBeForwarded;
+    }
+
+    public void setCanBeForwarded(boolean canBeForwarded) {
+        this.canBeForwarded = canBeForwarded;
+    }
+
+    @Transient
+    private String startTimeLocal;//生效时间-显示用户时区
+    @Transient
+    private String endTimeLocal;//过期时间-显示用户时区
+    @Transient
+    private CouponStyle couponStyle;//Coupon显示样式
+    /** Used to resolve relations */
+    @Generated(hash = 2040040024)
+    private transient DaoSession daoSession;
+    /** Used for active entity operations. */
+    @Generated(hash = 694336451)
+    private transient ProductDao myDao;
+
+    @Generated(hash = 1121282365)
+    public Product(Long productId, int productTypeId, int productTemplateId, @NotNull String title, String shortDesc, String fullDesc, String agreement, String numPrefix,
+            float price, boolean usePoint, int points, String allowedQuantities, boolean canBeForwarded, String currencyCode, String startTime, String endTime,
+            boolean published, boolean deleted, int stockQuantity, List<SpecAttr> specAttr, List<UserAttr> userAttr, Long merchantId) {
+        this.productId = productId;
+        this.productTypeId = productTypeId;
+        this.productTemplateId = productTemplateId;
+        this.title = title;
+        this.shortDesc = shortDesc;
+        this.fullDesc = fullDesc;
+        this.agreement = agreement;
+        this.numPrefix = numPrefix;
+        this.price = price;
+        this.usePoint = usePoint;
+        this.points = points;
+        this.allowedQuantities = allowedQuantities;
+        this.canBeForwarded = canBeForwarded;
+        this.currencyCode = currencyCode;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.published = published;
+        this.deleted = deleted;
+        this.stockQuantity = stockQuantity;
+        this.specAttr = specAttr;
+        this.userAttr = userAttr;
+        this.merchantId = merchantId;
+    }
+
+    @Generated(hash = 1890278724)
+    public Product() {
+    }
+
+    @Generated(hash = 129747413)
+    private transient Long merchant__resolvedKey;
+
+
+
 
 
 

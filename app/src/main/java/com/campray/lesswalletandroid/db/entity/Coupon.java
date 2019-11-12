@@ -12,9 +12,11 @@ import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.Transient;
 
 import com.campray.lesswalletandroid.db.converter.BenefitAttrConverter;
+import com.campray.lesswalletandroid.db.converter.UserValuesConverter;
 import com.campray.lesswalletandroid.db.dao.DaoSession;
 import com.campray.lesswalletandroid.db.dao.ProductDao;
 import com.campray.lesswalletandroid.db.dao.CouponDao;
+import com.campray.lesswalletandroid.model.CurrencyModel;
 import com.campray.lesswalletandroid.util.TimeUtil;
 
 import java.util.Calendar;
@@ -41,15 +43,17 @@ public class Coupon {
     @NotNull
     private Long userId; //所属用户Id
     private float orderTotal;//总支付金额
+    private float price;//单价
+    private int quantity;//购买数量
     private int paymentStatus;//支付状态: 已支付 30
     @NotNull
     private String startTime;//支付时间
     private String endTime;//过期时间
     @NotNull
     private boolean deleted=false;//是否已使用
-    @Transient
-    private List<UserAttrValue> userAttrValues; //用户选择或输入的属性的值
-
+    @Convert(columnType = String.class,converter = UserValuesConverter.class)
+    private List<UserValue> userValues; //用户选择或输入的属性的值集合
+    private String userValuesInfo; //用户选择或输入的属性的值的字符串
     @Transient
     private String startTimeLocal;//生效时间-显示用户时区
     @Transient
@@ -63,17 +67,23 @@ public class Coupon {
     @Generated(hash = 533881652)
     private transient CouponDao myDao;
 
-    @Generated(hash = 1712201155)
-    public Coupon(Long orderId, Long productId, String cid, @NotNull Long userId, float orderTotal, int paymentStatus, @NotNull String startTime, String endTime, boolean deleted) {
+
+    @Generated(hash = 827795434)
+    public Coupon(Long orderId, Long productId, String cid, @NotNull Long userId, float orderTotal, float price, int quantity, int paymentStatus, @NotNull String startTime, String endTime, boolean deleted,
+            List<UserValue> userValues, String userValuesInfo) {
         this.orderId = orderId;
         this.productId = productId;
         this.cid = cid;
         this.userId = userId;
         this.orderTotal = orderTotal;
+        this.price = price;
+        this.quantity = quantity;
         this.paymentStatus = paymentStatus;
         this.startTime = startTime;
         this.endTime = endTime;
         this.deleted = deleted;
+        this.userValues = userValues;
+        this.userValuesInfo = userValuesInfo;
     }
 
     @Generated(hash = 75265961)
@@ -82,6 +92,7 @@ public class Coupon {
 
     @Generated(hash = 587652864)
     private transient Long product__resolvedKey;
+
 
     public String getStartTimeLocal() {
         if (!TextUtils.isEmpty(startTime)) {
@@ -92,6 +103,15 @@ public class Coupon {
 
     public void setStartTimeLocal(String startTimeLocal) {
         this.startTimeLocal = startTimeLocal;
+    }
+
+    public String getPriceStr(){
+        Currency currency= CurrencyModel.getInstance().getDefaultCurrency();
+        String fmtStr="%s";
+        if(!TextUtils.isEmpty(currency.getCustomFormatting())){
+            fmtStr=currency.getCustomFormatting().replace("0.00","%.2f");
+        }
+        return String.format(fmtStr,price);
     }
 
     public String getEndTimeLocal() {
@@ -109,44 +129,50 @@ public class Coupon {
         if(this.getProduct()!=null) {
             if(couponStyle==null) {
                 couponStyle = new CouponStyle();
-                //循环遍历当前优惠卷的产品规格属性
-                for (SpecAttr specAttr : this.product.getSpecAttr()) {
-                    //String selectValue = specAttr.getColorSquaresRgb();//用户通过下接选项选择的值
-                    String value = specAttr.getValueRaw();//用户自已输入的值
-                    //String value = (TextUtils.isEmpty(selectValue) && TextUtils.isEmpty(customValue)) ? specAttr.getSpecificationAttributeName() : (TextUtils.isEmpty(selectValue) ? customValue : selectValue);
-                    if (specAttr.getSpecificationAttributeId() == 1) {
-                        couponStyle.setBenefitFree(value);
-                    } else if (specAttr.getSpecificationAttributeId() == 2) {
-                        couponStyle.setBenefitCash(value);
-                    } else if (specAttr.getSpecificationAttributeId() == 3) {
-                        couponStyle.setBenefitDiscount(value);
-                    } else if (specAttr.getSpecificationAttributeId() == 4) {
-                        couponStyle.setBenefitCustomized(value);
-                    }else if (specAttr.getSpecificationAttributeId() == 5) {//如果是背景色
-                        couponStyle.setBgColor(value);
-                    } else if (specAttr.getSpecificationAttributeId() == 6) {//如果是底纹
-                        couponStyle.setShadingUrl(TextUtils.isEmpty(specAttr.getFileUrl()) ? value : specAttr.getFileUrl());
-                    } else if (specAttr.getSpecificationAttributeId() == 7) {//如果是自定义图片
-                        couponStyle.setPictureUrl(TextUtils.isEmpty(specAttr.getFileUrl()) ? value : specAttr.getFileUrl());
-                    } else if (specAttr.getSpecificationAttributeId() == 8) {//如果是商用家logo
-                        couponStyle.setLogoUrl(TextUtils.isEmpty(specAttr.getFileUrl()) ? value : specAttr.getFileUrl());
-                    } else if (specAttr.getSpecificationAttributeId() == 9) {//如果是商用会员卡级别
-                        try {
-                            couponStyle.setCardLevel(Integer.parseInt(value));
-                        }catch (Exception e){}
-                    } else if (specAttr.getSpecificationAttributeId() == 10) {//如果是有效期（日）
-                        try {
-                            couponStyle.setValidityDay(Integer.parseInt(value));
-                        }catch (Exception e){}
-                    } else if (specAttr.getSpecificationAttributeId() == 11) {//如果是有效期（月）
-                        try {
-                            couponStyle.setValidityMonth(Integer.parseInt(value));
-                        }catch (Exception e){}
-                    } else if (specAttr.getSpecificationAttributeId() == 12) {//如果是有效期（年）
-                        try {
-                            couponStyle.setValidityYear(Integer.parseInt(value));
-                        }catch (Exception e){}
-                    } else {
+                if(this.product.getSpecAttr()!=null) {
+                    //循环遍历当前优惠卷的产品规格属性
+                    for (SpecAttr specAttr : this.product.getSpecAttr()) {
+                        //String selectValue = specAttr.getColorSquaresRgb();//用户通过下接选项选择的值
+                        String value = specAttr.getValueRaw();//用户自已输入的值
+                        //String value = (TextUtils.isEmpty(selectValue) && TextUtils.isEmpty(customValue)) ? specAttr.getSpecificationAttributeName() : (TextUtils.isEmpty(selectValue) ? customValue : selectValue);
+                        if (specAttr.getSpecificationAttributeId() == 1) {
+                            couponStyle.setBenefitFree(value);
+                        } else if (specAttr.getSpecificationAttributeId() == 2) {
+                            couponStyle.setBenefitCash(value);
+                        } else if (specAttr.getSpecificationAttributeId() == 3) {
+                            couponStyle.setBenefitDiscount(value);
+                        } else if (specAttr.getSpecificationAttributeId() == 4) {
+                            couponStyle.setBenefitCustomized(value);
+                        } else if (specAttr.getSpecificationAttributeId() == 5) {//如果是背景色
+                            couponStyle.setBgColor(value);
+                        } else if (specAttr.getSpecificationAttributeId() == 6) {//如果是底纹
+                            couponStyle.setShadingUrl(TextUtils.isEmpty(specAttr.getFileUrl()) ? value : specAttr.getFileUrl());
+                        } else if (specAttr.getSpecificationAttributeId() == 7) {//如果是自定义图片
+                            couponStyle.setPictureUrl(TextUtils.isEmpty(specAttr.getFileUrl()) ? value : specAttr.getFileUrl());
+                        } else if (specAttr.getSpecificationAttributeId() == 8) {//如果是商用家logo
+                            couponStyle.setLogoUrl(TextUtils.isEmpty(specAttr.getFileUrl()) ? value : specAttr.getFileUrl());
+                        } else if (specAttr.getSpecificationAttributeId() == 9) {//如果是商用会员卡级别
+                            try {
+                                couponStyle.setCardLevel(Integer.parseInt(value));
+                            } catch (Exception e) {
+                            }
+                        } else if (specAttr.getSpecificationAttributeId() == 10) {//如果是有效期（日）
+                            try {
+                                couponStyle.setValidityDay(Integer.parseInt(value));
+                            } catch (Exception e) {
+                            }
+                        } else if (specAttr.getSpecificationAttributeId() == 11) {//如果是有效期（月）
+                            try {
+                                couponStyle.setValidityMonth(Integer.parseInt(value));
+                            } catch (Exception e) {
+                            }
+                        } else if (specAttr.getSpecificationAttributeId() == 12) {//如果是有效期（年）
+                            try {
+                                couponStyle.setValidityYear(Integer.parseInt(value));
+                            } catch (Exception e) {
+                            }
+                        } else {
+                        }
                     }
                 }
             }
@@ -198,6 +224,22 @@ public class Coupon {
         this.orderTotal = orderTotal;
     }
 
+    public float getPrice() {
+        return this.price;
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
+    }
+
+    public int getQuantity() {
+        return this.quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
     public int getPaymentStatus() {
         return this.paymentStatus;
     }
@@ -228,6 +270,14 @@ public class Coupon {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public List<UserValue> getUserValues() {
+        return this.userValues;
+    }
+
+    public void setUserValues(List<UserValue> userValues) {
+        this.userValues = userValues;
     }
 
     /** To-one relationship, resolved on first access. */
@@ -301,6 +351,16 @@ public class Coupon {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getCouponDao() : null;
     }
+
+    public String getUserValuesInfo() {
+        return this.userValuesInfo;
+    }
+
+    public void setUserValuesInfo(String userValuesInfo) {
+        this.userValuesInfo = userValuesInfo;
+    }
+
+
 
     
 

@@ -38,7 +38,6 @@ public class ProductModel extends BaseModel {
         //封装请求参数
         JsonObject jObj=new JsonObject();
         jObj.addProperty("productId",(int)pid);
-        jObj.addProperty("device",this.getDeviceId());
         this.httpPostAPI(ProductModel.URL_API_GETPRODUCT, jObj, new ApiHandleListener<JsonObject>() {
             @Override
             public void  done(JsonObject obj, AppException exception) {
@@ -67,6 +66,45 @@ public class ProductModel extends BaseModel {
                                 catch (Exception exe){
                                     listener.done(null, new AppException("E_1005"));
                                 }
+                            }
+                            else{
+                                listener.done(null, null);
+                            }
+                        } else {
+                            listener.done(null, new AppException(obj.get("Errors").getAsString()));
+                        }
+                    }
+                    catch (Exception e){
+                        listener.done(null, new AppException("E_1004"));
+                    }
+                } else {
+                    listener.done(null, exception);
+                }
+            }
+        });
+    }
+
+    /**
+     * 从服务端查询指定商品的价格和库存信息
+     * @param pid 商品ID
+     * @param form 用户选择的表单数据
+     * @param listener
+     */
+    public void getPriceAndStockFromServer(long pid,String form,final OperationListener<JsonObject> listener) {
+        //封装请求参数
+        JsonObject jObj=new JsonObject();
+        jObj.addProperty("productId",(int)pid);
+        jObj.addProperty("form",form);
+        this.httpPostAPI(ProductModel.URL_API_GET_PRICE_STOCK, jObj, new ApiHandleListener<JsonObject>() {
+            @Override
+            public void  done(JsonObject obj, AppException exception) {
+                if (exception == null) {
+                    try {
+                        //如果返回结果没有异常
+                        if (obj.get("Errors").isJsonNull()) {
+                            if (!obj.get("ExtraData").isJsonNull()) {
+                                JsonObject res = obj.get("ExtraData").getAsJsonObject();
+                                listener.done(res, null);
                             }
                             else{
                                 listener.done(null, null);

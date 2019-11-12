@@ -20,7 +20,9 @@ import android.widget.TextView;
 import com.braintreepayments.api.dropin.DropInActivity;
 import com.braintreepayments.api.dropin.DropInRequest;
 import com.braintreepayments.api.dropin.DropInResult;
+import com.braintreepayments.api.models.GooglePaymentRequest;
 import com.braintreepayments.api.models.PaymentMethodNonce;
+import com.campray.lesswalletandroid.LessWalletApplication;
 import com.campray.lesswalletandroid.R;
 import com.campray.lesswalletandroid.db.entity.Coupon;
 import com.campray.lesswalletandroid.db.entity.CouponStyle;
@@ -35,8 +37,11 @@ import com.campray.lesswalletandroid.ui.base.MenuActivity;
 import com.campray.lesswalletandroid.util.AppException;
 import com.campray.lesswalletandroid.util.ImageUtil;
 import com.campray.lesswalletandroid.util.ResourcesUtils;
+
 import com.google.android.gms.wallet.Cart;
 import com.google.android.gms.wallet.LineItem;
+import com.google.android.gms.wallet.TransactionInfo;
+import com.google.android.gms.wallet.WalletConstants;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
@@ -173,11 +178,15 @@ public class CardPaymentActivity extends MenuActivity {
                     iv_card_logo.setVisibility(View.GONE);
                 }
             }
-            if(product.getPrice()>0){
-                tv_price.setText(product.getPriceStr());
+            if(product.getUsePoint()){
+                tv_price.setText(product.getPoints()+getResources().getString(R.string.coupon_point));
             }
-            else{
-                tv_price.setText(getResources().getString(R.string.coupon_free));
+            else {
+                if (product.getPrice() > 0) {
+                    tv_price.setText(product.getPriceStr());
+                } else {
+                    tv_price.setText(getResources().getString(R.string.coupon_free));
+                }
             }
 
             tv_title.setText(product.getTitle());
@@ -202,6 +211,7 @@ public class CardPaymentActivity extends MenuActivity {
                 public void onClick(View v) {
                     Intent intent = new Intent();
                     intent.setClass(CardPaymentActivity.this, ProductDetailActivity.class);
+                    Bundle bundle = new Bundle();
                     intent.putExtra("id",product.getProductId());
                     startActivity(intent);
                 }
@@ -219,36 +229,42 @@ public class CardPaymentActivity extends MenuActivity {
     @OnClick(R.id.btn_yes)
     public void onClickButtonYes(){
         btn_yes.setEnabled(false);
+        //int quantity=Integer.parseInt(et_quantity.getText().toString());
+        int quantity=1;
+        float total=curProduct.getPrice()*quantity;
         if(curProduct.getPrice()>0) {
-            Cart card=Cart.newBuilder()
+            GooglePaymentRequest googlePaymentRequest = new GooglePaymentRequest()
+                    .transactionInfo(TransactionInfo.newBuilder()
+                            .setTotalPrice(curProduct.getPrice()+"")
+                            .setTotalPriceStatus(WalletConstants.TOTAL_PRICE_STATUS_FINAL)
+                            .setCurrencyCode(curProduct.getCurrencyCode())
+                            .build()).billingAddressRequired(true);
+            //Android Pay
+            Cart cart = Cart.newBuilder()
                     .setCurrencyCode(curProduct.getCurrencyCode())
-                    .setTotalPrice(curProduct.getPrice()+"")
+                    .setTotalPrice(total+"")
                     .addLineItem(LineItem.newBuilder()
                             .setCurrencyCode(curProduct.getCurrencyCode())
                             .setDescription(curProduct.getTitle())
-                            .setQuantity("1")
+                            .setQuantity(quantity+"")
                             .setUnitPrice(curProduct.getPrice()+"")
-                            .setTotalPrice(curProduct.getPrice()+"")
+                            .setTotalPrice(total+"")
                             .build())
                     .build();
 
-            DropInRequest dropInRequest = new DropInRequest()
-                    .amount(curProduct.getPrice()+"")
-                    .clientToken(clientToken)
-                    .collectDeviceData(false)
+            DropInRequest dropInRequest = new DropInRequest().clientToken(clientToken).amount(total+"")
+                    .googlePaymentRequest(googlePaymentRequest)
                     .requestThreeDSecureVerification(false)
-                    .androidPayCart(card)
-                    .androidPayShippingAddressRequired(false)
-                    .androidPayPhoneNumberRequired(false);
-
+                    .androidPayCart(cart).androidPayShippingAddressRequired(false).androidPayPhoneNumberRequired(false);
             startActivityForResult(dropInRequest.getIntent(this), DROP_IN_REQUEST);
+
 //            Intent intent=new Intent(this, PaymentMethodsActivity.class);
 //            intent.putExtra("productId",curProduct.getProductId());
 //            intent.putExtra("price",curProduct.getPrice());
 //            startActivityForResult(intent, DROP_IN_REQUEST);
             btn_yes.setEnabled(true);
         }else{
-            CouponModel.getInstance().confirmCoupon(curProduct.getProductId(), new OperationListener<Coupon>() {
+            CouponModel.getInstance().confirmCoupon(curProduct.getProductId(),1,null, new OperationListener<Coupon>() {
                 @Override
                 public void done(Coupon coupon, AppException exception) {
                     if (exception == null) {
@@ -257,7 +273,13 @@ public class CardPaymentActivity extends MenuActivity {
                         finish();
                     } else {
                         btn_yes.setEnabled(true);
-                        toast("获取会员卡失败，错误原因: " + getResources().getString(ResourcesUtils.getStringId(getApplicationContext(), exception.getErrorCode())));
+                        String errcode=exception.getErrorCode();
+                        if(errcode.startsWith("E_")) {
+                            toast("获取会员卡失败，错误原因: " + getResources().getString(ResourcesUtils.getStringId(getApplicationContext(), errcode)));
+                        }
+                        else{
+                            toast("获取会员卡失败，错误原因: " + errcode);
+                        }
                     }
                 }
             });
@@ -283,13 +305,15 @@ public class CardPaymentActivity extends MenuActivity {
         Product productBean = coupon.getProduct();
         List<SpecAttr> specAttrBeanList = productBean.getSpecAttr();
         for (SpecAttr specAttrBean : specAttrBeanList) {
+            File folder= LessWalletApplication.INSTANCE().getPrivateDir();
+            File picFile=new File(folder,"p_"+productBean.getProductId()+"_"+specAttrBean.getSpecificationAttributeId());
             if (specAttrBean.getSpecificationAttributeId() == 6) {//如果是底纹
                 if (TextUtils.isEmpty(specAttrBean.getFileUrl())) {
                     shadingUrl=specAttrBean.getValueRaw();
                     String[] strArr = shadingUrl.split("\\.");
                     //保存图片到手机存储空间
                     iv_card_shading.setDrawingCacheEnabled(true);
-                    File shadingFile = ImageUtil.saveImage(iv_card_shading.getDrawingCache(), strArr[strArr.length - 1]);
+                    File shadingFile = ImageUtil.saveImage(iv_card_shading.getDrawingCache(),picFile, strArr[strArr.length - 1]);
                     specAttrBean.setFileUrl(Uri.fromFile(shadingFile).toString());
                     iv_card_shading.setDrawingCacheEnabled(false);
                     iv_card_shading.destroyDrawingCache();
@@ -300,7 +324,7 @@ public class CardPaymentActivity extends MenuActivity {
                     customPicUrl=specAttrBean.getValueRaw();
                     String[] strArr = customPicUrl.split("\\.");
                     iv_card_img.setDrawingCacheEnabled(true);
-                    File imageFile = ImageUtil.saveImage(iv_card_img.getDrawingCache(), strArr[strArr.length - 1]);
+                    File imageFile = ImageUtil.saveImage(iv_card_img.getDrawingCache(),picFile, strArr[strArr.length - 1]);
                     specAttrBean.setFileUrl(Uri.fromFile(imageFile).toString());
                     iv_card_img.setDrawingCacheEnabled(false);
                     iv_card_img.destroyDrawingCache();
@@ -311,7 +335,7 @@ public class CardPaymentActivity extends MenuActivity {
                     logoUrl=specAttrBean.getValueRaw();
                     String[] strArr = logoUrl.split("\\.");
                     iv_card_logo.setDrawingCacheEnabled(true);
-                    File logoFile = ImageUtil.saveImage(iv_card_logo.getDrawingCache(), strArr[strArr.length - 1]);
+                    File logoFile = ImageUtil.saveImage(iv_card_logo.getDrawingCache(),picFile, strArr[strArr.length - 1]);
                     specAttrBean.setFileUrl(Uri.fromFile(logoFile).toString());
                     iv_card_logo.setDrawingCacheEnabled(false);
                     iv_card_logo.destroyDrawingCache();
@@ -339,7 +363,7 @@ public class CardPaymentActivity extends MenuActivity {
 //                long productId=data.getLongExtra("productId",0);
                 if(productId>0) {
                     //支付Coupon
-                    CouponModel.getInstance().paypalCoupon(productId, paymentMethodNonce.getNonce(), new OperationListener<Coupon>() {
+                    CouponModel.getInstance().paypalCoupon(productId, paymentMethodNonce.getNonce(),1,null, new OperationListener<Coupon>() {
                         @Override
                         public void done(Coupon coupon, AppException exception) {
                             if (exception == null) {

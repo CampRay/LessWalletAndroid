@@ -35,7 +35,8 @@ public class HistoryAdapter extends BaseRecyclerAdapter<History> {
         int index = this.getCount();
         int position = -1;
         while(index-- > 0) {
-            if((getItem(index)).getId().equals(targetId)) {
+            History item=getItem(index);
+            if(item!=null&&item.getId().equals(targetId)) {
                 position = index;
                 break;
             }

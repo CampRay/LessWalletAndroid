@@ -45,7 +45,8 @@ public class ProductAdapter extends BaseRecyclerAdapter<Product> {
         int index = this.getCount();
         int position = -1;
         while(index-- > 0) {
-            if((getItem(index)).getProductId().equals(targetId)) {
+            Product item=getItem(index);
+            if(item!=null&&item.getProductId().equals(targetId)) {
                 position = index;
                 break;
             }
@@ -158,28 +159,29 @@ public class ProductAdapter extends BaseRecyclerAdapter<Product> {
                     @Override
                     public void onClick(final DialogInterface dialog, int which) {
                         final Product delProduct=ProductAdapter.this.getItem(position);
-                        List<Long> idList=new ArrayList<Long>();
-                        for (Coupon item:delProduct.getCoupons()) {
-                            idList.add(item.getOrderId());
-                        }
-                        String idsStr=TextUtils.join(",",idList.toArray());
-                        CouponModel.getInstance().delCouponsFromServer(idsStr, new OperationListener<Coupon>() {
-                            @Override
-                            public void done(Coupon obj, AppException exception) {
-                                if(exception==null) {
-                                    ProductModel.getInstance().deleteProductById(delProduct.getProductId());
-                                    toast("This coupon has been deleted discarded successfully.");
-                                    holder.setVisibleToggle(R.id.ll_desc);
-                                    int startPos = holder.getAdapterPosition();
-                                    ProductAdapter.this.remove(startPos);
-                                    dialog.cancel();
-                                }
-                                else{
-
-                                    toast("Failed to discard the coupon, Error Message: "+ResourcesUtils.getString(ProductAdapter.this.context,exception.getErrorCode()));
-                                }
+                        if(delProduct!=null) {
+                            List<Long> idList = new ArrayList<Long>();
+                            for (Coupon item : delProduct.getCoupons()) {
+                                idList.add(item.getOrderId());
                             }
-                        });
+                            String idsStr = TextUtils.join(",", idList.toArray());
+                            CouponModel.getInstance().delCouponsFromServer(idsStr, new OperationListener<Coupon>() {
+                                @Override
+                                public void done(Coupon obj, AppException exception) {
+                                    if (exception == null) {
+                                        ProductModel.getInstance().deleteProductById(delProduct.getProductId());
+                                        toast("This coupon has been deleted discarded successfully.");
+                                        holder.setVisibleToggle(R.id.ll_desc);
+                                        int startPos = holder.getAdapterPosition();
+                                        ProductAdapter.this.remove(startPos);
+                                        dialog.cancel();
+                                    } else {
+
+                                        toast("Failed to discard the coupon, Error Message: " + ResourcesUtils.getString(ProductAdapter.this.context, exception.getErrorCode()));
+                                    }
+                                }
+                            });
+                        }
 
                     }
                 });

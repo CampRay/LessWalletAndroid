@@ -9,18 +9,18 @@
     <string name="login">登錄</string>
     <string name="logout">登出</string>
     <string name="register_txt1">還沒有帳號？</string>
-    <string name="register_txt2">立即注冊 &gt;</string>
+    <string name="register_txt2">立即註冊 &gt;</string>
     <string name="reg_mobile_hint">手機號碼</string>
     <string name="reg_firstname_hint">名</string>
     <string name="reg_lastname_hint">姓</string>
     <string name="reg_password_hint">密碼</string>
     <string name="reg_repassword_hint">重輸密碼</string>
-    <string name="reg_password_short">密码字符长度太少 (最少7个字符)</string>
-    <string name="reg_password_leter">密码字符必须由字母和数字组成</string>
+    <string name="reg_password_short">密碼字符長度太少(最少6個字符)</string>
+    <string name="reg_password_leter">密碼字符必須由字母和數字組成</string>
     <string name="reg_email_hint">電子郵箱</string>
     <string name="reg_address_hint">家庭地址</string>
     <string name="reg_country_hint">請選擇你所在的國家</string>
-    <string name="register">注冊</string>
+    <string name="register">註冊</string>
 
     <string name="account_title">我的資料</string>
     <string name="account_mobile">電話號碼</string>
@@ -30,6 +30,12 @@
     <string name="account_scan">掃一掃上面的二維碼，加我爲好友</string>
     <string name="merchant_scan">掃一掃上面的二維碼，收藏此商家</string>
     <string name="account_setting">個人配置</string>
+    <string name="account_password">修改密碼</string>
+    <string name="account_oldpassword">填寫原密碼</string>
+    <string name="account_newpassword">填寫新密碼</string>
+    <string name="account_repassword">再次填寫確認</string>
+    <string name="account_password_mark">密碼字符必須由最少6位的字母和數字組成</string>
+    <string name="account_password_success">修改密碼成功</string>
 
     <string name="collect_title">二維碼收款</string>
     <string name="collect_scan">LessWallet掃一掃，向我付錢</string>
@@ -92,7 +98,8 @@
     <string name="coupon_validity_nolimit">無限制</string>
     <string name="coupon_description">詳細說明:</string>
     <string name="coupon_free">免費</string>
-    <string name="coupon_stock_quantity">庫存數量:</string>
+    <string name="coupon_point">積分</string>
+    <string name="coupon_stock_quantity">剩余數量:</string>
     <string name="coupon_prepaid_cash">預付金額:</string>
     <string name="coupon_prepaid_service">預付服務:</string>
     <string name="coupon_one_redeemed">使用並銷毀</string>
@@ -103,13 +110,29 @@
     <string name="coupon_buy_add">添加購買次數</string>
     <string name="coupon_buy_deduct">扣減購買次數</string>
 
+    <string name="coupon_purchase_quantity">购买数量</string>
+    <string name="coupon_real_name">真实姓名</string>
+    <string name="coupon_gender">性别</string>
+    <string name="coupon_phone_number">联系电话</string>
+    <string name="coupon_id_number">身份证号</string>
+    <string name="coupon_email">电子邮箱</string>
+    <string name="coupon_birthday">出生日期</string>
+    <string name="coupon_event_address">选择地点</string>
+    <string name="coupon_event_datetime">选择时间</string>
+    <string name="coupon_event_date">选择日期</string>
+    <string name="coupon_event_time">选择时间</string>
+    <string name="coupon_select_seat">选择座位</string>
+
     <string name="card_firstname">名:</string>
     <string name="card_lastname">姓:</string>
     <string name="card_phone">手機號碼:</string>
     <string name="card_points">當前會員積分:</string>
+    <string name="card_cash">當前會員餘額:</string>
     <string name="card_expired_time">有效期限:</string>
     <string name="card_point_add">增加積分</string>
     <string name="card_point_deduct">扣減積分</string>
+    <string name="card_cash_add">增加金額</string>
+    <string name="card_cash_deduct">扣減金額</string>
     <string name="card_point_amount">積分數</string>
     <string name="card_btn_add">添加</string>
     <string name="card_btn_deduct">減少</string>
@@ -124,7 +147,7 @@
     <string name="text_buy_time_deduct">輸入要扣減的已購買次數</string>
 
     <string name="text_operate_failed">操作失敗，錯誤原因是:</string>
-    <string name="text_coupon_is_deleded">此優惠卷已經被使用並銷毀</string>
+    <string name="text_coupon_is_deleded">此優惠卷已經被使用過或刪除</string>
     <string name="text_coupon_redeemed_success">此優惠卷已確認使用，並被成功注銷</string>
     <string name="text_coupon_add_points_success">爲用戶添加積分成功</string>
     <string name="text_coupon_deduct_points_success">扣減用戶積分成功</string>
@@ -135,6 +158,12 @@
     <string name="text_coupon_add_buy_success">爲優惠卷增加已購次數成功</string>
     <string name="text_coupon_deduct_buy_success">扣減優惠卷已購次數成功</string>
 
+    <string name="text_select_address">请选择地点</string>
+    <string name="text_select_datetime">请选择日期时间</string>
+    <string name="text_select_date">请选择日期</string>
+    <string name="text_select_time">请选择时间</string>
+    <string name="text_select_seat">请选择座位号</string>
+
     <string name="notification_coupon_received">收到一張優惠卷</string>
     <string name="notification_coupon_received_text">您的好友送給您一張優惠卷</string>
     <string name="notification_coupon_sent">送出一張優惠卷</string>
@@ -142,26 +171,23 @@
 
     <string name="notification_user_coupon_received">收到一張優惠卷</string>
     <string name="notification_user_coupon_received_text">您收到一張商家贈送的優惠卷</string>
+    <string name="notification_user_ticket_received">收到一張電子票</string>
+    <string name="notification_user_ticket_received_text">您收到一張商家贈送的電子票</string>
     <string name="notification_user_card_received">收到一張會員卡</string>
     <string name="notification_user_card_received_text">您收到一張商家贈送的會員卡</string>
     <string name="notification_user_point_add">會員積分增長</string>
     <string name="notification_user_point_add_text">商家贈送給您%s會員積分</string>
     <string name="notification_user_point_redeemed">會員積分減少</string>
     <string name="notification_user_point_redeemed_text">商家扣除了您%s會員積分</string>
-    <string name="notification_user_service_add">預付服務次數增加</string>
-    <string name="notification_user_service_add_text">商家給您的預付服務優惠卷添加了%s次服務</string>
-    <string name="notification_user_service_redeemed">預付服務次數減少</string>
-    <string name="notification_user_service_redeemed_text">商家扣減了您的預付服務優惠卷%s次服務</string>
     <string name="notification_user_coupon_used">優惠卷被注銷</string>
     <string name="notification_user_coupon_used_text">您有一張一次性優惠卷被使用，已被商家銷毀</string>
+    <string name="notification_user_ticket_used">電子票被注銷</string>
+    <string name="notification_user_ticket_used_text">您有一張一次性電子票被使用，已被商家銷毀</string>
     <string name="notification_user_cash_add">預付優惠卷金額增加</string>
     <string name="notification_user_cash_add_text">商家給您的預付現金優惠卷充值%s</string>
     <string name="notification_user_cash_redeemed">預付優惠卷金額減少</string>
     <string name="notification_user_cash_redeemed_text">商家扣除了您的預付現金優惠卷%s</string>
-    <string name="notification_user_buy_redeemed">優惠卷購買次數減少</string>
-    <string name="notification_user_buy_redeemed_text">您的買N得一優惠卷的購買次數增加%s次</string>
-    <string name="notification_user_buy_added">優惠卷購買次數增加</string>
-    <string name="notification_user_buy_added_text">您的買N得一優惠卷的購買次數減少%s次</string>
+
 
     <string name="notification_merchant_coupon_sent">贈送優惠卷成功</string>
     <string name="notification_merchant_coupon_sent_text">您成功地贈送給用戶一張優惠卷</string>
@@ -181,15 +207,10 @@
     <string name="notification_merchant_cash_added">充值預付金額成功</string>
     <string name="notification_merchant_cash_added_text">您成功地給用戶優惠卷預付金額充值%s</string>
 
-    <string name="notification_merchant_service_redeemed">扣減服務次數成功</string>
-    <string name="notification_merchant_service_redeemed_text">您成功地扣減掉用戶優惠卷的服務次數%s次</string>
-    <string name="notification_merchant_service_added">增加服務次數成功</string>
-    <string name="notification_merchant_service_added_text">您成功地給用戶優惠卷服務次數增加%s次</string>
-
-    <string name="notification_merchant_buy_deduct">扣減購買次數成功</string>
-    <string name="notification_merchant_buy_deducted_text">您成功地扣減掉用戶買N得一優惠卷的購買次數%s次</string>
-    <string name="notification_merchant_buy_added">增加購買次數成功</string>
-    <string name="notification_merchant_buy_added_text">您成功地給用戶買N得一優惠卷的購買次數增加%s次</string>
+    <string name="notification_merchant_ticket_sent">贈送電子票成功</string>
+    <string name="notification_merchant_ticket_sent_text">您成功地贈送給用戶一張電子票</string>
+    <string name="notification_merchant_ticket_redeemed">注銷優惠卷成功</string>
+    <string name="notification_merchant_ticket_redeemed_text">您成功地使用並銷毀用戶的一張電子票</string>
 
     <!--錯誤碼-->
     <string name="E_0000">錯誤原因</string>
@@ -215,6 +236,8 @@
     <string name="E_2013">姓不能爲空</string>
     <string name="E_2014">手機號碼不能爲空</string>
     <string name="E_2015">用戶不存在</string>
+    <string name="E_2016">請填寫新密碼</string>
+
     <string name="E_2050">帳戶積分不足</string>
     <string name="E_2051">沒有權限執行此操作</string>
 
@@ -223,6 +246,19 @@
     <string name="E_3002">電子卷不存在</string>
     <string name="E_3003">電子卷余額不足</string>
     <string name="E_3004">電子卷沒有此權益或功能</string>
+    <string name="E_3005">獲取電子卷失敗，支付不成功</string>
+    <string name="E_3009">您选择的座位数量必须与您的购买数量相等</string>
+    <string name="E_3010">请填写您的真实姓名</string>
+    <string name="E_3011">请填写您的联系电话</string>
+    <string name="E_3012">请填写您的身份证号码</string>
+    <string name="E_3013">请填写您的电子邮箱地址</string>
+    <string name="E_3014">请填写您的出生日期</string>
+    <string name="E_3015">请选择您的性别</string>
+    <string name="E_3016">请选择选技电子票的活动日期时间</string>
+    <string name="E_3017">请选择选技电子票的活动地点</string>
+    <string name="E_3018">请选择选技电子票的座们号码</string>
+    <string name="E_3019">请选择选技电子票的活动日期和活动开始时间</string>
+
 
     <string name="E_3020">不是當前商家發布的電子卷</string>
     <string name="E_3021">當前電子卷庫存數量不足</string>
