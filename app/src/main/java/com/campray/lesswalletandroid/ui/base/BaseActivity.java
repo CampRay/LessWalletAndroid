@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v7.app.AppCompatActivity;
+
 import android.util.Config;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
 import butterknife.ButterKnife;
 
 /**基类

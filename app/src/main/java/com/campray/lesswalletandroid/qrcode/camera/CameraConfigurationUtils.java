@@ -20,7 +20,6 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.hardware.Camera;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import java.util.Arrays;
@@ -29,6 +28,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
+
+import androidx.annotation.RequiresApi;
 
 /**
  * Utility methods for configuring the Android camera.

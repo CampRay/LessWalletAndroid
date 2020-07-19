@@ -172,10 +172,12 @@ public class TicketSendActivity extends MenuActivity {
             }
 
             if (!TextUtils.isEmpty(couponStyle.getPictureUrl())) {
-                Picasso.with(this).load(couponStyle.getPictureUrl()).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_ticket_img);
+                //Picasso.with(this).load(couponStyle.getPictureUrl()).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_ticket_img);
+                Picasso.get().load(couponStyle.getPictureUrl()).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_ticket_img);
             }
             else if (!TextUtils.isEmpty(couponStyle.getLogoUrl())){
-                Picasso.with(this).load(couponStyle.getLogoUrl()).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_ticket_img);
+//                Picasso.with(this).load(couponStyle.getLogoUrl()).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_ticket_img);
+                Picasso.get().load(couponStyle.getLogoUrl()).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_ticket_img);
             }
         }
 

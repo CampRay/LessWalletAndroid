@@ -2,10 +2,6 @@ package com.campray.lesswalletandroid.ui;
 
 
 import android.os.Bundle;
-
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-
 import com.campray.lesswalletandroid.R;
 import com.campray.lesswalletandroid.adapter.WiCouponAdapter;
 import com.campray.lesswalletandroid.adapter.WiTicketAdapter;
@@ -21,6 +17,8 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 
 /**

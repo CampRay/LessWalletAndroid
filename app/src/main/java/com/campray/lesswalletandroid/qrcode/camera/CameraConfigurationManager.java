@@ -22,7 +22,6 @@ import android.graphics.Point;
 import android.hardware.Camera;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.Display;
 import android.view.Surface;
@@ -31,6 +30,8 @@ import android.view.WindowManager;
 import com.campray.lesswalletandroid.qrcode.camera.open.CameraFacing;
 import com.campray.lesswalletandroid.qrcode.camera.open.OpenCamera;
 import com.campray.lesswalletandroid.ui.SettingsActivity;
+
+import androidx.annotation.RequiresApi;
 
 /**
  * A class which deals with reading, parsing, and setting the camera parameters which are used to

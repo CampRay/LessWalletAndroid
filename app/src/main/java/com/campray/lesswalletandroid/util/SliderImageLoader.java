@@ -24,9 +24,10 @@ public class SliderImageLoader extends ImageLoader {
          2.返回的图片路径为Object类型，由于不能确定你到底使用的那种图片加载器，
          传输的到的是什么格式，那么这种就使用Object接收和返回，你只需要强转成你传输的类型就行，
          切记不要胡乱强转！
-         */
+         **/
         Uri uri = Uri.parse((String) path);
         //Picasso 加载图片简单用法
-        Picasso.with(context).load(uri).resize(540,256).centerCrop().placeholder(R.mipmap.banner).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(imageView);
+        //Picasso.with(context).load(uri).resize(540,256).centerCrop().placeholder(R.mipmap.banner).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(imageView);
+        Picasso.get().load(uri).resize(540,256).centerCrop().placeholder(R.mipmap.banner).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(imageView);
     }
 }

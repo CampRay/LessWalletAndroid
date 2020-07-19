@@ -73,7 +73,8 @@ public class FriendActivity extends MenuActivity {
             String lastName=this.getBundle().getString("lastName");
             String avatarUrl=this.getBundle().getString("avatarUrl");
             String country=this.getBundle().getString("country");
-            Picasso.with(this).load(avatarUrl).placeholder(R.mipmap.icon_account).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_avatar);
+            //Picasso.with(this).load(avatarUrl).placeholder(R.mipmap.icon_account).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_avatar);
+            Picasso.get().load(avatarUrl).placeholder(R.mipmap.icon_account).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_avatar);
             tv_email.setText(email);
             tv_mobile.setText(mobile);
             tv_country.setText(country);

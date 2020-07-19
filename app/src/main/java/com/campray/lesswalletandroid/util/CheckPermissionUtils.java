@@ -3,10 +3,11 @@ package com.campray.lesswalletandroid.util;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.support.v4.content.ContextCompat;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.core.content.ContextCompat;
 
 /**
  * Created by Apple on 2017/11/13.

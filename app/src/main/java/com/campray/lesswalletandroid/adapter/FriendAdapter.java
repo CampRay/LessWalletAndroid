@@ -1,9 +1,6 @@
 package com.campray.lesswalletandroid.adapter;
 
 import android.content.Context;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +15,9 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import butterknife.BindView;
 
 /**
@@ -48,7 +48,8 @@ public class FriendAdapter extends ArrayAdapter {
         TextView emailView = (TextView) view.findViewById(R.id.tv_email);
         TextView mobileView = (TextView) view.findViewById(R.id.tv_mobile);
         //为图片视图设置好友头像，如果没有则显示默认头像图片
-        Picasso.with(this.getContext()).load(friend.getAvatorPath()).placeholder(R.mipmap.icon_account).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(avatarImage);
+        //Picasso.with(this.getContext()).load(friend.getAvatorPath()).placeholder(R.mipmap.icon_account).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(avatarImage);
+        Picasso.get().load(friend.getAvatorPath()).placeholder(R.mipmap.icon_account).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(avatarImage);
         usernameView.setText(friend.getUserName());//为文本视图设置文本内容
         emailView.setText(friend.getEmail());
         mobileView.setText(friend.getMobile());

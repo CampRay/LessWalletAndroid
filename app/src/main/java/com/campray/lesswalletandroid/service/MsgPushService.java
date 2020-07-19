@@ -1,5 +1,6 @@
 package com.campray.lesswalletandroid.service;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -12,7 +13,6 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.campray.lesswalletandroid.LessWalletApplication;
@@ -33,6 +33,8 @@ import com.campray.lesswalletandroid.R;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
+
+import androidx.core.app.NotificationCompat;
 
 import static android.content.ContentValues.TAG;
 import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
@@ -291,6 +293,7 @@ public class MsgPushService extends Service {
      * @param title 标题
      * @param text 通知文本内容
      */
+    @SuppressLint("WrongConstant")
     private void showNotification(Context context, int id, String title, String text) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder.setSmallIcon(R.mipmap.ic_launcher);//设置通知小ICON

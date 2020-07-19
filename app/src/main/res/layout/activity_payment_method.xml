@@ -15,7 +15,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:animateLayoutChanges="true"
-        android:background="@color/bt_base_background"
+        android:background="@color/windowBackg"
         android:elevation="5dp"
         android:orientation="vertical"
         tools:targetApi="lollipop">
@@ -49,15 +49,14 @@
 
                 <TextView
                     android:id="@+id/tv_supported_payment_methods_header"
-                    style="@style/bt_choose_payment_label"
-                    android:paddingTop="@dimen/bt_choose_new_payment_label_padding_top"
-                    android:text="@string/bt_select_payment_method" />
+                    style=""
+                    android:paddingTop="2dp"
+                    android:text="选择支付方法" />
 
                 <ListView
                     android:id="@+id/lv_supported_payment_methods"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:divider="@drawable/bt_list_view_divider"
                     android:dividerHeight="1dp" />
 
             </LinearLayout>

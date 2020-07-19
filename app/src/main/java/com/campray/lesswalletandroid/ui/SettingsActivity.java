@@ -2,8 +2,9 @@ package com.campray.lesswalletandroid.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * 应用主要配置的activity页面.

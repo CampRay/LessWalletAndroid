@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
-import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,6 +13,8 @@ import android.widget.TextView;
 import com.campray.lesswalletandroid.LessWalletApplication;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * 列表视图对象的显示支架
@@ -228,7 +229,8 @@ public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
     public BaseRecyclerHolder setImageView(int viewId,String url, int defaultRes) {
         ImageView iv = getView(viewId);
         if(iv!=null) {
-            Picasso.with(LessWalletApplication.INSTANCE()).load(url).memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE).into(iv);
+            //Picasso.with(LessWalletApplication.INSTANCE()).load(url).memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE).into(iv);
+            Picasso.get().load(url).memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE).into(iv);
         }
         //iv.setImageBitmap(BitmapFactory.decodeFile(url));
         return this;

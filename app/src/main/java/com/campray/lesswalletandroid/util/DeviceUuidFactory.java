@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 import android.provider.Settings.Secure;
 
@@ -43,7 +42,7 @@ public class DeviceUuidFactory {
                                 uuid = UUID.nameUUIDFromBytes(androidId
                                         .getBytes("utf8"));
                             } else {
-                                final String deviceId = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
+                                final String deviceId = null;//((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
                                 uuid = deviceId != null ? UUID.nameUUIDFromBytes(deviceId.getBytes("utf8")) : UUID.randomUUID();
                             }
                         } catch (UnsupportedEncodingException e) {

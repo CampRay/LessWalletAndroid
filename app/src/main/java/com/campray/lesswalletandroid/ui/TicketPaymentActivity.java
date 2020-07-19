@@ -23,11 +23,6 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.braintreepayments.api.dropin.DropInActivity;
-import com.braintreepayments.api.dropin.DropInRequest;
-import com.braintreepayments.api.dropin.DropInResult;
-import com.braintreepayments.api.models.GooglePaymentRequest;
-import com.braintreepayments.api.models.PaymentMethodNonce;
 import com.campray.lesswalletandroid.LessWalletApplication;
 import com.campray.lesswalletandroid.R;
 import com.campray.lesswalletandroid.db.entity.Coupon;
@@ -46,8 +41,6 @@ import com.campray.lesswalletandroid.util.BasicTimesUtils;
 import com.campray.lesswalletandroid.util.ImageUtil;
 import com.campray.lesswalletandroid.util.ResourcesUtils;
 import com.campray.lesswalletandroid.view.InnerCornerView;
-import com.google.android.gms.wallet.Cart;
-import com.google.android.gms.wallet.LineItem;
 import com.google.android.gms.wallet.TransactionInfo;
 import com.google.android.gms.wallet.WalletConstants;
 import com.google.gson.JsonObject;
@@ -263,10 +256,12 @@ public class TicketPaymentActivity extends MenuActivity {
             }
 
             if (!TextUtils.isEmpty(couponStyle.getPictureUrl())) {
-                Picasso.with(this).load(couponStyle.getPictureUrl()).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_ticket_img);
+//                Picasso.with(this).load(couponStyle.getPictureUrl()).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_ticket_img);
+                Picasso.get().load(couponStyle.getPictureUrl()).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_ticket_img);
             }
             else if (!TextUtils.isEmpty(couponStyle.getLogoUrl())){
-                Picasso.with(this).load(couponStyle.getLogoUrl()).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_ticket_img);
+//                Picasso.with(this).load(couponStyle.getLogoUrl()).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_ticket_img);
+                Picasso.get().load(couponStyle.getLogoUrl()).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_ticket_img);
             }
         }
 
@@ -564,6 +559,7 @@ public class TicketPaymentActivity extends MenuActivity {
         int quantity=Integer.parseInt(et_quantity.getText().toString());
         float total=curProduct.getPrice()*quantity;
         if(curProduct.getPrice()>0) {
+            /**
             GooglePaymentRequest googlePaymentRequest = new GooglePaymentRequest()
                     .transactionInfo(TransactionInfo.newBuilder()
                             .setTotalPrice(curProduct.getPrice()+"")
@@ -588,7 +584,7 @@ public class TicketPaymentActivity extends MenuActivity {
                     .requestThreeDSecureVerification(false)
                     .androidPayCart(cart).androidPayShippingAddressRequired(false).androidPayPhoneNumberRequired(false);
             startActivityForResult(dropInRequest.getIntent(this), DROP_IN_REQUEST);
-
+            **/
 //            Intent intent=new Intent(this, PaymentMethodsActivity.class);
 //            intent.putExtra("productId",curProduct.getProductId());
 //            intent.putExtra("price",curProduct.getPrice());
@@ -776,6 +772,7 @@ public class TicketPaymentActivity extends MenuActivity {
 
         if (resultCode == RESULT_OK) {
             if (requestCode == DROP_IN_REQUEST) {
+                /**
                 //使用DropIn时的处理
                 DropInResult result = data.getParcelableExtra(DropInResult.EXTRA_DROP_IN_RESULT);
                 PaymentMethodNonce paymentMethodNonce =result.getPaymentMethodNonce();
@@ -815,10 +812,12 @@ public class TicketPaymentActivity extends MenuActivity {
                 else{
                     toast("支付异常，错误原因:支付商品ID不匹配! ");
                 }
+                 **/
             }
 
         }
         else if (resultCode != RESULT_CANCELED) {
+            /**
             //使用DropIn时的异常处理
             Exception exe=(Exception) data.getSerializableExtra(DropInActivity.EXTRA_ERROR);
             //Exception exe=(Exception) data.getSerializableExtra("EXTRA_ERROR");
@@ -831,6 +830,7 @@ public class TicketPaymentActivity extends MenuActivity {
                             }
                         }).show();
             }
+             **/
         }
     }
 

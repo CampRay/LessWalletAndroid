@@ -5,11 +5,12 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.campray.lesswalletandroid.R;
+
+import androidx.core.view.ViewCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 /**
@@ -23,7 +24,7 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
     private Paint dividerPaint;
     public RecyclerViewItemDecoration(Context context) {
         dividerPaint = new Paint();
-        dividerPaint.setColor(context.getResources().getColor(R.color.bt_very_light_gray));
+        dividerPaint.setColor(context.getResources().getColor(R.color.colorPrimaryDark));
         dividerHeight = context.getResources().getDimensionPixelSize(R.dimen.y1);
     }
 

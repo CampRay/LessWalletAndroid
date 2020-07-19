@@ -2,17 +2,10 @@ package com.campray.lesswalletandroid.ui;
 
 
 import android.content.DialogInterface;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.LinearSnapHelper;
-import android.support.v7.widget.RecyclerView;
+
 import android.text.TextUtils;
-import android.util.Base64;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -20,38 +13,26 @@ import android.widget.TextView;
 import com.campray.lesswalletandroid.LessWalletApplication;
 import com.campray.lesswalletandroid.R;
 import com.campray.lesswalletandroid.adapter.WiCardAdapter;
-import com.campray.lesswalletandroid.adapter.WiCouponAdapter;
-import com.campray.lesswalletandroid.adapter.base.BaseRecyclerAdapter;
-import com.campray.lesswalletandroid.adapter.base.BaseRecyclerHolder;
 import com.campray.lesswalletandroid.adapter.listener.OnRecyclerViewListener;
 import com.campray.lesswalletandroid.db.entity.Coupon;
 import com.campray.lesswalletandroid.db.entity.Merchant;
 import com.campray.lesswalletandroid.db.entity.Product;
 import com.campray.lesswalletandroid.db.entity.User;
-import com.campray.lesswalletandroid.event.RefreshEvent;
 import com.campray.lesswalletandroid.listener.OperationListener;
 import com.campray.lesswalletandroid.model.CouponModel;
-import com.campray.lesswalletandroid.model.ProductModel;
 import com.campray.lesswalletandroid.model.UserModel;
-import com.campray.lesswalletandroid.qrcode.encode.QRCodeEncoder;
 import com.campray.lesswalletandroid.ui.base.MenuActivity;
 import com.campray.lesswalletandroid.util.AppException;
 import com.campray.lesswalletandroid.util.ResourcesUtils;
 import com.campray.lesswalletandroid.view.CustomDialog;
-import com.campray.lesswalletandroid.view.RecyclerViewItemDecoration;
-import com.campray.lesswalletandroid.view.RoundImageView;
 import com.campray.lesswalletandroid.view.SpaceItemDecoration;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.WriterException;
-import com.squareup.picasso.MemoryPolicy;
-import com.squareup.picasso.Picasso;
-
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSnapHelper;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
 

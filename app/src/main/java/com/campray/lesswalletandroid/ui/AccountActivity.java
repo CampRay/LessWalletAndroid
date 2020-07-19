@@ -2,12 +2,12 @@ package com.campray.lesswalletandroid.ui;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v7.widget.PopupMenu;
 import android.util.Base64;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.campray.lesswalletandroid.LessWalletApplication;
@@ -65,8 +65,8 @@ public class AccountActivity extends MenuActivity {
         tv_mobile.setText(user.getMobile());
         tv_country.setText(user.getCountry().getName());
         tv_name.setText(user.getFullName());
-        Picasso.with(this).load(user.getAvatorPath()).placeholder(R.mipmap.icon_account).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_avatar);
-
+//        Picasso.with(this).load(user.getAvatorPath()).placeholder(R.mipmap.icon_account).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_avatar);
+        Picasso.get().load(user.getAvatorPath()).placeholder(R.mipmap.icon_account).memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(iv_avatar);
         String userStr="user:"+ user.getId();
         Bitmap qrCodeBitmap= null;
         try {
